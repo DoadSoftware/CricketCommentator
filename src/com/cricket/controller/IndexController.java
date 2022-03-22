@@ -65,9 +65,9 @@ public class IndexController
 					throws IllegalAccessException, InvocationTargetException, JAXBException
 	{
 		session_selected_match = selectedMatch; session_selected_broadcaster = select_broadcaster;
-		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 		session_match = populateMatchVariables((Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match)));
+		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_match", session_selected_match);

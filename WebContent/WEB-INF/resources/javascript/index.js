@@ -29,7 +29,7 @@ function processCricketProcedures(whatToProcess)
 	
 	switch(whatToProcess) {
 	case 'READ-MATCH-AND-POPULATE':
-		valueToProcess = $('#match_file_timestamp').val();
+		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
 	}
 
@@ -42,6 +42,7 @@ function processCricketProcedures(whatToProcess)
         	switch(whatToProcess) {
 			case 'READ-MATCH-AND-POPULATE':
 				addItemsToList(whatToProcess,data);
+				$('#matchFileTimeStamp').val(session_match.matchFileTimeStamp);
 				break;
         	}
 			processWaitingButtonSpinner('END_WAIT_TIMER');
