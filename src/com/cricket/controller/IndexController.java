@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,12 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.cricket.model.BattingCard;
-import com.cricket.model.BowlingCard;
-import com.cricket.model.Inning;
 import com.cricket.model.Match;
-import com.cricket.model.Player;
 import com.cricket.service.CricketService;
+import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 
 import net.sf.json.JSONObject;
@@ -65,7 +59,7 @@ public class IndexController
 					throws IllegalAccessException, InvocationTargetException, JAXBException
 	{
 		session_selected_match = selectedMatch; session_selected_broadcaster = select_broadcaster;
-		session_match = populateMatchVariables((Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+		session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match)));
 		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 
@@ -93,7 +87,7 @@ public class IndexController
 			if(!valueToProcess.equalsIgnoreCase(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified())))
 			{
-				session_match = populateMatchVariables((Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+				session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match)));
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
@@ -104,74 +98,6 @@ public class IndexController
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
-	}
-	
-	public Match populateMatchVariables(Match match) throws IllegalAccessException, InvocationTargetException 
-	{
-		List<Player> players = new ArrayList<Player>();
-		
-		for(Player plyr:match.getHomeSquad()) 
-			players.add(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId())));
-		match.setHomeSquad(players);
-		
-		players = new ArrayList<Player>();
-		for(Player plyr:match.getAwaySquad()) 
-			players.add(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId())));
-		match.setAwaySquad(players);
-
-		if(match.getHomeTeamId() > 0)
-			match.setHomeTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getHomeTeamId())));
-		if(match.getAwayTeamId() > 0)
-			match.setAwayTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getAwayTeamId())));
-		if(match.getGroundId() > 0)
-			match.setGround(cricketService.getGround(match.getGroundId()));
-		
-		for(Inning inn:match.getInning()) {
-			
-			inn.setBatting_team(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(inn.getBattingTeamId())));
-			inn.setBowling_team(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(inn.getBowlingTeamId())));
-			
-			if(inn.getBattingCard() != null)
-				for(BattingCard batc:inn.getBattingCard()) 
-					batc = processBattingcard(batc);
-			
-			if(inn.getBowlingCard() != null)
-				for(BowlingCard bowlc:inn.getBowlingCard())
-					bowlc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bowlc.getPlayerId())));
-
-			if(inn.getBowlingTeamId() == match.getHomeTeamId()) {
-				inn.setFielders(match.getHomeSquad());
-			} else if(inn.getBowlingTeamId() == match.getAwayTeamId()) {
-				inn.setFielders(match.getAwaySquad());
-			}
-			
-			Collections.sort(inn.getBattingCard());
-
-		}
-		return match;
-	}
-	
-	public BattingCard processBattingcard(BattingCard bc)
-	{
-		bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
-		
-		if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
-
-			switch (bc.getHowOut().toUpperCase()) {
-			case CricketUtil.CAUGHT_AND_BOWLED: case CricketUtil.CAUGHT: case CricketUtil.BOWLED: 
-			case CricketUtil.STUMPED: case CricketUtil.LBW: case CricketUtil.HIT_WICKET: case CricketUtil.MANKAD:
-				bc.setHowOutBowler(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutBowlerId())));
-				break;
-			}
-			
-			switch (bc.getHowOut().toUpperCase()) {
-			case CricketUtil.CAUGHT: case CricketUtil.STUMPED: case CricketUtil.RUN_OUT:  
-				bc.setHowOutFielder(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutFielderId())));
-				break;
-			}
-
-		}
-		return bc;
 	}
 
 	@ModelAttribute("session_selected_match")
