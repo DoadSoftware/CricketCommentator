@@ -65,7 +65,6 @@ function addItemsToList(whatToProcess, dataToProcess)
 		if(dataToProcess) {
 			dataToProcess.inning.forEach(function(inn,index,arr) {
 				if(inn.isCurrentInning.toUpperCase() == 'YES') {
-					
 					header_text = document.createElement('h6');
 					if(inn.battingTeamId ==dataToProcess.homeTeamId)
 					{	
@@ -89,7 +88,76 @@ function addItemsToList(whatToProcess, dataToProcess)
 					header_text.innerHTML = 'Extras-' + inn.totalExtras+' '+'('+inn.totalWides+'wd, '+inn.totalByes+'b, '+inn.totalLegByes+'lb, '+inn.totalNoBalls+'nb'+')';
 					document.getElementById('fruit_captions_div').appendChild(header_text);
 					
+					header_text = document.createElement('h6');
+					header_text.innerHTML = 'Batsman';
+					document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+					inn.battingCard.forEach(function(bc,index,arr1){
+						if(bc.onStrike == 'YES'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ bc.player.surname+'*'+'|'+'Runs:'+bc.runs +'|'+'Strike:'+ bc.strikeRate+'|'+'4s/6s:'+ bc.fours+'/'+bc.sixes;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						if(bc.onStrike == 'NO'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ bc.player.surname+'|'+'Runs:'+bc.runs +'|'+'Strike:'+ bc.strikeRate+'|'+'4s/6s:'+ bc.fours+'/'+bc.sixes;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						
+					});
+					
+					header_text = document.createElement('h6');
+					header_text.innerHTML = 'Bowler';
+					document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+					inn.bowlingCard.forEach(function(boc,index,arr2){
+						if(boc.status == 'CURRENTBOWLER'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						if(boc.status == 'LASTBOWLER'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						
+					});
+					
+					header_text = document.createElement('h6');
+					header_text.innerHTML = 'Fall Of Wickets';
+					document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+					inn.fallsOfWickets.forEach(function(fow,index,arr3){
+						header_text = document.createElement('h6');
+						header_text.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
+						document.getElementById('fruit_captions_div').appendChild(header_text);
+						
+					});
+					
+					header_text = document.createElement('h6');
+					header_text.innerHTML = 'Batsman Team Order';
+					document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+					inn.battingCard.forEach(function(bc,index,arr1){
+						if(bc.status == 'OUT'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ bc.player.surname+'|'+'Runs:'+bc.runs +'|'+'Balls:'+ bc.balls;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						else if(bc.status == 'NOT OUT'){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ bc.player.surname+'*'+'|'+'Runs:'+bc.runs +'|'+'Balls:'+ bc.balls;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+						else{
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Name:'+ bc.player.surname;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+					});
 				}
+				
 			});
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}
