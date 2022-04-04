@@ -81,7 +81,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					document.getElementById('fruit_captions_div').appendChild(header_text);
 					
 					header_text = document.createElement('h6');
-					header_text.innerHTML = 'Run Rate-' +  (inn.totalRuns/inn.totalOvers);
+					header_text.innerHTML = 'Run Rate-' +  inn.runRate;
 					document.getElementById('fruit_captions_div').appendChild(header_text);
 					
 					header_text = document.createElement('h6');
@@ -113,12 +113,20 @@ function addItemsToList(whatToProcess, dataToProcess)
 					inn.bowlingCard.forEach(function(boc,index,arr2){
 						if(boc.status == 'CURRENTBOWLER'){
 							header_text = document.createElement('h6');
-							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+							
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'This Over:' +  boc.totalRunsThisOver;
 							document.getElementById('fruit_captions_div').appendChild(header_text);
 						}
 						if(boc.status == 'LASTBOWLER'){
 							header_text = document.createElement('h6');
-							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							header_text.innerHTML = 'Name:'+ boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+							
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'This Over:' +  boc.totalRunsThisOver;
 							document.getElementById('fruit_captions_div').appendChild(header_text);
 						}
 						
@@ -156,7 +164,34 @@ function addItemsToList(whatToProcess, dataToProcess)
 							document.getElementById('fruit_captions_div').appendChild(header_text);
 						}
 					});
+					
+					header_text = document.createElement('h6');
+					header_text.innerHTML = 'Partnership';
+					document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+					inn.partnerships.forEach(function(ps,index,arr4){
+						if(ps.partnershipNumber == inn.partnerships.length){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'FirstBatterRuns'+ps.firstBatterRuns+'|'+'Runs'+ ps.totalRuns+'|'+'SecondBatterRuns'+ps.secondBatterRuns;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						}
+					});
+					
 				}
+				/*else{
+					if(inn.inningNumber == 1){
+						header_text = document.createElement('h6');
+						header_text.innerHTML = 'Fall Of Wickets 1 Inning';
+						document.getElementById('fruit_captions_div').appendChild(header_text);
+					
+						inn.fallsOfWickets.forEach(function(fow,index,arr3){
+							header_text = document.createElement('h6');
+							header_text.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
+							document.getElementById('fruit_captions_div').appendChild(header_text);
+						
+						});
+					}
+				}*/
 				
 			});
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
