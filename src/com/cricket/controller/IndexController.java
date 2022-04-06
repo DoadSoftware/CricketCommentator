@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.cricket.model.EventFile;
 import com.cricket.model.Match;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
@@ -29,7 +30,7 @@ import com.cricket.util.CricketUtil;
 import net.sf.json.JSONObject;
 
 @Controller
-@SessionAttributes(value={"session_match","session_selected_match","session_selected_broadcaster"})
+@SessionAttributes(value={"session_match","session_event_file","session_selected_match","session_selected_broadcaster"})
 public class IndexController 
 {
 	@Autowired
@@ -53,14 +54,20 @@ public class IndexController
 	public String commentatorPage(ModelMap model,
 			@ModelAttribute("session_selected_match") String session_selected_match,
 			@ModelAttribute("session_match") Match session_match,
+			@ModelAttribute("session_event_file") EventFile session_event_file,
 			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch) 
 					throws IllegalAccessException, InvocationTargetException, JAXBException
 	{
 		session_selected_match = selectedMatch; session_selected_broadcaster = select_broadcaster;
+		
 		session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match)));
+		
+		session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
+				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_selected_match));
+		
 		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 
 		model.addAttribute("session_match", session_match);
@@ -73,6 +80,7 @@ public class IndexController
 	@RequestMapping(value = {"/processCricketProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processCricketProcedures(
 			@ModelAttribute("session_match") Match session_match,
+			@ModelAttribute("session_event_file") EventFile session_event_file,
 			@ModelAttribute("session_socket") Socket session_socket,
 			@ModelAttribute("session_viz_scene") String session_viz_scene,
 			@ModelAttribute("session_selected_match") String session_selected_match,
@@ -89,8 +97,13 @@ public class IndexController
 			{
 				session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match)));
+				
+				session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
+						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_selected_match));
+				
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
+				
 				return JSONObject.fromObject(session_match).toString();
 			} else {
 				return JSONObject.fromObject(null).toString();
@@ -111,5 +124,9 @@ public class IndexController
 	@ModelAttribute("session_match")
 	public Match session_match(){
 		return new Match();
+	}
+	@ModelAttribute("session_event_file")
+	public EventFile session_event_file(){
+		return new EventFile();
 	}
 }
