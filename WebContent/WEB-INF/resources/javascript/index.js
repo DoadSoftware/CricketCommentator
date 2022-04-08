@@ -71,146 +71,250 @@ function addItemsToList(whatToProcess, dataToProcess)
 		tbody = document.createElement('tbody');
 		if(dataToProcess) {
 			dataToProcess.inning.forEach(function(inn,index,arr){
-					if(inn.isCurrentInning.toUpperCase() == 'YES') {
-						for (var i = 0; i <= 10; i++){
-							row = tbody.insertRow(tbody.rows.length);
-							for (var  j= 0; j <= 2; j++){
-								cell=row.insertCell(j);
-						
-									switch (j){
+				for (var i = 0; i <= 9; i++){
+					row = tbody.insertRow(tbody.rows.length);
+					for (var  j= 0; j <= 11; j++){
+						cell=row.insertCell(j);
+						if(inn.isCurrentInning.toUpperCase() == 'YES') {
+							switch (i){
+								case 0:
+									switch(j){
 										case 0:
-											switch(i){
+											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+												cell.innerHTML = dataToProcess.homeTeam.shortname;
+											}
+											else if(inn.battingTeamId == dataToProcess.awayTeamId){
+												cell.innerHTML = dataToProcess.awayTeam.shortname;
+											}
+												break;
+										case 1:
+											inn.bowlingCard.forEach(function(boc,index,arr2){
+												if(boc.status == 'CURRENTBOWLER'){
+													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
+												}
+												else if(boc.status == 'LASTBOWLER'){
+													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
+												}
+											});
+											break;
+										}
+										break;
+									case 1:
+										switch(j){
+											case 0:
+												cell.innerHTML = inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+												break;
+											case 1:
+												cell.innerHTML = 'Ball Since Last Boundary' ;
+												cell.style.border = "thin dotted red";
+												break;
+										}
+											break;
+									case 2:
+										switch(j){
+											case 0:
+												cell.innerHTML = 'RR-' + inn.runRate;
+												break;
+											case 1:
+												cell.innerHTML = 'Last 30 Balls' ;
+												cell.style.border = "thin dotted red";
+												break;
+										}
+											break;
+									case 3:
+										switch(j){
+											case 1:
+												cell.innerHTML ='BATSMAN';
+												cell.style='color:#2E008B';
+												cell.style.textAlign = "center"
+												break;
+											case 3:
+												cell.innerHTML ='BOWLER';
+												cell.style='color:#2E008B';
+												cell.style.textAlign = "center"
+												break;
+											case 4:
+												cell.innerHTML ='BATTING CARD';
+												cell.style='color:#2E008B';
+												cell.style.textAlign = "center"
+												break;
+										}
+										break;
+									case 4:
+										cell.style.textAlign = "center"
+										switch(j){
+											case 0:
+												inn.battingCard.forEach(function(bc,index,arr1){
+													if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
+														cell.innerHTML = bc.player.surname+'*'+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
+														cell.style.border = "thin dotted blue";
+													}
+												});
+													break;
+											case 1:
+												inn.battingCard.forEach(function(bc,index,arr1){
+													if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
+														cell.innerHTML ='Name'+"<br />"+'Runs'+"<br />"+'Strike Rate'+"<br />"+'4s/6s';
+														cell.style.border = "thin dotted blue";
+													}
+												});
+												break;				
+											case 2:
+												inn.battingCard.forEach(function(bc,index,arr1){
+													if(bc.status == 'NOT OUT' &&bc.onStrike == 'NO'){
+														cell.innerHTML = bc.player.surname+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
+														cell.style.border = "thin dotted blue";	
+													}
+												});
+												break;	
+											case 3:
+												cell.style.border = "thin dotted blue";
+												inn.bowlingCard.forEach(function(boc,index,arr2){
+													if(boc.status == 'CURRENTBOWLER'){
+														cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;
+														
+													}
+													else if(boc.status == 'LASTBOWLER'){
+														cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;
+													}
+												});
+												break;			
+										}
+										break;
+									case 5:
+										cell.style.textAlign = "center"
+										inn.partnerships.forEach(function(ps,index,arr4){
+											switch(j){
 												case 0:
-													if(inn.battingTeamId == dataToProcess.homeTeamId){	
-														cell.innerHTML = dataToProcess.homeTeam.shortname;
-													}
-													else if(inn.battingTeamId == dataToProcess.awayTeamId){
-														cell.innerHTML = dataToProcess.awayTeam.shortname;
-													}
+													cell.innerHTML = ps.firstBatterRuns+'('+ps.firstBatterBalls+')';
+													cell.style.border = "thin dotted blue";
 													break;
 												case 1:
-													cell.innerHTML = inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+													cell.innerHTML = 'Partnership Runs'+"<br />"+ ps.totalRuns+'('+ps.totalBalls+')';
+													cell.style.border = "thin dotted blue";
 													break;
 												case 2:
-													cell.innerHTML = 'RR-' + inn.runRate; 
+													cell.innerHTML = ps.secondBatterRuns+'('+ps.secondBatterBalls+')';
+													cell.style.border = "thin dotted blue";
 													break;
-												case 3:
-													cell.innerHTML ='BATSMAN';
-													cell.style='color:#2E008B';
-													break;
-												case 4:
-													inn.battingCard.forEach(function(bc,index,arr1){
-														if(bc.onStrike == 'YES'){
-															cell.innerHTML = bc.player.surname+'*'+'|'+'Runs:'+bc.runs +'|'+'Strike:'+ bc.strikeRate+'|'+'4s/6s:'+ bc.fours+'/'+bc.sixes;
-														}
-													});
-													break;
-												case 5:
-													inn.battingCard.forEach(function(bc,index,arr1){
-														if(bc.onStrike == 'NO'){
-															cell.innerHTML = bc.player.surname+'|'+'Runs:'+bc.runs +'|'+'Strike:'+ bc.strikeRate+'|'+'4s/6s:'+ bc.fours+'/'+bc.sixes;	
-														}
-													});
-													break;
-												case 6:
-													cell.innerHTML = 'Partnership';
-													cell.style='color:#2E008B';
-													break;
-												case 7:
-													 inn.partnerships.forEach(function(ps,index,arr4){
-														if(ps.partnershipNumber == inn.partnerships.length){
-															cell.innerHTML = 'FirstBatterRuns'+ps.firstBatterRuns+'|'+'Runs'+ ps.totalRuns+'|'+'SecondBatterRuns'+ps.secondBatterRuns;
-														}
-													});
-													break;
-												case 8:
-													cell.innerHTML = 'Fall Of Wickets';
-													cell.style='color:#2E008B';
-													break;
-												case 9:
-													 inn.fallsOfWickets.forEach(function(fow,index,arr3){
-														cell.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
-													});
-													break;
+											}
+										});
+										break;
+									case 6:
+										switch(j){
+											case 0:
+												cell.innerHTML = 'Last Wickets:';
+												cell.style='color:#2E008B';
+												break;
+											case 1:
+												inn.fallsOfWickets.forEach(function(fow,index,arr3){
+													//cell.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
+												});
+												break;
+										}
+										break;
+									case 7:
+										switch(j){
+											case 0:
+												cell.innerHTML = 'Fall Of Wickets:';
+												cell.style='color:#2E008B';
+												break;
+											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+												var k=j;
+												if(k<=10){
+													cell.innerHTML = k;
+													cell.style.border = "thin dotted blue";
+													k++;
 												}
-											break;
-										case 1:
-											switch(i){
-												case 0:
-													inn.bowlingCard.forEach(function(boc,index,arr2){
-														if(boc.status == 'CURRENTBOWLER'){
-															cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
-														}
-														else if(boc.status == 'LASTBOWLER'){
-															cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
-														}
-													});
-													break;
-												case 3:
-													cell.innerHTML ='BOLWER';
-													cell.style='color:#2E008B';
-													break;
-												case 4:
-													inn.bowlingCard.forEach(function(boc,index,arr2){
-														if(boc.status == 'CURRENTBOWLER'){
-															cell.innerHTML = boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
-														}
-														else if(boc.status == 'LASTBOWLER'){
-															cell.innerHTML = boc.player.surname+'|'+'Bowling Figures:'+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+'|'+'Dot Balls:'+boc.dots+'|'+'Economy:'+boc.economyRate;
-														}
-													});
-													break;
-											}
-											break;
-										case 2:
-											switch(i){
-												case 3:
-													cell.innerHTML = 'Batting Card';
-													cell.style='color:#2E008B';
-													break;
-												case 4:
-													inn.battingCard.forEach(function(bc,index,arr1){
-														if(bc.status == 'OUT'){
-															cell.innerHTML = bc.player.surname+':	'+bc.runs+'('+ bc.balls+')';
-														}
-														/*else if(bc.status == 'NOT OUT'){
-															cell.innerHTML = bc.player.surname+'*'+':	'+bc.runs+'('+ bc.balls+')';	
-														}
-														else{
-															cell.innerHTML = bc.player.surname;
-														}*/
-													});
-													break;
-												case 9:
-													cell.innerHTML = 'Extras-' + inn.totalExtras+' '+'('+inn.totalWides+'wd, '+inn.totalByes+'b, '+inn.totalLegByes+'lb, '+inn.totalNoBalls+'nb'+')';
-													break;
-											}
-											break;
+												break;
+										}
+										break;
+									case 8:
+										switch(j){
+											case 0:
+												if(inn.battingTeamId == dataToProcess.homeTeamId){	
+													cell.innerHTML = dataToProcess.homeTeam.shortname;
+												}
+												else if(inn.battingTeamId == dataToProcess.awayTeamId){
+													cell.innerHTML = dataToProcess.awayTeam.shortname;
+												}
+												break;
+											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+												inn.fallsOfWickets.forEach(function(fow,index,arr3){
+													var k=j;
+													//if(k<=fow.fowNumber){
+														cell.innerHTML = fow.fowRuns+"<br />"+'('+fow.fowOvers+'.'+fow.fowBalls+')';
+													//}
+													cell.style.border = "thin dotted blue";
+												});
+												break;
+										}
+										break;
+									case 9:
+										switch(j){
+											case 0:
+												if(inn.bowlingTeamId == dataToProcess.homeTeamId){	
+													cell.innerHTML = dataToProcess.homeTeam.shortname;
+												}
+												else if(inn.bowlingTeamId == dataToProcess.awayTeamId){
+													cell.innerHTML = dataToProcess.awayTeam.shortname;
+												}
+												break;
+											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+												inn.fallsOfWickets.forEach(function(fow,index,arr3){
+													var k=j;
+													//if(k<=fow.fowNumber){
+														cell.innerHTML = fow.fowRuns+"<br />"+'('+fow.fowOvers+'.'+fow.fowBalls+')';
+													//}
+													cell.style.border = "thin dotted blue";
+												});
+												break;
+											case 11:
+												cell.innerHTML = 'Extras-' + inn.totalExtras+' '+'('+inn.totalWides+'wd, '+inn.totalByes+'b, '+inn.totalLegByes+'lb, '+inn.totalNoBalls+'nb'+')';
+												break;
+										}
+										break;		
+										
 								}
 								row.appendChild(cell);
-							}
-							row.style='color:#008cff';
-							tr.appendChild(row);
-						
 						}
-						tbody = document.createElement('tbody');
-						tbody.appendChild(tr);
-						table.appendChild(tbody);
+						/*else{
+							switch(i){
+								case 9:
+									switch(j){
+										case 0:
+											if(inn.inningNumber == 1){
+												if(inn.battingTeamId == dataToProcess.homeTeamId){	
+													cell.innerHTML = dataToProcess.homeTeam.shortname;
+												}
+												else if(inn.battingTeamId == dataToProcess.awayTeamId){
+													cell.innerHTML = dataToProcess.awayTeam.shortname;
+												}
+											}
+											break;
+										case 1:
+											inn.fallsOfWickets.forEach(function(fow,index,arr3){
+													var k=j;
+													//if(k<=fow.fowNumber){
+														cell.innerHTML = fow.fowRuns+'('+fow.fowOvers+'.'+fow.fowBalls+')';
+													//}
+													cell.style.border = "thin dotted blue";
+												});
+											break;
+									}
+									break;
+							}
+							row.appendChild(cell);
+							
+						}*/
+
 					}
-				/*else{
-					if(inn.inningNumber == 1){
-						header_text = document.createElement('h6');
-						header_text.innerHTML = 'Fall Of Wickets 1 Inning';
-						document.getElementById('fruit_captions_div').appendChild(header_text);
-					
-						inn.fallsOfWickets.forEach(function(fow,index,arr3){
-							header_text = document.createElement('h6');
-							header_text.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
-							document.getElementById('fruit_captions_div').appendChild(header_text);
-						
-						});
-					}
-				}*/
+					row.style='color:#008cff';
+					tr.appendChild(row);
+				}
+				tbody = document.createElement('tbody');
+				tbody.appendChild(tr);
+				table.appendChild(tbody);
 			});
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}
