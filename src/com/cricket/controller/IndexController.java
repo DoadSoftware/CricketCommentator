@@ -30,7 +30,7 @@ import com.cricket.util.CricketUtil;
 import net.sf.json.JSONObject;
 
 @Controller
-@SessionAttributes(value={"session_match","session_event_file","session_selected_match","session_selected_broadcaster"})
+@SessionAttributes(value={"session_match","session_selected_inning","session_event_file","session_selected_match","session_selected_broadcaster"})
 public class IndexController 
 {
 	@Autowired
@@ -56,6 +56,8 @@ public class IndexController
 			@ModelAttribute("session_match") Match session_match,
 			@ModelAttribute("session_event_file") EventFile session_event_file,
 			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
+			@ModelAttribute("session_selected_inning") int session_selected_inning,
+			@RequestParam(value = "select_inning", required = false, defaultValue = "") String select_inning,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch) 
 					throws IllegalAccessException, InvocationTargetException, JAXBException
@@ -69,8 +71,11 @@ public class IndexController
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_selected_match));
 		
 		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-
+		
+		session_selected_inning = Integer.valueOf(session_selected_inning);
+		
 		model.addAttribute("session_match", session_match);
+		model.addAttribute("session_selected_inning", session_selected_inning);
 		model.addAttribute("session_selected_match", session_selected_match);
 		model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
 		
@@ -86,11 +91,19 @@ public class IndexController
 			@ModelAttribute("session_selected_match") String session_selected_match,
 			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
 			@ModelAttribute("session_which_graphics_onscreen") String session_which_graphics_onscreen,
+			@ModelAttribute("session_selected_inning") int session_selected_inning,
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
 			@RequestParam(value = "valueToProcess", required = false, defaultValue = "") String valueToProcess) 
 					throws IOException, IllegalAccessException, InvocationTargetException, JAXBException
 	{	
 		switch (whatToProcess.toUpperCase()) {
+		case "CHECK-NUMBER-INNINGS":
+
+			session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + valueToProcess)));
+			
+			return JSONObject.fromObject(session_match).toString();
+
 		case "READ-MATCH-AND-POPULATE":
 			if(!valueToProcess.equalsIgnoreCase(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified())))
@@ -103,8 +116,11 @@ public class IndexController
 				
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
+
+				// set selected inning variable under match object to 'session_selected_inning'
 				
 				return JSONObject.fromObject(session_match).toString();
+
 			} else {
 				return JSONObject.fromObject(null).toString();
 			}
@@ -128,5 +144,10 @@ public class IndexController
 	@ModelAttribute("session_event_file")
 	public EventFile session_event_file(){
 		return new EventFile();
+	}
+	@SuppressWarnings("removal")
+	@ModelAttribute("session_selected_inning")
+	public int session_selected_inning(){
+		return new Integer(0);
 	}
 }

@@ -28,6 +28,9 @@ function processCricketProcedures(whatToProcess)
 	var valueToProcess;
 	
 	switch(whatToProcess) {
+	case 'CHECK-NUMBER-INNINGS':
+		valueToProcess = $('#select_cricket_matches').val();
+		break;
 	case 'READ-MATCH-AND-POPULATE':
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
@@ -40,6 +43,9 @@ function processCricketProcedures(whatToProcess)
         dataType : 'json',
         success : function(data) {
         	switch(whatToProcess) {
+			case 'CHECK-NUMBER-INNINGS':
+				addItemsToList(whatToProcess,data);
+				break;
 			case 'READ-MATCH-AND-POPULATE':
 				addItemsToList(whatToProcess,data);
 				$('#matchFileTimeStamp').val(session_match.matchFileTimeStamp);
@@ -54,22 +60,67 @@ function processCricketProcedures(whatToProcess)
 }
 function addItemsToList(whatToProcess, dataToProcess)
 {
-	var Tname;
-	
 	switch (whatToProcess) {
-	case 'READ-MATCH-AND-POPULATE':
+	case 'CHECK-NUMBER-INNINGS':
 		
-		if(dataToProcess){
-			$('#fruit_captions_div').empty();
+		var option;
+		
+		$('#select_inning').empty();
+		
+		switch (dataToProcess.matchType.toUpperCase()) {
+		case 'TEST':
+
+			for(var i = 1; i <= 4; i++) {
+				option = document.createElement('option');
+			}
+			break;
+		default:
+			break;
 		}
 		
-		table = document.createElement('table');
-		table.setAttribute('class', 'table table-bordered');
-		table.setAttribute('id', 'setup_teams');
-		tr = document.createElement('tr');
+		break;
+
+	case 'READ-MATCH-AND-POPULATE':
 		
-		tbody = document.createElement('tbody');
+		var table,tbody,row,cell;
+		
+		$('#fruit_captions_div').empty();
+		
 		if(dataToProcess) {
+
+			table = document.createElement('table');
+			table.setAttribute('class', 'table table-bordered');
+			table.setAttribute('id', 'setup_teams');
+			tbody = document.createElement('tbody');
+			table.appendChild(tbody);
+
+			for (var i = 1; i <= 18; i++){
+				row = tbody.insertRow(tbody.rows.length - 1);
+				for (var j = 1; j <= 11; j++){
+					cell = row.insertCell(j - 1);
+					switch (i){
+					case 1:
+						switch(j) {
+						case 1:
+							dataToProcess.inning.forEach(function(inn,index,arr){
+								if(inn.inningNumber == dataToProcess.selected_inning) {
+									if(inn.battingTeamId == dataToProcess.homeTeamId){	
+										cell.innerHTML = dataToProcess.homeTeam.shortname;
+									}
+									else if(inn.battingTeamId == dataToProcess.awayTeamId){
+										cell.innerHTML = dataToProcess.awayTeam.shortname;
+									}
+								}
+							});
+						break;
+						}
+					break;
+					}
+				}
+			}
+			
+			
+			
 			dataToProcess.inning.forEach(function(inn,index,arr){
 				for (var i = 0; i <= 9; i++){
 					row = tbody.insertRow(tbody.rows.length);
@@ -310,11 +361,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 
 					}
 					row.style='color:#008cff';
-					tr.appendChild(row);
 				}
-				tbody = document.createElement('tbody');
-				tbody.appendChild(tr);
-				table.appendChild(tbody);
 			});
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}

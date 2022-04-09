@@ -32,9 +32,20 @@
 			    <label for="select_cricket_matches" class="col-sm-4 col-form-label text-left">Select Cricket Match </label>
 			    <div class="col-sm-6 col-md-6">
 			      <select id="select_cricket_matches" name="select_cricket_matches" 
-			      		class="browser-default custom-select custom-select-sm">
+			      		class="browser-default custom-select custom-select-sm" onchange="processCricketProcedures('CHECK-NUMBER-INNINGS')">
 						<c:forEach items = "${match_files}" var = "match">
 				          	<option value="${match.name}">${match.name}</option>
+						</c:forEach>
+			      </select>
+			    </div>
+			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="select_inning" class="col-sm-4 col-form-label text-left">Select Inning </label>
+			    <div class="col-sm-6 col-md-6">
+			      <select id="select_inning" name="select_inning" 
+			      		class="browser-default custom-select custom-select-sm">
+						<c:forEach var="inn" begin="1" end="4" step="1">
+				          	<option value="${inn}">Inning + ${inn}</option>
 						</c:forEach>
 			      </select>
 			    </div>
