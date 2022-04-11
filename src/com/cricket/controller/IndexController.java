@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cricket.model.EventFile;
 import com.cricket.model.Match;
+import com.cricket.model.Inning;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
@@ -118,6 +119,8 @@ public class IndexController
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
 
 				// set selected inning variable under match object to 'session_selected_inning'
+				
+				
 				
 				return JSONObject.fromObject(session_match).toString();
 

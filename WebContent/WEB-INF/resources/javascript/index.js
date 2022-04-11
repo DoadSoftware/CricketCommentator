@@ -72,12 +72,18 @@ function addItemsToList(whatToProcess, dataToProcess)
 
 			for(var i = 1; i <= 4; i++) {
 				option = document.createElement('option');
+				option.innerHTML = select_inning
+				$('#select_inning').appendChild(option);	
 			}
 			break;
 		default:
+			for(var i = 1; i <= 2; i++) {
+				option = document.createElement('option');
+				option.innerHTML = select_inning
+				$('#select_inning').appendChild(option);		
+			}
 			break;
 		}
-		
 		break;
 
 	case 'READ-MATCH-AND-POPULATE':
@@ -94,275 +100,312 @@ function addItemsToList(whatToProcess, dataToProcess)
 			tbody = document.createElement('tbody');
 			table.appendChild(tbody);
 
-			for (var i = 1; i <= 18; i++){
+			for (var i = 0; i <= 11; i++){
 				row = tbody.insertRow(tbody.rows.length - 1);
-				for (var j = 1; j <= 11; j++){
+				for (var j = 0; j <= 11; j++){
 					cell = row.insertCell(j - 1);
 					switch (i){
 					case 1:
 						switch(j) {
 						case 1:
 							dataToProcess.inning.forEach(function(inn,index,arr){
-								if(inn.inningNumber == dataToProcess.selected_inning) {
+								//if(inn.inningNumber == dataToProcess.selected_inning) {
 									if(inn.battingTeamId == dataToProcess.homeTeamId){	
-										cell.innerHTML = dataToProcess.homeTeam.shortname;
+										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										
 									}
 									else if(inn.battingTeamId == dataToProcess.awayTeamId){
-										cell.innerHTML = dataToProcess.awayTeam.shortname;
+										cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+									}
+								//}
+							});
+						break;
+						case 2:
+							dataToProcess.inning.forEach(function(inn,index,arr){
+								inn.bowlingCard.forEach(function(boc,index,arr2){
+									if(boc.status == 'CURRENTBOWLER'){
+										cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+'Print over event';
+									}
+									else if(boc.status == 'LASTBOWLER'){
+										cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+'Print over event';
+									}
+								});
+							});
+						break;
+						case 3:
+							dataToProcess.inning.forEach(function(inn,index,arr){
+								if(inn.inningNumber == 1){
+									if(inn.isCurrentInning.toUpperCase() == 'YES'){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+									}
+									else{
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+									}
+								}
+							});
+						break;
+						case 4:
+							dataToProcess.inning.forEach(function(inn,index,arr){
+								cell.innerHTML = 'TEAM NAME'+"<br />"+'TEAM RUNS'
+								cell.style.textAlign = "center";
+							});
+						break;
+						case 5:
+							dataToProcess.inning.forEach(function(inn,index,arr){
+								if(inn.inningNumber == 2){
+									if(inn.isCurrentInning.toUpperCase() == 'YES'){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+									}
+									else{
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
 									}
 								}
 							});
 						break;
 						}
 					break;
+					case 2:
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'CRR-' + inn.runRate;
+								});
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'Ball Since Last Boundary:-';
+								});
+							break;
+						}
+					break;
+					case 3:
+						switch(j){
+							case 1:
+								case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML =  'RRR-';
+								});
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'Last 30 Balls:-' ;
+								});
+							break;
+						}
+					break;
+					case 4:
+					break;
+					case 5:
+						switch(j){
+							case 1:
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'BATSMAN';
+									cell.style='color:#2E008B';
+									cell.style.textAlign = "center";
+								});
+							break;
+							case 3:
+							break;
+							case 4:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'BOWLER';
+									cell.style='color:#2E008B';
+									cell.style.textAlign = "center";
+								});
+							break;
+						}
+					break;
+					case 6:
+						cell.style.textAlign = "center";
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.battingCard.forEach(function(bc,index,arr1){
+										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
+											cell.innerHTML = bc.player.surname+'*'+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
+										}
+									});
+								});
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML ='Name'+"<br />"+'Runs'+"<br />"+'Strike Rate'+"<br />"+'4s/6s';
+								});
+							break;
+							case 3:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.battingCard.forEach(function(bc,index,arr1){
+										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
+											cell.innerHTML = bc.player.surname+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
+										}
+									});
+								});
+							break;
+							case 4:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.bowlingCard.forEach(function(boc,index,arr2){
+										if(boc.status == 'CURRENTBOWLER'){
+											cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;			
+										}
+										else if(boc.status == 'LASTBOWLER'){
+											cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;		
+										}
+									});
+								});
+							break;
+						}
+					break;
+					case 7:
+						cell.style.textAlign = "center";
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.partnerships.forEach(function(ps,index,arr4){
+										cell.innerHTML = ps.firstBatterRuns+'('+ps.firstBatterBalls+')';
+									});
+								});
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.partnerships.forEach(function(ps,index,arr4){
+										cell.innerHTML = 'Partnership Runs'+"<br />"+ ps.totalRuns+'('+ps.totalBalls+')';		
+									});
+								});
+							break;
+							case 3:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.partnerships.forEach(function(ps,index,arr4){
+										cell.innerHTML = ps.secondBatterRuns+'('+ps.secondBatterBalls+')';
+									});
+								});
+							break;
+							case 4:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'Extras-' + inn.totalExtras+"<br />"+'('+inn.totalWides+'wd, '+inn.totalByes+'b, '+inn.totalLegByes+'lb, '+inn.totalNoBalls+'nb'+')';
+								});
+							break;
+						}
+					break;
+					case 8:
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'Last Wickets:';
+									cell.style='color:#2E008B';
+								});
+							break;
+							case 2:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.fallsOfWickets.forEach(function(fow,index,arr3){
+										cell.innerHTML = fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
+									});
+								});
+							break;
+						}
+					break;
+					case 9:
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									cell.innerHTML = 'Fall Of Wickets:';
+									cell.style='color:#2E008B';
+								});
+							break;
+							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									var k=j-1;
+										if(k<=11){
+											cell.innerHTML = k;
+											k++;
+										}
+								});
+							break;
+						}
+					break;
+					case 10:
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									if(inn.isCurrentInning.toUpperCase() == 'YES') {
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+										cell.innerHTML = dataToProcess.homeTeam.shortname;
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname;
+										}
+									}
+									cell.style='color:#2E008B';
+								});
+							break;
+							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.fallsOfWickets.forEach(function(fow,index,arr3){
+										if(inn.isCurrentInning.toUpperCase() == 'YES') {
+											var k=j-1;
+												if(k==fow.fowNumber){
+													cell.innerHTML = fow.fowRuns+'('+fow.fowOvers+'.'+fow.fowBalls+')';
+												}
+										}
+									});
+								});
+							break;
+						}
+					break;
+					case 11:
+						switch(j){
+							case 1:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									if(inn.isCurrentInning.toUpperCase() == 'NO') {
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+										cell.innerHTML = dataToProcess.homeTeam.shortname;
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname;
+										}
+									}
+									
+									cell.style='color:#2E008B';
+								});
+							break;
+							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.fallsOfWickets.forEach(function(fow,index,arr3){
+										if(inn.isCurrentInning.toUpperCase() == 'NO') {
+											var k=j-1;
+											if(k==fow.fowNumber){
+												cell.innerHTML = fow.fowRuns+'('+fow.fowOvers+'.'+fow.fowBalls+')';
+											}
+										}
+									});
+								});
+							break;
+						}
+					break;
 					}
 				}
 			}
-			
-			
-			
-			dataToProcess.inning.forEach(function(inn,index,arr){
-				for (var i = 0; i <= 9; i++){
-					row = tbody.insertRow(tbody.rows.length);
-					for (var  j= 0; j <= 11; j++){
-						cell=row.insertCell(j);
-						if(inn.isCurrentInning.toUpperCase() == 'YES') {
-							switch (i){
-								case 0:
-									switch(j){
-										case 0:
-											if(inn.battingTeamId == dataToProcess.homeTeamId){	
-												cell.innerHTML = dataToProcess.homeTeam.shortname;
-											}
-											else if(inn.battingTeamId == dataToProcess.awayTeamId){
-												cell.innerHTML = dataToProcess.awayTeam.shortname;
-											}
-												break;
-										case 1:
-											inn.bowlingCard.forEach(function(boc,index,arr2){
-												if(boc.status == 'CURRENTBOWLER'){
-													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
-												}
-												else if(boc.status == 'LASTBOWLER'){
-													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver;
-												}
-											});
-											break;
-										}
-										break;
-									case 1:
-										switch(j){
-											case 0:
-												cell.innerHTML = inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
-												break;
-											case 1:
-												cell.innerHTML = 'Ball Since Last Boundary' ;
-												cell.style.border = "thin dotted red";
-												break;
-										}
-											break;
-									case 2:
-										switch(j){
-											case 0:
-												cell.innerHTML = 'RR-' + inn.runRate;
-												break;
-											case 1:
-												cell.innerHTML = 'Last 30 Balls' ;
-												cell.style.border = "thin dotted red";
-												break;
-										}
-											break;
-									case 3:
-										switch(j){
-											case 1:
-												cell.innerHTML ='BATSMAN';
-												cell.style='color:#2E008B';
-												cell.style.textAlign = "center"
-												break;
-											case 3:
-												cell.innerHTML ='BOWLER';
-												cell.style='color:#2E008B';
-												cell.style.textAlign = "center"
-												break;
-											case 4:
-												cell.innerHTML ='BATTING CARD';
-												cell.style='color:#2E008B';
-												cell.style.textAlign = "center"
-												break;
-										}
-										break;
-									case 4:
-										cell.style.textAlign = "center"
-										switch(j){
-											case 0:
-												inn.battingCard.forEach(function(bc,index,arr1){
-													if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
-														cell.innerHTML = bc.player.surname+'*'+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
-														cell.style.border = "thin dotted blue";
-													}
-												});
-													break;
-											case 1:
-												inn.battingCard.forEach(function(bc,index,arr1){
-													if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
-														cell.innerHTML ='Name'+"<br />"+'Runs'+"<br />"+'Strike Rate'+"<br />"+'4s/6s';
-														cell.style.border = "thin dotted blue";
-													}
-												});
-												break;				
-											case 2:
-												inn.battingCard.forEach(function(bc,index,arr1){
-													if(bc.status == 'NOT OUT' &&bc.onStrike == 'NO'){
-														cell.innerHTML = bc.player.surname+"<br />"+bc.runs +"<br />"+ bc.strikeRate+"<br />"+ bc.fours+'/'+bc.sixes;
-														cell.style.border = "thin dotted blue";	
-													}
-												});
-												break;	
-											case 3:
-												cell.style.border = "thin dotted blue";
-												inn.bowlingCard.forEach(function(boc,index,arr2){
-													if(boc.status == 'CURRENTBOWLER'){
-														cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;
-														
-													}
-													else if(boc.status == 'LASTBOWLER'){
-														cell.innerHTML = boc.player.surname+"<br />"+boc.wickets+'-'+boc.runs+'('+boc.overs+'.'+boc.balls+')'+"<br />"+'Dot Balls:'+boc.dots+"<br />"+'Economy:'+boc.economyRate;
-													}
-												});
-												break;			
-										}
-										break;
-									case 5:
-										cell.style.textAlign = "center"
-										inn.partnerships.forEach(function(ps,index,arr4){
-											switch(j){
-												case 0:
-													cell.innerHTML = ps.firstBatterRuns+'('+ps.firstBatterBalls+')';
-													cell.style.border = "thin dotted blue";
-													break;
-												case 1:
-													cell.innerHTML = 'Partnership Runs'+"<br />"+ ps.totalRuns+'('+ps.totalBalls+')';
-													cell.style.border = "thin dotted blue";
-													break;
-												case 2:
-													cell.innerHTML = ps.secondBatterRuns+'('+ps.secondBatterBalls+')';
-													cell.style.border = "thin dotted blue";
-													break;
-											}
-										});
-										break;
-									case 6:
-										switch(j){
-											case 0:
-												cell.innerHTML = 'Last Wickets:';
-												cell.style='color:#2E008B';
-												break;
-											case 1:
-												inn.fallsOfWickets.forEach(function(fow,index,arr3){
-													//cell.innerHTML = 'Wicket Number:'+fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
-												});
-												break;
-										}
-										break;
-									case 7:
-										switch(j){
-											case 0:
-												cell.innerHTML = 'Fall Of Wickets:';
-												cell.style='color:#2E008B';
-												break;
-											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
-												var k=j;
-												if(k<=10){
-													cell.innerHTML = k;
-													cell.style.border = "thin dotted blue";
-													k++;
-												}
-												break;
-										}
-										break;
-									case 8:
-										switch(j){
-											case 0:
-												if(inn.battingTeamId == dataToProcess.homeTeamId){	
-													cell.innerHTML = dataToProcess.homeTeam.shortname;
-												}
-												else if(inn.battingTeamId == dataToProcess.awayTeamId){
-													cell.innerHTML = dataToProcess.awayTeam.shortname;
-												}
-												break;
-											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
-												inn.fallsOfWickets.forEach(function(fow,index,arr3){
-													var k=j;
-													//if(k<=fow.fowNumber){
-														cell.innerHTML = fow.fowRuns+"<br />"+'('+fow.fowOvers+'.'+fow.fowBalls+')';
-													//}
-													cell.style.border = "thin dotted blue";
-												});
-												break;
-										}
-										break;
-									case 9:
-										switch(j){
-											case 0:
-												if(inn.bowlingTeamId == dataToProcess.homeTeamId){	
-													cell.innerHTML = dataToProcess.homeTeam.shortname;
-												}
-												else if(inn.bowlingTeamId == dataToProcess.awayTeamId){
-													cell.innerHTML = dataToProcess.awayTeam.shortname;
-												}
-												break;
-											case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
-												inn.fallsOfWickets.forEach(function(fow,index,arr3){
-													var k=j;
-													//if(k<=fow.fowNumber){
-														cell.innerHTML = fow.fowRuns+"<br />"+'('+fow.fowOvers+'.'+fow.fowBalls+')';
-													//}
-													cell.style.border = "thin dotted blue";
-												});
-												break;
-											case 11:
-												cell.innerHTML = 'Extras-' + inn.totalExtras+' '+'('+inn.totalWides+'wd, '+inn.totalByes+'b, '+inn.totalLegByes+'lb, '+inn.totalNoBalls+'nb'+')';
-												break;
-										}
-										break;		
-										
-								}
-								row.appendChild(cell);
-						}
-						/*else{
-							switch(i){
-								case 9:
-									switch(j){
-										case 0:
-											if(inn.inningNumber == 1){
-												if(inn.battingTeamId == dataToProcess.homeTeamId){	
-													cell.innerHTML = dataToProcess.homeTeam.shortname;
-												}
-												else if(inn.battingTeamId == dataToProcess.awayTeamId){
-													cell.innerHTML = dataToProcess.awayTeam.shortname;
-												}
-											}
-											break;
-										case 1:
-											inn.fallsOfWickets.forEach(function(fow,index,arr3){
-													var k=j;
-													//if(k<=fow.fowNumber){
-														cell.innerHTML = fow.fowRuns+'('+fow.fowOvers+'.'+fow.fowBalls+')';
-													//}
-													cell.style.border = "thin dotted blue";
-												});
-											break;
-									}
-									break;
-							}
-							row.appendChild(cell);
-							
-						}*/
-
-					}
-					row.style='color:#008cff';
-				}
-			});
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}
 		document.getElementById('fruit_captions_div').appendChild(table);

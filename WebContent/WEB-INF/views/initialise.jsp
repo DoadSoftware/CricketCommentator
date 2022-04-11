@@ -45,7 +45,7 @@
 			      <select id="select_inning" name="select_inning" 
 			      		class="browser-default custom-select custom-select-sm">
 						<c:forEach var="inn" begin="1" end="4" step="1">
-				          	<option value="${inn}">Inning + ${inn}</option>
+				          	<option value="${inn}">Inning ${inn}</option>
 						</c:forEach>
 			      </select>
 			    </div>
