@@ -1,3 +1,4 @@
+var session_match;
 function processWaitingButtonSpinner(whatToProcess) 
 {
 	switch (whatToProcess) {
@@ -16,22 +17,34 @@ function reloadPage(whichPage)
 {
 	switch (whichPage) {
 	case 'initialise':
-		processUserSelection($('#select_broadcaster'));
+		processUserSelection(document.getElementById('select_cricket_matches'));
 		break;
 	}
 }
 function processUserSelection(whichInput)
 {	
+	switch (whichInput.id) {
+	case 'select_cricket_matches':
+		processCricketProcedures('CHECK-NUMBER-INNINGS');
+		break;
+	}
 }
 function processCricketProcedures(whatToProcess)
 {
 	var valueToProcess;
+	
+	processWaitingButtonSpinner('START_WAIT_TIMER');
 	
 	switch(whatToProcess) {
 	case 'CHECK-NUMBER-INNINGS':
 		valueToProcess = $('#select_cricket_matches').val();
 		break;
 	case 'READ-MATCH-AND-POPULATE':
+		if(session_match) {
+			if(session_match.matchFileTimeStamp === $('#matchFileTimeStamp').val()) {
+				return false;
+			}
+		}
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
 	}
@@ -48,10 +61,8 @@ function processCricketProcedures(whatToProcess)
 				break;
 			case 'READ-MATCH-AND-POPULATE':
 				addItemsToList(whatToProcess,data);
-				alert(document.getElementById('matchFileTimeStamp').value);
 				document.getElementById('matchFileTimeStamp').value = data.matchFileTimeStamp;
-			//	$('#matchFileTimeStamp').val(data.matchFileTimeStamp);
-				
+				session_match = data;
 				break;
         	}
 			processWaitingButtonSpinner('END_WAIT_TIMER');
@@ -60,6 +71,7 @@ function processCricketProcedures(whatToProcess)
 	  	 	console.log('Error occured in ' + whatToProcess + ' with error description = ' + e);     
 	    }    
 	});
+	processWaitingButtonSpinner('END_WAIT_TIMER');
 }
 function addItemsToList(whatToProcess, dataToProcess)
 {
@@ -76,7 +88,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 
 			for(var i = 1; i <= 4; i++) {
 				option = document.createElement('option');
-				option.innerHTML = "Inning" + i;
+				option.innerHTML = "Inning " + i;
 				option.value = i;
 				drop_down.appendChild(option);	
 			}
@@ -84,7 +96,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 		default:
 			for(var i = 1; i <= 2; i++) {
 				option = document.createElement('option');
-				option.innerHTML = "Inning" + i
+				option.innerHTML = "Inning " + i
 				option.value = i;
 				drop_down.appendChild(option);		
 			}

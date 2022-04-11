@@ -42,11 +42,7 @@
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="select_inning" class="col-sm-4 col-form-label text-left">Select Inning </label>
 			    <div class="col-sm-6 col-md-6">
-			      <select id="select_inning" name="select_inning" 
-			      		class="browser-default custom-select custom-select-sm">
-						<c:forEach var="inn" begin="1" end="4" step="1">
-				          	<option value="${inn}">Inning ${inn}</option>
-						</c:forEach>
+			      <select id="select_inning" name="select_inning" class="browser-default custom-select custom-select-sm">
 			      </select>
 			    </div>
 			  </div>
@@ -60,6 +56,7 @@
 			  </div>
 		    <button style="background-color:#2E008B;color:#FEFEFE;" class="btn btn-sm" type="submit"
 		  		name="load_fruit_btn" id="load_fruit_btn">
+		  		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
 		  		<i class="fa-solid fa-microphone"></i> Load Commentator</button>
 	       </div>
 	    </div>

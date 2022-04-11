@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cricket.model.EventFile;
-import com.cricket.model.Match;
 import com.cricket.model.Inning;
+import com.cricket.model.Match;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
@@ -75,6 +75,14 @@ public class IndexController
 		
 		session_selected_inning = Integer.valueOf(session_selected_inning);
 		
+		for(Inning inn : session_match.getInning()) {
+			if(inn.getInningNumber() == session_selected_inning) {
+				inn.setIsCurrentInning(CricketUtil.YES);
+			} else {
+				inn.setIsCurrentInning(CricketUtil.NO);
+			}
+		}
+		
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_inning", session_selected_inning);
 		model.addAttribute("session_selected_match", session_selected_match);
@@ -106,6 +114,7 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 
 		case "READ-MATCH-AND-POPULATE":
+			
 			if(!valueToProcess.equalsIgnoreCase(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified())))
 			{
@@ -118,12 +127,18 @@ public class IndexController
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
 
+				for(Inning inn : session_match.getInning()) {
+					if(inn.getInningNumber() == session_selected_inning) {
+						inn.setIsCurrentInning(CricketUtil.YES);
+					} else {
+						inn.setIsCurrentInning(CricketUtil.NO);
+					}
+				}
 				
-				return JSONObject.fromObject(session_match).toString();
-
-			} else {
-				return JSONObject.fromObject(null).toString();
 			}
+
+			return JSONObject.fromObject(session_match).toString();
+
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
