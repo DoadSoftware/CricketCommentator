@@ -48,7 +48,10 @@ function processCricketProcedures(whatToProcess)
 				break;
 			case 'READ-MATCH-AND-POPULATE':
 				addItemsToList(whatToProcess,data);
-				$('#matchFileTimeStamp').val(session_match.matchFileTimeStamp);
+				alert(document.getElementById('matchFileTimeStamp').value);
+				document.getElementById('matchFileTimeStamp').value = data.matchFileTimeStamp;
+			//	$('#matchFileTimeStamp').val(data.matchFileTimeStamp);
+				
 				break;
         	}
 			processWaitingButtonSpinner('END_WAIT_TIMER');
@@ -63,7 +66,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 	switch (whatToProcess) {
 	case 'CHECK-NUMBER-INNINGS':
 		
-		var option;
+		var option,drop_down;
+		drop_down = document.getElementById('select_inning');
 		
 		$('#select_inning').empty();
 		
@@ -72,15 +76,17 @@ function addItemsToList(whatToProcess, dataToProcess)
 
 			for(var i = 1; i <= 4; i++) {
 				option = document.createElement('option');
-				option.innerHTML = select_inning
-				$('#select_inning').appendChild(option);	
+				option.innerHTML = "Inning" + i;
+				option.value = i;
+				drop_down.appendChild(option);	
 			}
 			break;
 		default:
 			for(var i = 1; i <= 2; i++) {
 				option = document.createElement('option');
-				option.innerHTML = select_inning
-				$('#select_inning').appendChild(option);		
+				option.innerHTML = "Inning" + i
+				option.value = i;
+				drop_down.appendChild(option);		
 			}
 			break;
 		}
@@ -100,10 +106,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 			tbody = document.createElement('tbody');
 			table.appendChild(tbody);
 
-			for (var i = 0; i <= 11; i++){
-				row = tbody.insertRow(tbody.rows.length - 1);
+			for (var i = 1; i <= 11; i++){
+				row = tbody.insertRow(tbody.rows.length);
 				for (var j = 0; j <= 11; j++){
-					cell = row.insertCell(j - 1);
+					cell = row.insertCell(j-1);
 					switch (i){
 					case 1:
 						switch(j) {
@@ -318,8 +324,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 							case 2:
 								dataToProcess.inning.forEach(function(inn,index,arr){
+									inn.battingCard.forEach(function(bc,index,arr1){
 									inn.fallsOfWickets.forEach(function(fow,index,arr3){
-										cell.innerHTML = fow.fowNumber+'|'+'Runs:'+fow.fowRuns;
+										if(fow.fowPlayerID == bc.playerId){
+											cell.innerHTML = bc.player.surname +' '+ bc.runs+'('+bc.balls+')';
+										}
+										
+									});
 									});
 								});
 							break;
@@ -408,7 +419,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}
-		document.getElementById('fruit_captions_div').appendChild(table);
+		$('#fruit_captions_div').append(table);
+		//document.getElementById('fruit_captions_div').appendChild(table);
 		document.getElementById('fruit_captions_div').style.display = '';
 		break;
 	}

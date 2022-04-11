@@ -118,9 +118,6 @@ public class IndexController
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
 
-				// set selected inning variable under match object to 'session_selected_inning'
-				
-				
 				
 				return JSONObject.fromObject(session_match).toString();
 
