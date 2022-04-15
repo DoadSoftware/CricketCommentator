@@ -7,7 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+//import java.util.HashMap;
+//import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -84,16 +85,6 @@ public class IndexController
 			}
 		}
 		
-		/*HashMap<String, String> this_stats = new HashMap<String,String>();
-		for(Inning inn : session_match.getInning()){
-			if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
-				this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
-				inn.setStats(this_stats);
-				System.out.println(inn.getStats().size());
-			}
-		}*/
-		
-		
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_inning", session_selected_inning);
 		model.addAttribute("session_selected_match", session_selected_match);
@@ -148,7 +139,7 @@ public class IndexController
 					
 				}
 				
-				/*HashMap<String, String> this_stats = new HashMap<String,String>();
+				/*Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
 					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
 						this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
