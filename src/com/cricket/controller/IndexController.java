@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -73,7 +74,7 @@ public class IndexController
 		
 		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 		
-		session_selected_inning = Integer.valueOf(session_selected_inning);
+		session_selected_inning = Integer.valueOf(select_inning);
 		
 		for(Inning inn : session_match.getInning()) {
 			if(inn.getInningNumber() == session_selected_inning) {
@@ -82,6 +83,16 @@ public class IndexController
 				inn.setIsCurrentInning(CricketUtil.NO);
 			}
 		}
+		
+		/*HashMap<String, String> this_stats = new HashMap<String,String>();
+		for(Inning inn : session_match.getInning()){
+			if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+				this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+				inn.setStats(this_stats);
+				System.out.println(inn.getStats().size());
+			}
+		}*/
+		
 		
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_inning", session_selected_inning);
@@ -127,13 +138,24 @@ public class IndexController
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
 
+				
 				for(Inning inn : session_match.getInning()) {
 					if(inn.getInningNumber() == session_selected_inning) {
 						inn.setIsCurrentInning(CricketUtil.YES);
 					} else {
 						inn.setIsCurrentInning(CricketUtil.NO);
 					}
+					
 				}
+				
+				/*HashMap<String, String> this_stats = new HashMap<String,String>();
+				for(Inning inn : session_match.getInning()){
+					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+						this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+						inn.setStats(this_stats);
+						System.out.println("Over in inning 1- " + inn.getStats().get("OVER"));
+					}
+				}*/
 				
 			}
 
@@ -143,6 +165,7 @@ public class IndexController
 			return JSONObject.fromObject(null).toString();
 		}
 	}
+	
 
 	@ModelAttribute("session_selected_match")
 	public String session_selected_match(){
