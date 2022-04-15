@@ -238,12 +238,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 3:
 						switch(j){
 							case 1:
-								case 1:
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 										if(dataToProcess.inning.at(0).totalRuns > dataToProcess.inning.at(1).totalRuns){
-											var RRR = ((dataToProcess.inning.at(0).totalRuns-dataToProcess.inning.at(1).totalRuns)/(dataToProcess.inning.at(0).totalOvers-dataToProcess.inning.at(1).totalOvers));
-											cell.innerHTML =  'Req. RR-'+ Math.round(RRR * 100) / 100
+											var RRR = ((dataToProcess.inning.at(0).totalRuns - dataToProcess.inning.at(1).totalRuns)/((dataToProcess.maxOvers*6) - (dataToProcess.inning.at(1).totalOvers*6 + dataToProcess.inning.at(1).totalBalls)));
+											cell.innerHTML =  'Req. RR-'+ Math.round((RRR*6) * 100) / 100
 										}
 										else{
 											cell.innerHTML = 'Req. RR-'+'0.00';
