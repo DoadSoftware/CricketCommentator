@@ -107,6 +107,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 	case 'READ-MATCH-AND-POPULATE':
 		
 		var table,tbody,row,cell;
+		var myMap = new Map();
 		
 		$('#fruit_captions_div').empty();
 		
@@ -128,12 +129,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 1:
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
-									if(inn.battingTeamId == dataToProcess.homeTeamId){	
-										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
-									}
-									else {
-										cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
-									}
+									inn.stats.forEach(function(st,index,arr){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+st.get("OVER")+')';
+										}
+										else {
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+										}
+									});
 								}
 							});
 						break;
