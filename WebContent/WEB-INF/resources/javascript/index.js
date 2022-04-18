@@ -83,31 +83,20 @@ function addItemsToList(whatToProcess, dataToProcess)
 		
 		$('#select_inning').empty();
 		
-		switch (dataToProcess.matchType.toUpperCase()) {
-		case 'TEST':
-
-			for(var i = 1; i <= 4; i++) {
-				option = document.createElement('option');
-				option.innerHTML = "Inning " + i;
-				option.value = i;
-				drop_down.appendChild(option);	
+		dataToProcess.inning.forEach(function(inn,index,arr){
+			option = document.createElement('option');
+			if(inn.isCurrentInning == 'YES'){
+				option.value = inn.inningNumber;
+				option.innerHTML = "Inning " + inn.inningNumber;
+				option.selectedIndex = inn.inningNumber;
+				drop_down.appendChild(option);
 			}
-			break;
-		default:
-			for(var i = 1; i <= 2; i++) {
-				option = document.createElement('option');
-				option.innerHTML = "Inning " + i
-				option.value = i;
-				drop_down.appendChild(option);		
-			}
-			break;
-		}
+		});
 		break;
 
 	case 'READ-MATCH-AND-POPULATE':
 		
 		var table,tbody,row,cell;
-		var myMap = new Map();
 		
 		$('#fruit_captions_div').empty();
 		
@@ -129,14 +118,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 1:
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
-									inn.stats.forEach(function(st,index,arr){
+									//inn.stats.forEach(function(st,index,arr){
 										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+st.get("OVER")+')';
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
 										}
 										else {
 											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
 										}
-									});
+									//});
 								}
 							});
 						break;
