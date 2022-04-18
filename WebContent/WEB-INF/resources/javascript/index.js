@@ -85,11 +85,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 		
 		dataToProcess.inning.forEach(function(inn,index,arr){
 			option = document.createElement('option');
-			if(inn.isCurrentInning == 'YES'){
-				option.value = inn.inningNumber;
-				option.innerHTML = "Inning " + inn.inningNumber;
-				option.selectedIndex = inn.inningNumber;
-				drop_down.appendChild(option);
+			option.value = inn.inningNumber;
+			option.innerHTML = "Inning " + inn.inningNumber;
+			alert('Inning Number' + inn.inningNumber + 'Current Inning' + inn.isCurrentInning);
+			drop_down.appendChild(option);
+			if(inn.isCurrentInning.toUpperCase().includes('YES')){	
+				option.selected = true;	
 			}
 		});
 		break;
@@ -118,14 +119,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 1:
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
-									//inn.stats.forEach(function(st,index,arr){
+									inn.stats.forEach(function(value,key){
 										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+key+value+')';
 										}
 										else {
 											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.totalOvers+'.'+inn.totalBalls+')';
 										}
-									//});
+									});
 								}
 							});
 						break;
