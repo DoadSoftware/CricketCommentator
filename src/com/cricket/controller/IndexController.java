@@ -144,7 +144,6 @@ public class IndexController
 					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
 						this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
 						inn.setStats(this_stats);
-						System.out.println("Over in inning - " + inn.getStats().get("OVER"));
 					}
 				}
 				
