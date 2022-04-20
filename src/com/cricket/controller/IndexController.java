@@ -141,11 +141,14 @@ public class IndexController
 				
 				Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
-					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
-						this_stats.put(CricketUtil.OVER, CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
-						inn.setStats(this_stats);
+					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+				
+					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {	
+						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 					}
+					inn.setStats(this_stats);
 				}
+				
 				
 			}
 

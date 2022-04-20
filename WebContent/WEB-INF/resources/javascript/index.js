@@ -133,11 +133,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.bowlingCard.forEach(function(boc,index,arr2){
-										if(boc.status == 'CURRENTBOWLER'){
-											cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />";
-										}
-										else if(boc.status == 'LASTBOWLER'){
-											cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />";
+										for(var key1 in inn.stats){
+											if(boc.status == 'CURRENTBOWLER'){
+												cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key1];
+											}
+											else if(boc.status == 'LASTBOWLER'){
+												cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key1];
+											}
 										}
 									});
 								}
@@ -147,11 +149,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.textAlign = "center";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 1){
-									if(inn.battingTeamId == dataToProcess.homeTeamId){	
-										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
-									}
-									else if(inn.battingTeamId == dataToProcess.awayTeamId){
-										cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+									for(var key in inn.stats){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										}
 									}
 								}
 							});
@@ -166,11 +170,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.textAlign = "center";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 2){
-									if(inn.battingTeamId == dataToProcess.homeTeamId){	
-										cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
-									}
-									else if(inn.battingTeamId == dataToProcess.awayTeamId){
-										cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+									for(var key in inn.stats){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										}
+										else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										}
 									}
 								}
 							});
