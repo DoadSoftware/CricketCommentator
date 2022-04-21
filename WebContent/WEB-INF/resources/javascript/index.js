@@ -133,12 +133,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.bowlingCard.forEach(function(boc,index,arr2){
-										for(var key1 in inn.stats){
-											if(boc.status == 'CURRENTBOWLER'){
-												cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key1];
-											}
-											else if(boc.status == 'LASTBOWLER'){
-												cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key1];
+										for(var key in inn.stats){
+											if(key == "OVER"){
+												if(boc.status == 'CURRENTBOWLER'){
+													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key];
+												}
+												else if(boc.status == 'LASTBOWLER'){
+													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver+"<br />"+inn.stats[key];
+												}
 											}
 										}
 									});
@@ -178,6 +180,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
 										}
 									}
+								}
+							});
+						break;
+						case 6:
+						break;
+						case 7:
+							dataToProcess.daysSessions.forEach(function(ds,index,arr){
+								if(dataToProcess.matchType == 'TEST'){
+									cell.innerHTML = 'Day-'+ ds.dayNumber  + "<br />" + 'Session-' + ds.sessionNumber;
 								}
 							});
 						break;
