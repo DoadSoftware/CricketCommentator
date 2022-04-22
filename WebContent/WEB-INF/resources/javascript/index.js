@@ -119,11 +119,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									for(var key in inn.stats){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
-										}
-										else {
-											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										if(key == "OVER"+ inn.inningNumber){
+											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+												cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
+											else {
+												cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
 										}
 									}
 								}
@@ -152,11 +154,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 1){
 									for(var key in inn.stats){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
-										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										if(key == "OVER"+ inn.inningNumber){
+											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+												cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
+											else if(inn.battingTeamId == dataToProcess.awayTeamId){
+												cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
 										}
 									}
 								}
@@ -173,11 +177,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 2){
 									for(var key in inn.stats){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
-										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+										if(key == "OVER"+ inn.inningNumber){
+											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+												cell.innerHTML = dataToProcess.homeTeam.shortname +"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
+											else if(inn.battingTeamId == dataToProcess.awayTeamId){
+												cell.innerHTML = dataToProcess.awayTeam.shortname+"<br />"+inn.totalRuns+'-'+inn.totalWickets+'('+inn.stats[key]+')';
+											}
 										}
 									}
 								}
@@ -205,7 +211,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 							case 2:
 								dataToProcess.inning.forEach(function(inn,index,arr){
-									cell.innerHTML = 'Ball Since Last Boundary:-';
+									for(var key in inn.stats){
+										if(key == "BOUNDARY"){
+											cell.innerHTML = 'Ball Since Last Boundary:-'+inn.stats[key];
+										}
+									}
 								});
 							break;
 							case 3:

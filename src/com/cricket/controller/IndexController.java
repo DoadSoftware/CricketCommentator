@@ -129,6 +129,7 @@ public class IndexController
 				
 				session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_selected_match));
+				Collections.reverse(session_event_file.getEvents());
 				
 				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_selected_match).lastModified()));
@@ -148,6 +149,7 @@ public class IndexController
 				
 					if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {	
 						this_stats.put(CricketUtil.OVER, getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
+						this_stats.put(CricketUtil.BOUNDARY, getLastBoundary(CricketUtil.BOUNDARY, session_event_file.getEvents()));
 					}
 					inn.setStats(this_stats);
 				}
@@ -165,9 +167,7 @@ public class IndexController
 	  {
 	    int total_runs = 0;
 	    String this_over = "";String this_ball_data = "";
-	    
-	    Collections.reverse(events);
-	    
+
 	    if ((events != null) && (events.size() > 0)) {
 	      for (Event evnt : events)
 	      {
@@ -203,7 +203,7 @@ public class IndexController
 	          break;
 	        case "LOG_WICKET": 
 	          if (evnt.getEventRuns() > 0) {
-	            this_ball_data = String.valueOf(evnt.getEventRuns()) + "+" + evnt.getEventType();
+	            this_ball_data = String.valueOf(evnt.getEventRuns()) + evnt.getEventType();
 	          } else {
 	            this_ball_data = evnt.getEventType();
 	          }
@@ -255,14 +255,41 @@ public class IndexController
 	    }
 	    this_over = this_over.replace("WIDE", "wd");
 	    this_over = this_over.replace("NO_BALL", "nb");
-	    this_over = this_over.replace("BYE", "b");
 	    this_over = this_over.replace("LEG_BYE", "lb");
+	    this_over = this_over.replace("BYE", "b");
 	    this_over = this_over.replace("PENALTY", "pen");
 	    this_over = this_over.replace("LOG_WICKET", "w");
 	    this_over = this_over.replace("WICKET", "w");
 	    
 	    return this_over;
 	  }
+	
+	public static String getLastBoundary(String whatToProcess, List<Event> events) {
+		String last_boundary = "";
+		int count_lb = 0;
+		if((events != null) && (events.size() > 0)) {
+			for(Event evnt : events) {
+				if(whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY) && evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX) || evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR)) {
+					last_boundary = String.valueOf(count_lb);
+					break;
+				}
+				
+				//System.out.println(evnt.getEventType());
+				switch(evnt.getEventType()) {
+				case "0": case "1": case "2": case "3": case "5": 
+				case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+				case "LOG_WICKET":
+					count_lb = count_lb + 1;
+					break;
+				}
+				last_boundary = String.valueOf(count_lb);
+			}
+			
+		}
+		
+		return last_boundary;
+		
+	}
 
 	@ModelAttribute("session_selected_match")
 	public String session_selected_match(){
