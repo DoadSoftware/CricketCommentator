@@ -281,14 +281,25 @@ public class IndexController
 				case "LOG_WICKET":
 					count_lb = count_lb + 1;
 					break;
+				/*case "LOG_ANY_BALL":
+					if(evnt.getEventRuns() == 4 || evnt.getEventRuns() == 6) {
+						if(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+							count_lb = count_lb - count_lb;
+							last_boundary = String.valueOf(count_lb);
+							break;
+						}
+					}
+					else {
+						count_lb = count_lb + 1;
+					}
+					break;*/
 				}
 				last_boundary = String.valueOf(count_lb);
+				System.out.println("count " + count_lb);
 			}
 			
 		}
-		
 		return last_boundary;
-		
 	}
 
 	@ModelAttribute("session_selected_match")
