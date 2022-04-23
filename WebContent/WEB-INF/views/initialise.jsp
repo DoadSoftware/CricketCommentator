@@ -16,7 +16,7 @@
   <link href="<c:url value="/webjars/font-awesome/6.0.0/css/all.css"/>" rel="stylesheet">
 		
 </head>
-<body onload="reloadPage('initialise')">
+<body>
 <form:form name="initialise_form" autocomplete="off" action="commentator" method="POST">
 <div class="content py-5" style="background-color: #EAE8FF; color: #2E008B">
   <div class="container">
@@ -40,13 +40,6 @@
 			    </div>
 			  </div>
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="select_inning" class="col-sm-4 col-form-label text-left">Select Inning </label>
-			    <div class="col-sm-6 col-md-6">
-			      <select id="select_inning" name="select_inning" class="browser-default custom-select custom-select-sm">
-			      </select>
-			    </div>
-			  </div>
-			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="select_broadcaster" class="col-sm-4 col-form-label text-left">Select Broadcaster </label>
 			    <div class="col-sm-6 col-md-6">
 			      <select id="select_broadcaster" name="select_broadcaster" class="browser-default custom-select custom-select-sm">
@@ -56,7 +49,6 @@
 			  </div>
 		    <button style="background-color:#2E008B;color:#FEFEFE;" class="btn btn-sm" type="submit"
 		  		name="load_fruit_btn" id="load_fruit_btn">
-		  		<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
 		  		<i class="fa-solid fa-microphone"></i> Load Commentator</button>
 	       </div>
 	    </div>
