@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
@@ -116,10 +118,12 @@ public class IndexController
 				
 				Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
-					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {	
-						this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
 						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
-						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, session_event_file.getEvents()));
+						this_stats.put(CricketUtil.BOUNDARY, lastFewOversData(CricketUtil.BOUNDARY, session_event_file.getEvents()));
+						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 					}
 					inn.setStats(this_stats);
 				}
@@ -131,6 +135,40 @@ public class IndexController
 			return JSONObject.fromObject(null).toString();
 		}
 	}
+	
+	public static String lastFewOversData(String whatToProcess, List<Event> events)
+	  {
+	    int count_lb = 0;
+	    boolean exitLoop = false;
+	    if ((events != null) && (events.size() > 0)) {
+	      for (Event evnt : events)
+	      {
+	        if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) && (evnt.getEventWasABoundary() != null) && (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)))){
+	          break;
+	        }
+	        switch (evnt.getEventType())
+	        {
+	        case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR : case CricketUtil.FIVE : case CricketUtil.SIX: 
+	        case CricketUtil.DOT: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: 
+	        case CricketUtil.LOG_WICKET: 
+	          count_lb += 1;
+	          break;
+	        case CricketUtil.LOG_ANY_BALL: 
+	          if ((evnt.getEventWasABoundary() != null) && (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+	            exitLoop = true;
+	          }
+	          else {
+	        	  count_lb += 1; 
+	          }
+	          break;
+	        }
+	        if (exitLoop == true) {
+	          break;
+	        }
+	      }
+	    }
+	    return String.valueOf(count_lb);
+	  }
 	
 	@ModelAttribute("session_selected_broadcaster")
 	public String session_selected_broadcaster(){
