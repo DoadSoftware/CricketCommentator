@@ -121,7 +121,7 @@ public class IndexController
 					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
-						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
+						this_stats.put(CricketUtil.OVER, getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 						this_stats.put(CricketUtil.BOUNDARY, lastFewOversData(CricketUtil.BOUNDARY, inn, session_event_file.getEvents()));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 					}
@@ -144,18 +144,26 @@ public class IndexController
 	      for (Event evnt : events)
 	      {
 	    	if(inning.getInningNumber() == evnt.getEventInningNumber()) {
-	    		if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) && (evnt.getEventWasABoundary() != null) && (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)))){
+	    		if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) && (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) || 
+	    				(evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR)) &&
+	    				(evnt.getEventWasABoundary() != null) && (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))){
 	  	          break;
 	  	        }
 	  	        switch (evnt.getEventType())
 	  	        {
-	  	        case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR : case CricketUtil.FIVE : case CricketUtil.SIX: 
-	  	        case CricketUtil.DOT: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: 
+	  	        case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: 
+	  	        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: 
 	  	        case CricketUtil.LOG_WICKET: 
 	  	          count_lb += 1;
 	  	          break;
+	  	        case CricketUtil.FOUR: case CricketUtil.SIX:
+	  	    	  if(evnt.getEventWasABoundary() == null) {
+	  	    		count_lb += 1;
+	  	    	  }
+	  	    	  break;
 	  	        case CricketUtil.LOG_ANY_BALL: 
-	  	          if ((evnt.getEventWasABoundary() != null) && (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+	  	          if (((evnt.getEventRuns() == 4) || (evnt.getEventRuns() == 6)) && (evnt.getEventWasABoundary() != null) && 
+	  	        		  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 	  	            exitLoop = true;
 	  	          }
 	  	          else {
@@ -170,6 +178,95 @@ public class IndexController
 	      }
 	    }
 	    return String.valueOf(count_lb);
+	  }
+	
+	public static String getEventsText(String whatToProcess, String seperatorType, List<Event> events)
+	  {
+	    int total_runs = 0;
+	    String this_over = "";String this_ball_data = "";
+	    if ((events != null) && (events.size() > 0)) {
+	      for (Event evnt : events)
+	      {
+	        if ((whatToProcess.equalsIgnoreCase(CricketUtil.OVER)) && (evnt.getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER))) {
+	          break;
+	        }
+	        this_ball_data = "";
+	        switch (evnt.getEventType())
+	        {
+	        case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+	        case CricketUtil.FOUR: case CricketUtil.SIX: 
+	          this_ball_data = String.valueOf(evnt.getEventRuns());
+	          total_runs += evnt.getEventRuns();
+	          break;
+	        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+	          this_ball_data = String.valueOf(evnt.getEventRuns()) + evnt.getEventType();
+	          switch (evnt.getEventType())
+	          {
+	          case CricketUtil.WIDE: case CricketUtil.NO_BALL:
+	            total_runs = total_runs + evnt.getEventRuns() + evnt.getEventExtraRuns() + evnt.getEventSubExtraRuns();
+	          }
+	          break;
+	        case CricketUtil.LOG_WICKET: 
+	          if (evnt.getEventRuns() > 0) {
+	            this_ball_data = String.valueOf(evnt.getEventRuns()) + "+" + evnt.getEventType();
+	          } else {
+	            this_ball_data = evnt.getEventType();
+	          }
+	          total_runs = total_runs + evnt.getEventRuns() + evnt.getEventExtraRuns() + evnt.getEventSubExtraRuns();
+	          break;
+	        case CricketUtil.LOG_ANY_BALL:
+	          if (evnt.getEventExtra() != null) {
+	            this_ball_data = evnt.getEventExtra();
+	          }
+	          if (evnt.getEventSubExtra() != null)
+	          {
+	            if (this_ball_data.isEmpty()) {
+	              this_ball_data = evnt.getEventSubExtra();
+	            } else {
+	              this_ball_data = this_ball_data + "+" + evnt.getEventSubExtra();
+	            }
+	            if (evnt.getEventExtraRuns() > 0) {
+	              if (this_ball_data.isEmpty()) {
+	                this_ball_data = String.valueOf(evnt.getEventExtraRuns());
+	              } else {
+	                this_ball_data = this_ball_data + String.valueOf(evnt.getEventExtraRuns());
+	              }
+	            }
+	          }
+	          if (evnt.getEventRuns() > 0) {
+	            if (this_ball_data.isEmpty()) {
+	              this_ball_data = String.valueOf(evnt.getEventRuns());
+	            } else {
+	              this_ball_data = this_ball_data + "+" + String.valueOf(evnt.getEventRuns());
+	            }
+	          }
+	          if (evnt.getEventHowOut() != null && !evnt.getEventHowOut().isEmpty()) {
+	            if (this_ball_data.isEmpty()) {
+	              this_ball_data = "WICKET";
+	            } else {
+	              this_ball_data = this_ball_data + "+" + "WICKET";
+	            }
+	          }
+	          total_runs = total_runs + evnt.getEventRuns() + evnt.getEventExtraRuns() + evnt.getEventSubExtraRuns();
+	        }
+	        if (!this_ball_data.isEmpty()) {
+	          if (this_over.isEmpty()) {
+	            this_over = this_ball_data;
+	          } else {
+	            this_over = this_over + seperatorType + this_ball_data;
+	          }
+	        }
+	      }
+	    }
+	    this_over = this_over.replace("WIDE", "wd");
+	    this_over = this_over.replace("NO_BALL", "nb");
+	    this_over = this_over.replace("LEG_BYE", "lb");
+	    this_over = this_over.replace("BYE", "b");
+	    this_over = this_over.replace("PENALTY", "pen");
+	    this_over = this_over.replace("LOG_WICKET", "w");
+	    this_over = this_over.replace("WICKET", "w");
+	    
+	    return this_over;
 	  }
 	
 	@ModelAttribute("session_selected_broadcaster")
