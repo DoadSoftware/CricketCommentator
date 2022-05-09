@@ -82,9 +82,7 @@ public class IndexController
 	{
 		session_selected_broadcaster = select_broadcaster;
 		
-		session_Configurations = new Configurations();
-		session_Configurations.setFilename(selectedMatch);
-		session_Configurations.setBroadcaster(select_broadcaster);
+		session_Configurations = new Configurations(selectedMatch, select_broadcaster);
 		
 		JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
 				new File(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
@@ -150,7 +148,6 @@ public class IndexController
 						this_stats.put("PLURAL",CricketFunctions.Plural(inn.getTotalOvers()));
 					}
 					inn.setStats(this_stats);
-					//System.out.println(this_stats.get("COMPARE" + inn.getInningNumber()));
 				}
 			}
 

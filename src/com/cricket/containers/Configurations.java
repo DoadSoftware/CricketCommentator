@@ -15,7 +15,18 @@ public class Configurations {
     @XmlElement(name="broadcaster")
     private String broadcaster;
 
-    public String getBroadcaster() {
+    public Configurations(String filename, String broadcaster) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+	}
+    
+	public Configurations() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getBroadcaster() {
         return broadcaster;
     }
     public void setBroadcaster(String broadcaster) {
