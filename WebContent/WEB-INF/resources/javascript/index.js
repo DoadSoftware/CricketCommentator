@@ -172,6 +172,16 @@ function addItemsToList(whatToProcess, dataToProcess)
 									if(inn.isCurrentInning == 'YES'){
 										cell.innerHTML = 'CRR-' + inn.runRate;
 									}
+									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+										if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
+											var RRR = ((dataToProcess.inning[0].totalRuns - dataToProcess.inning[1].totalRuns)/
+												((dataToProcess.maxOvers * 6) - (dataToProcess.inning[1].totalOvers * 6 + dataToProcess.inning[1].totalBalls)));
+											cell.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req. RR-' + Math.round((RRR * 6) * 100) / 100;
+										}
+										else{
+											cell.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req. RR- 0.00'
+										}
+									}
 								});
 								break;
 							case 2:
@@ -221,14 +231,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 						switch(j){
 							case 1:
 								dataToProcess.inning.forEach(function(inn,index,arr){
-									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
-										if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
-											var RRR = ((dataToProcess.inning[0].totalRuns - dataToProcess.inning[1].totalRuns)/
-												((dataToProcess.maxOvers * 6) - (dataToProcess.inning[1].totalOvers * 6 + dataToProcess.inning[1].totalBalls)));
-											cell.innerHTML =  'Req. RR-' + Math.round((RRR * 6) * 100) / 100;
-										}
-										else{
-											cell.innerHTML =  'Req. RR- 0.00'
+									if(inn.isCurrentInning == 'YES'){
+										if(inn.spells.length > 0) {
+											cell.innerHTML = 'SPELL-' + inn.spells[inn.spells.length-1].spellNumber + "<br />" + 
+											'(' + inn.spells[inn.spells.length-1].runs + '-' + inn.spells[inn.spells.length-1].wickets+ ')';
+										} else {
+											cell.innerHTML = '';
 										}
 									}
 								});
@@ -241,30 +249,32 @@ function addItemsToList(whatToProcess, dataToProcess)
 							case 3:
 								cell.style.textAlign = "center";
 								dataToProcess.inning.forEach(function(inn,index,arr){
-									if(inn.inningNumber == 1){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											//cell.innerHTML = 'compare' ;
-										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											//cell.innerHTML = 'compare' ;
+									if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
+										for(var key in inn.stats){
+											if(key == 'COMPARE' + inn.inningNumber){
+												cell.innerHTML = inn.stats[key] ;
+											}
 										}
 									}
 								});
 								break;
 							case 4:
-								//cell.innerHTML = 'at this stage';
-								cell.style.textAlign = "center";
+								dataToProcess.inning.forEach(function(inn,index,arr){
+									for(var key in inn.stats){
+										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+											if(key == 'PLURAL'){
+												cell.innerHTML = 'at this stage' + "<br />" + "Over - " + inn.totalOvers + inn.stats[key] ;
+												cell.style.textAlign = "center";
+											}		
+										}						
+									}	
+								});
 								break;
 							case 5:
 								cell.style.textAlign = "center";
 								dataToProcess.inning.forEach(function(inn,index,arr){
-									if(inn.inningNumber == 2){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											//cell.innerHTML = 'compare' ;
-										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											//cell.innerHTML = 'compare' ;
-										}
+									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+										cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 									}
 								});
 								break;

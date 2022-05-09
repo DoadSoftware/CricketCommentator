@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.cricket.containers.Configurations;
 import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.Inning;
@@ -41,9 +42,12 @@ public class IndexController
 {
 	@Autowired
 	CricketService cricketService;
+	public static Configurations session_Configurations;
+	
+	String CONFIGURATIONS_DIRECTORY = "Configurations/", COMMENTATOR_CONFIG = "COMMENTATOR.XML";
 
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
-	public String initialisePage(ModelMap model)  
+	public String initialisePage(ModelMap model) throws JAXBException  
 	{
 		model.addAttribute("match_files", new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
 			@Override
@@ -53,6 +57,16 @@ public class IndexController
 		    }
 		}));
 		
+		if(new File(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG).exists()) {
+            session_Configurations = (Configurations)JAXBContext.newInstance(Configurations.class).createUnmarshaller().unmarshal(
+                    new File(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
+        }
+        else {
+            session_Configurations = new Configurations();
+            System.out.println(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG);
+            JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
+                    new File(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
+        }
 		return "initialise";
 	}
 
@@ -67,6 +81,14 @@ public class IndexController
 					throws IllegalAccessException, InvocationTargetException, JAXBException
 	{
 		session_selected_broadcaster = select_broadcaster;
+		
+		session_Configurations = new Configurations();
+		session_Configurations.setFilename(selectedMatch);
+		session_Configurations.setBroadcaster(select_broadcaster);
+		
+		JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
+				new File(CricketUtil.CRICKET_DIRECTORY + CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
+
 		
 		session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch)));
@@ -119,13 +141,16 @@ public class IndexController
 				Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
 					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
+					this_stats.put("COMPARE" + inn.getInningNumber(),calRunsWickets("COMPARE" ,inn , session_event_file.getEvents()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
 						this_stats.put(CricketUtil.OVER, getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 						this_stats.put(CricketUtil.BOUNDARY, lastFewOversData(CricketUtil.BOUNDARY, inn, session_event_file.getEvents()));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
+						this_stats.put("PLURAL",CricketFunctions.Plural(inn.getTotalOvers()));
 					}
 					inn.setStats(this_stats);
+					//System.out.println(this_stats.get("COMPARE" + inn.getInningNumber()));
 				}
 			}
 
@@ -135,7 +160,55 @@ public class IndexController
 			return JSONObject.fromObject(null).toString();
 		}
 	}
-	
+	public static String calRunsWickets(String whatToProcess,Inning inning, List<Event> events) {
+		int total_runs = 0,total_wickets=0;
+		boolean exitLoop = false;
+		Collections.reverse(events);
+		if((events != null) && (events.size() > 0)) {
+			for (Event evnt : events) {
+				if((evnt.getEventOverNo() == inning.getTotalOvers()) && (evnt.getEventBallNo() == inning.getTotalBalls())) {
+					break;
+				}
+				
+				switch (evnt.getEventType()) 
+				{
+				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+		        case CricketUtil.FOUR: case CricketUtil.SIX: 
+		          total_runs += evnt.getEventRuns();
+		          break;
+		          
+		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+		        	total_runs += evnt.getEventRuns();
+		        	break;
+		        	
+		        case CricketUtil.LOG_WICKET:
+		        	if(inning.getTotalWickets() > total_wickets) {
+		        		total_wickets += 1;
+		        		exitLoop = true;
+		        	}
+		        	break;
+		        
+		        case CricketUtil.LOG_ANY_BALL:
+		        	total_runs += evnt.getEventRuns();
+			          if (evnt.getEventExtra() != null) {
+			        	 total_runs += evnt.getEventExtraRuns();
+			          }
+			          if (evnt.getEventSubExtra() != null) {
+			        	 total_runs += evnt.getEventSubExtraRuns();
+			          }
+			          if (evnt.getEventHowOut() != null && !evnt.getEventHowOut().isEmpty()) {
+			        	  total_wickets += 1;
+			          }
+			          break;
+				}
+				if (exitLoop == true) {
+		  	          break;
+		  	    }
+			}
+		}
+		return total_runs + "-" + total_wickets;
+	}
+
 	public static String lastFewOversData(String whatToProcess,Inning inning, List<Event> events)
 	  {
 	    int count_lb = 0;
