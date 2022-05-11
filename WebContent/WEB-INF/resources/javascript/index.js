@@ -56,7 +56,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 	switch (whatToProcess) {
 	case 'READ-MATCH-AND-POPULATE':
 		
-		var table,tbody,row,cell;
+		var table,tbody,row,cell,count;
 		
 		$('#fruit_captions_div').empty();
 		
@@ -70,12 +70,31 @@ function addItemsToList(whatToProcess, dataToProcess)
 
 			for (var i = 1; i <= 11; i++){
 				row = tbody.insertRow(tbody.rows.length);
-				for (var j = 0; j <= 11; j++){
+				switch(i){
+					case 1: case 2: case 3: 
+						count = 5;
+						break;
+					case 4:
+						count = 1
+						break;
+					case 5: case 6: case 7:
+						count = 4	
+						break;
+					case 8:
+						count = 2
+						break;	
+					case 9: case 10:
+						count = 11;
+						break;
+				}
+				for (var j = 1; j <= count; j++){
 					cell = row.insertCell(j-1);
 					switch (i){
 					case 1:
 						switch(j) {
 						case 1:
+							cell.style.textAlign = "center";
+							cell.style.backgroundColor = "red";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									if(inn.battingTeamId == dataToProcess.homeTeamId){	
@@ -118,6 +137,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 3:
 							cell.style.textAlign = "center";
+							cell.style.width = "400px";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 1){
 									for(var key in inn.stats){
@@ -139,6 +159,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 5:
 							cell.style.textAlign = "center";
+							cell.style.width = "400px";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 2){
 									for(var key in inn.stats){
@@ -154,7 +175,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								}
 							});
 							break;
-						case 6:
+						/*case 6:
 							break;
 						case 7:
 							dataToProcess.daysSessions.forEach(function(ds,index,arr){
@@ -162,12 +183,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'Day-' + ds.dayNumber + "<br />" + 'Session-' + ds.sessionNumber;
 								}
 							});
-							break;
+							break;*/
 						}
 						break;
 					case 2:
 						switch(j){
 							case 1:
+								cell.style.width = "500px";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										cell.innerHTML = 'CRR-' + inn.runRate;
@@ -246,7 +268,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'Last 30 Balls:-' ;
 								});
 								break;
-							case 3:
+							/*case 3:
 								cell.style.textAlign = "center";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
@@ -277,12 +299,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 										cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 									}
 								});
-								break;
+								break;*/
 							}
 						break;
 					case 4:
 						switch(j){
 							case 1:
+								cell.style.width = "500px";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 										for(var key in inn.stats){
@@ -297,15 +320,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 						break;
 					case 5:
 						switch(j){
-							case 1:
-								break;
+							/*case 1:
+								break;*/
 							case 2:
 								cell.innerHTML = 'BATSMAN';
 								cell.style='color:#2E008B';
 								cell.style.textAlign = "center";
 								break;
-							case 3:
-								break;
+							/*case 3:
+								break;*/
 							case 4:
 								cell.innerHTML = 'BOWLER';
 								cell.style='color:#2E008B';
