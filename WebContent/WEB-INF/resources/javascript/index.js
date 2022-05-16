@@ -75,7 +75,18 @@ function addItemsToList(whatToProcess, dataToProcess)
 						count = 5;
 						break;
 					case 4:
-						count = 1
+						count = 0
+						row.style = "color: #FFFFFF"
+						row.style.fontWeight = "1000"
+						dataToProcess.inning.forEach(function(inn,index,arr){
+							if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+								for(var key in inn.stats){
+									if(key == "INNING_STATUS"){
+										row.innerHTML = inn.stats[key];
+									}
+								}
+							}
+						});
 						break;
 					case 5: case 6: case 7:
 						count = 4	
@@ -93,8 +104,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 1:
 						switch(j) {
 						case 1:
+							cell.style = "background: red ; color: #FFFFFF ; width:10%";
 							cell.style.textAlign = "center";
-							cell.style.backgroundColor = "red";
+							cell.style.fontWeight = "900";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									if(inn.battingTeamId == dataToProcess.homeTeamId){	
@@ -118,6 +130,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 							});
 							break;
 						case 2:
+							cell.style= "background: linear-gradient(to top, lightgray 50%, yellow 50%)";
+							cell.style.fontWeight = "700";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.bowlingCard.forEach(function(boc,index,arr2){
@@ -136,8 +150,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 							});
 							break;
 						case 3:
+							cell.style = "background: silver ; width:10%";
 							cell.style.textAlign = "center";
-							cell.style.width = "400px";
+							cell.style.fontWeight = "900";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 1){
 									for(var key in inn.stats){
@@ -155,11 +170,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 4:
 							cell.innerHTML = 'TEAM NAME' + "<br />" + 'TEAM RUNS'
+							cell.style = "background: black ; color:#FFFFFF";
 							cell.style.textAlign = "center";
 							break;
 						case 5:
+							cell.style = "background: silver ; width:10%";
 							cell.style.textAlign = "center";
-							cell.style.width = "400px";
+							cell.style.fontWeight = "900";
 							dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.inningNumber == 2){
 									for(var key in inn.stats){
@@ -189,7 +206,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 2:
 						switch(j){
 							case 1:
-								cell.style.width = "500px";
+								cell.style= "background: linear-gradient(to top, lightgray 50%, yellow 50%);";
+								cell.style.fontWeight = "700";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										cell.innerHTML = 'CRR-' + inn.runRate;
@@ -207,6 +225,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 2:
+								cell.style = "background: silver";
+								cell.style.fontWeight = "700";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										for(var key in inn.stats){
@@ -218,7 +238,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 3:
+								cell.style = "background: silver";
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1){
 										if(inn.battingTeamId == dataToProcess.homeTeamId){	
@@ -232,10 +254,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 								break;
 							case 4:
 								cell.innerHTML = '4s/6s' + "<br />" + 'REVIEWS'
+								cell.style = "background: black ; color:#FFFFFF";
 								cell.style.textAlign = "center";
 								break;
 							case 5:
+								cell.style = "background: silver ";
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2){
 										if(inn.battingTeamId == dataToProcess.homeTeamId){	
@@ -250,6 +275,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 						}
 						break;
 					case 3:
+						cell.style = "background: silver ";
+						cell.style.fontWeight = "700";
 						switch(j){
 							case 1:
 								dataToProcess.inning.forEach(function(inn,index,arr){
@@ -268,8 +295,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'Last 30 Balls:-' ;
 								});
 								break;
-							/*case 3:
+							case 3:
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
 										for(var key in inn.stats){
@@ -281,65 +309,80 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 4:
+								cell.style = "background: black ; color:#FFFFFF";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									for(var key in inn.stats){
 										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
-											if(key == 'PLURAL'){
-												cell.innerHTML = 'at this stage' + "<br />" + "Over - " + inn.totalOvers + inn.stats[key] ;
-												cell.style.textAlign = "center";
-											}		
-										}						
-									}	
+											cell.innerHTML = 'at this stage' + "<br />" + "Over - " +  inn.stats[key] ;
+											cell.style.textAlign = "center";
+										}		
+									}							
 								});
 								break;
 							case 5:
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 										cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 									}
 								});
-								break;*/
+								break;
 							}
 						break;
-					case 4:
-						switch(j){
-							case 1:
-								cell.style.width = "500px";
-								dataToProcess.inning.forEach(function(inn,index,arr){
-									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
-										for(var key in inn.stats){
-											if(key == "INNING_STATUS"){
-												cell.innerHTML = inn.stats[key]
-											}
-										}
+					/*case 4:
+						//cell.style.backgroundColor = "silver";
+						//row.style.fontWeight = "900";
+						dataToProcess.inning.forEach(function(inn,index,arr){
+							if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+								for(var key in inn.stats){
+									if(key == "INNING_STATUS"){
+										row.innerHTML = inn.stats[key]
 									}
-								});
-								break;
-						}
-						break;
+								}
+							}
+						});
+						break;*/
 					case 5:
 						switch(j){
-							/*case 1:
-								break;*/
+							case 1:
+								cell.style = "background:green "
+								cell.style.borderLeft = "thick solid #C0C0C0";
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
+								break;
 							case 2:
 								cell.innerHTML = 'BATSMAN';
-								cell.style='color:#2E008B';
+								cell.style = "background: green ; color: #FFFFFF";
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "700";
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								break;
-							/*case 3:
-								break;*/
+							case 3:
+								cell.style = "background: green";
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderRight = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
+								break;
 							case 4:
 								cell.innerHTML = 'BOWLER';
-								cell.style='color:#2E008B';
+								cell.style = "background: blue ; color: #FFFFFF";
 								cell.style.textAlign = "center";
+								cell.style.fontWeight = "700";
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderRight = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								break;
 						}
 						break;
 					case 6:
+						cell.style = "background: green ; color: #FFFFFF";
 						cell.style.textAlign = "center";
+						cell.style.fontWeight = "700";
 						switch(j){
 							case 1:
+								cell.style.borderLeft = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										inn.battingCard.forEach(function(bc,index,arr1){
@@ -354,6 +397,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								cell.innerHTML ='Name' + "<br />" + 'Runs' + "<br />" + 'Strike Rate' + "<br />" + '4s/6s';
 								break;
 							case 3:
+								cell.style.borderRight = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										inn.battingCard.forEach(function(bc,index,arr1){
@@ -365,6 +409,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 4:
+								cell.style = "background: blue ; color: #FFFFFF ";
+								cell.style.textAlign = "center";
+								cell.style.fontWeight = "700";
+								cell.style.borderRight = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										inn.bowlingCard.forEach(function(boc,index,arr2){
@@ -381,9 +430,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 						}
 						break;
 					case 7:
+						cell.style = "background: yellow";
 						cell.style.textAlign = "center";
+						cell.style.fontWeight = "700";
 						switch(j){
 							case 1:
+								cell.style.borderLeft = "thick solid #C0C0C0";
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										if(inn.partnerships.length > 0) {
@@ -395,6 +449,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 2:
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										inn.partnerships.forEach(function(ps,index,arr4){
@@ -404,6 +460,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 3:
+								cell.style.borderTop = "thick solid #C0C0C0";
+								cell.style.borderRight = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										if(inn.partnerships.length > 0) {
@@ -415,6 +474,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 4:
+								cell.style= "background: linear-gradient(to top, gray 50%, black 50%); color:#FFFFFF"
+								cell.style.fontWeight = "700";
+								cell.style.borderRight = "thick solid #C0C0C0";
+								cell.style.borderBottom = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										cell.innerHTML = 'Extras-' + inn.totalExtras + "<br />" + '(' + 'WD:' + inn.totalWides + ' NB:' + inn.totalNoBalls + ' B:' + inn.totalByes + ' LB:' + inn.totalLegByes  + ' Pen:' + inn.totalPenalties + ')';
@@ -424,21 +487,23 @@ function addItemsToList(whatToProcess, dataToProcess)
 						}
 						break;
 					case 8:
+						cell.style.fontWeight = "700";
 						switch(j){
 							case 1:
 									cell.innerHTML = 'Last Wickets:';
-									cell.style='color:#2E008B';
+									cell.style = "background: black ; color: #FFFFFF";
+									cell.style.border = "thick solid #C0C0C0";
 								break;
 							case 2:
+								cell.style.border = "thick solid #C0C0C0";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
 										inn.battingCard.forEach(function(bc,index,arr1){
 											if(inn.fallsOfWickets.length > 0){
 												if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId) {
-													cell.innerHTML = bc.player.surname + ' ' + bc.runs + '(' + bc.balls + ')' + "<br />" + bc.howOutText;
+													cell.innerHTML = bc.player.surname + ' ' + bc.runs + '(' + bc.balls + ')' + " " + bc.howOutText;
 												}
 											}
-											
 										});
 									}
 								});
@@ -448,10 +513,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 9:
 						switch(j){
 							case 1:
-									cell.innerHTML = 'Fall Of Wickets:';
-									cell.style='color:#2E008B';
+									cell.innerHTML = 'F.O.W:';
+									cell.style = "background: black ; color: #FFFFFF";
+									cell.style.fontWeight = "700";
+									cell.style.border = "thick solid #C0C0C0";
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								cell.style = "background: black ; color: #FFFFFF";
+								cell.style.fontWeight = "600";
+								cell.style.border = "thick solid #C0C0C0"
 								cell.innerHTML = j - 1;
 								break;
 						}
@@ -469,10 +539,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 									
 									}
-									cell.style='color:#2E008B';
+									cell.style = "background: black ; color: #FFFFFF";
+									cell.style.fontWeight = "700";
+									cell.style.border = "thick solid #C0C0C0";
 								});
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								cell.style.border = "thick solid #C0C0C0";
+								cell.style.fontWeight = "600";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1){
 										if(inn.fallsOfWickets.length >= j-1){
@@ -495,10 +569,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 											cell.innerHTML = dataToProcess.awayTeam.shortname;
 										}
 									}
-									cell.style='color:#2E008B';
+									cell.style = "background: black ; color: #FFFFFF";
+									cell.style.fontWeight = "700";
+									cell.style.border = "thick solid #C0C0C0";
 								});
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
+								cell.style = "background: black ; color: #FFFFFF";
+								cell.style.fontWeight = "600";
+								cell.style.border = "thick solid #C0C0C0"
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2){
 										if(inn.fallsOfWickets.length >= j-1){

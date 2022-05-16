@@ -159,7 +159,10 @@ public class IndexController
 	}
 	
 	public static String compareInningData(String whatToProcess, String separator, Inning inning, List<Event> events) {
-		int total_runs = 0,total_wickets=0;
+		int total_runs = 0,total_wickets=0,count_balls=0;
+		if(inning.getInningNumber() == 2) {
+			count_balls=((inning.getTotalOvers()*6)+inning.getTotalBalls());
+		}
 		if((events != null) && (events.size() > 0)) {
 			for (Event evnt : events) {
 				if(evnt.getEventInningNumber() == 1) {
@@ -167,7 +170,7 @@ public class IndexController
 					{
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 			        case CricketUtil.FOUR: case CricketUtil.SIX: 
-			          total_runs += evnt.getEventRuns();
+			        	total_runs += evnt.getEventRuns();
 			          break;
 			          
 			        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
@@ -191,7 +194,7 @@ public class IndexController
 				          }
 				          break;
 					}
-					if((evnt.getEventOverNo() == inning.getTotalOvers()) && (evnt.getEventBallNo() == inning.getTotalBalls())) {
+					if(count_balls == ((evnt.getEventOverNo()*6)+evnt.getEventBallNo())) {
 						break;
 					}
 				}

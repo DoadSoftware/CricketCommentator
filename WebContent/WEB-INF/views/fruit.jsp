@@ -22,23 +22,16 @@
 	
 </head>
 <body>
-<div class="content py-5" style="background-color: #EAE8FF; color: #2E008B">
-  <div class="container">
-	<div class="row">
-	 <div class="col-md-8 offset-md-2">
+<div class="content py-8" style="background-color: #EAE8FF; color: #2E008B">
+	<div class="row ; text-nowrap" style="height: 100% ; width: 101% ">
+	 <div class="col-xl">
        <span class="anchor"></span>
-         <div class="card card-outline-secondary">
-           <div class="card-header">
-             <h3 class="mb-0">Fruit Machine</h3>
-           </div>
-          <div class="card-body">
-			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+          <div class="card-body" style="background-color: #808080">
+			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2">
 			  </div>
 	       </div>
-	    </div>
        </div>
     </div>
-  </div>
 </div>
 <input type="hidden" id="matchFileTimeStamp" name="matchFileTimeStamp" value="${session_match.matchFileTimeStamp}"></input>
 </body>
