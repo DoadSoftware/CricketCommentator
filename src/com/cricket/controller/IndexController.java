@@ -17,12 +17,10 @@ import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cricket.containers.Configurations;
 import com.cricket.model.Event;
@@ -37,14 +35,15 @@ import com.cricket.util.CricketUtil;
 import net.sf.json.JSONObject;
 
 @Controller
-@SessionAttributes(value={"session_match","session_event_file","session_selected_broadcaster"})
 public class IndexController 
 {
 	@Autowired
 	CricketService cricketService;
+
 	public static Configurations session_Configurations;
-	
-	String COMMENTATOR_CONFIG = CricketUtil.COMMENTATOR_XML;
+	public static Match session_match;
+	public static EventFile session_event_file;
+	public static String session_selected_broadcaster;
 
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String initialisePage(ModelMap model) throws JAXBException  
@@ -57,24 +56,19 @@ public class IndexController
 		    }
 		}));
 		
-		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG).exists()) {
+		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML).exists()) {
             session_Configurations = (Configurations)JAXBContext.newInstance(Configurations.class).createUnmarshaller().unmarshal(
-                    new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
-        }
-        else {
+                    new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML));
+        } else {
             session_Configurations = new Configurations();
-            System.out.println(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG);
-            JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
-                    new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
+			JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations, 
+					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML));
         }
 		return "initialise";
 	}
 
 	@RequestMapping(value = {"/commentator"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String commentatorPage(ModelMap model,
-			@ModelAttribute("session_match") Match session_match,
-			@ModelAttribute("session_event_file") EventFile session_event_file,
-			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
 			@RequestParam(value = "select_inning", required = false, defaultValue = "") String select_inning,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch) 
@@ -85,17 +79,15 @@ public class IndexController
 		session_Configurations = new Configurations(selectedMatch, select_broadcaster);
 		
 		JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
-				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + COMMENTATOR_CONFIG));
-
+				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML));
 		
 		session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch)));
-		session_match.setMatchFileName(selectedMatch);
+//		session_match.setMatchFileName(selectedMatch);
+		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 		
 		session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + selectedMatch));
-		
-		session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 		
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
@@ -105,9 +97,6 @@ public class IndexController
 	
 	@RequestMapping(value = {"/processCricketProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processCricketProcedures(
-			@ModelAttribute("session_match") Match session_match,
-			@ModelAttribute("session_event_file") EventFile session_event_file,
-			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster,
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
 			@RequestParam(value = "valueToProcess", required = false, defaultValue = "") String valueToProcess) 
 					throws IOException, IllegalAccessException, InvocationTargetException, JAXBException
@@ -127,14 +116,14 @@ public class IndexController
 			{
 				session_match = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_match.getMatchFileName())));
+
+				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
+						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_match.getMatchFileName()).lastModified()));
 				
 				session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_match.getMatchFileName()));
 				
 				Collections.reverse(session_event_file.getEvents());
-				
-				session_match.setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(
-						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + session_match.getMatchFileName()).lastModified()));
 				
 				Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
@@ -201,18 +190,5 @@ public class IndexController
 			}
 		}
 		return total_runs + "-" + total_wickets;
-	}
-	
-	@ModelAttribute("session_selected_broadcaster")
-	public String session_selected_broadcaster(){
-		return new String();
-	}
-	@ModelAttribute("session_match")
-	public Match session_match(){
-		return new Match();
-	}
-	@ModelAttribute("session_event_file")
-	public EventFile session_event_file(){
-		return new EventFile();
 	}
 }

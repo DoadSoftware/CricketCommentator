@@ -1,4 +1,3 @@
-var session_match;
 function processWaitingButtonSpinner(whatToProcess) 
 {
 	switch (whatToProcess) {
@@ -17,15 +16,8 @@ function processCricketProcedures(whatToProcess)
 {
 	var valueToProcess;
 	
-	processWaitingButtonSpinner('START_WAIT_TIMER');
-	
 	switch(whatToProcess) {
 	case 'READ-MATCH-AND-POPULATE':
-		if(session_match) {
-			if(session_match.matchFileTimeStamp === $('#matchFileTimeStamp').val()) {
-				return false;
-			}
-		}
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
 	}
@@ -38,18 +30,17 @@ function processCricketProcedures(whatToProcess)
         success : function(data) {
         	switch(whatToProcess) {
 			case 'READ-MATCH-AND-POPULATE':
-				addItemsToList(whatToProcess,data);
-				document.getElementById('matchFileTimeStamp').value = data.matchFileTimeStamp;
-				session_match = data;
+				if($('#matchFileTimeStamp').val() != data.matchFileTimeStamp) {
+					addItemsToList(whatToProcess,data);
+					document.getElementById('matchFileTimeStamp').value = data.matchFileTimeStamp;
+				}
 				break;
         	}
-			processWaitingButtonSpinner('END_WAIT_TIMER');
 	    },    
 	    error : function(e) {    
 	  	 	console.log('Error occured in ' + whatToProcess + ' with error description = ' + e);     
 	    }    
 	});
-	processWaitingButtonSpinner('END_WAIT_TIMER');
 }
 function addItemsToList(whatToProcess, dataToProcess)
 {
@@ -591,7 +582,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					}
 				}
 			}
-			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
+//			$('#match_file_timestamp').attr('value',dataToProcess.match_file_timestamp);
 		}
 		$('#fruit_captions_div').append(table);
 		document.getElementById('fruit_captions_div').style.display = '';
