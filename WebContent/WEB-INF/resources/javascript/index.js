@@ -70,6 +70,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 						row.style = "color: #FFFFFF"
 						row.style.fontWeight = "1000"
 						dataToProcess.inning.forEach(function(inn,index,arr){
+							if(inn.isCurrentInning == 'YES' && inn.totalOvers > 6){
+								for(var key in inn.stats){
+									if(key == 'PS'){
+										row.innerHTML = 'Projected Score-' + inn.stats[key] ;
+									}
+								}
+							}
 							if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 								for(var key in inn.stats){
 									if(key == "INNING_STATUS"){
@@ -205,9 +212,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 									}
 									if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 										if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
-											var RRR = ((dataToProcess.inning[0].totalRuns - dataToProcess.inning[1].totalRuns)/
-												((dataToProcess.maxOvers * 6) - (dataToProcess.inning[1].totalOvers * 6 + dataToProcess.inning[1].totalBalls)));
-											cell.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req. RR-' + Math.round((RRR * 6) * 100) / 100;
+											for(var key in inn.stats){
+												if(key == 'Req_RR'){
+													cell.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req.RR-' + inn.stats[key];
+												}
+											}
 										}
 										else{
 											cell.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req. RR- 0.00'

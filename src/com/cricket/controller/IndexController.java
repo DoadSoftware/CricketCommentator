@@ -135,8 +135,12 @@ public class IndexController
 						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, inn, session_event_file.getEvents()));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
+						this_stats.put("Req_RR", CricketFunctions.GenerateRunRate((CricketFunctions.getTargetRuns(session_match)- inn.getTotalRuns()), 0, CricketFunctions.getRequiredBalls(session_match), 2));
+						this_stats.put("PS", ProjectedScore(whatToProcess,inn));
+						
 					}
 					inn.setStats(this_stats);
+					//System.out.println("traget runs:" + (CricketFunctions.getTargetRuns(session_match) - inn.getTotalRuns()) +" "+ "traget balls:" + CricketFunctions.getRequiredBalls(session_match));
 				}
 			}
 
@@ -145,6 +149,16 @@ public class IndexController
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
+	}
+	
+	public static String ProjectedScore(String whatToProcess,Inning inn) {
+		
+		int PS=0;
+		int remaining_overs = (session_match.getMaxOvers() - inn.getTotalOvers());
+		
+		PS = (int) (inn.getTotalRuns() + remaining_overs * Double.valueOf(inn.getRunRate()));
+		
+		return String.valueOf(PS)+"("+inn.getRunRate()+")";
 	}
 	
 	public static String compareInningData(String whatToProcess, String separator, Inning inning, List<Event> events) {
