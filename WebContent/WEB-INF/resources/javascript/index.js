@@ -167,7 +167,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							});
 							break;
 						case 4:
-							cell.innerHTML = 'TEAM NAME' + "<br />" + 'TEAM RUNS'
+							cell.innerHTML = 'TEAMS' + "<br />" + 'SCORES'
 							cell.style = "background: black ; color:#FFFFFF";
 							cell.style.textAlign = "center";
 							break;
@@ -295,7 +295,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'Last 30 Balls:-' ;
 								});
 								break;
-							case 3:
+							/*case 3:
 								cell.style.textAlign = "center";
 								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){
@@ -327,7 +327,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 									}
 								});
-								break;
+								break;*/
 							}
 						break;
 					/*case 4:
@@ -387,7 +387,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									if(inn.isCurrentInning == 'YES'){
 										inn.battingCard.forEach(function(bc,index,arr1){
 											if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
-												cell.innerHTML = bc.player.surname + '*' + "<br />" + bc.runs + "<br />" + bc.strikeRate +"<br />" + bc.fours + '/' + bc.sixes;
+												cell.innerHTML = bc.player.surname + '*' + "<br />" + bc.runs +'('+bc.balls+')'+ "<br />" + bc.strikeRate +"<br />" + bc.fours + '/' + bc.sixes;
 											}
 										});
 									}
@@ -402,7 +402,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									if(inn.isCurrentInning == 'YES'){
 										inn.battingCard.forEach(function(bc,index,arr1){
 											if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
-												cell.innerHTML = bc.player.surname + "<br />" + bc.runs + "<br />" + bc.strikeRate + "<br />" + bc.fours + '/' + bc.sixes;
+												cell.innerHTML = bc.player.surname + "<br />" + bc.runs +'('+bc.balls+')'+ "<br />" + bc.strikeRate + "<br />" + bc.fours + '/' + bc.sixes;
 											}
 										});
 									}

@@ -130,12 +130,12 @@ public class IndexController
 					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
 					this_stats.put(CricketUtil.COMPARE + inn.getInningNumber() , compareInningData(CricketUtil.COMPARE, "-", inn, session_event_file.getEvents()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
-						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
+						this_stats.put(CricketUtil.POWERPLAY, processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
 						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, inn, session_event_file.getEvents()));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
-						this_stats.put("Req_RR", CricketFunctions.GenerateRunRate((CricketFunctions.getTargetRuns(session_match)- inn.getTotalRuns()), 0, CricketFunctions.getRequiredBalls(session_match), 2));
+						this_stats.put("Req_RR", CricketFunctions.GenerateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
 						this_stats.put("PS", ProjectedScore(whatToProcess,inn));
 						
 					}
@@ -150,15 +150,61 @@ public class IndexController
 			return JSONObject.fromObject(null).toString();
 		}
 	}
+	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls)
+	  {
+	    int cuEcoent_over = total_overs;
+	    if (total_balls > 0) {
+	      cuEcoent_over += 1;
+	    }
+	    String return_pp_txt = "";
+	    switch (powerplay_return_type)
+	    {
+	    case "FULL": 
+	      return_pp_txt = "POWERPLAY ";
+	      break;
+	    case "SHORT": 
+	      return_pp_txt = "PP";
+	    }
+	    
+	    if((inning.getFirstPowerplayEndOver() >= cuEcoent_over)) {
+	    	return_pp_txt = return_pp_txt + "1";
+	    }else if ((inning.getSecondPowerplayEndOver() >= cuEcoent_over) || (inning.getSecondPowerplayStartOver() <= cuEcoent_over )) {
+	    	return_pp_txt = return_pp_txt + "2";
+	    }else if ((inning.getThirdPowerplayEndOver() >= cuEcoent_over) || (inning.getThirdPowerplayStartOver() <= cuEcoent_over )) {
+	    	return_pp_txt = return_pp_txt + "3";
+	    }
+	    
+	    return return_pp_txt;
+	  }
 	
 	public static String ProjectedScore(String whatToProcess,Inning inn) {
 		
-		int PS=0;
+		int PS_Curr=0;
+		String PS_1="", PS_2="", PS_3="";
+		String RR1_count="",RR2_count="",RR3_count="";
 		int remaining_overs = (session_match.getMaxOvers() - inn.getTotalOvers());
 		
-		PS = (int) (inn.getTotalRuns() + remaining_overs * Double.valueOf(inn.getRunRate()));
+		PS_Curr = (int) (inn.getTotalRuns() + remaining_overs * Double.valueOf(inn.getRunRate()));
 		
-		return String.valueOf(PS)+"("+inn.getRunRate()+")";
+		String[] arr = inn.getRunRate().split("\\.");
+	    int[] intArr=new int[2];
+	    intArr[0]=Integer.parseInt(arr[0]);
+	    
+		for(int i=1;i<=3;i++) {
+			if(i==1) {
+				PS_1 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0]=Integer.parseInt(arr[0]) + i)));
+				RR1_count = String.valueOf(intArr[0]=Integer.parseInt(arr[0]) + i);
+			}
+			else if(i==2) {
+				PS_2 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0]=Integer.parseInt(arr[0]) + i)));
+				RR2_count = String.valueOf(intArr[0]=Integer.parseInt(arr[0]) + i);
+			}
+			else if(i==3) {
+				PS_3 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0]=Integer.parseInt(arr[0]) + i)));
+				RR3_count = String.valueOf(intArr[0]=Integer.parseInt(arr[0]) + i);
+			}
+		}
+		return String.valueOf(PS_Curr)+"("+inn.getRunRate()+")" +" | "+ PS_1 +"("+RR1_count+")" +" | "+ PS_2 +"("+RR2_count+")" +" | "+ PS_3 +"("+RR3_count+")";
 	}
 	
 	public static String compareInningData(String whatToProcess, String separator, Inning inning, List<Event> events) {
@@ -200,6 +246,7 @@ public class IndexController
 					if(count_balls == ((evnt.getEventOverNo()*6)+evnt.getEventBallNo())) {
 						break;
 					}
+					System.out.println();
 				}
 			}
 		}
