@@ -134,15 +134,25 @@ function addItemsToList(whatToProcess, dataToProcess)
 								if(inn.isCurrentInning == 'YES'){
 									inn.bowlingCard.forEach(function(boc,index,arr2){
 										for(var key in inn.stats){
-											if(key == "OVER"){
+											if(key == "ThisOver"){
 												if(boc.status == 'CURRENTBOWLER'){
-													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver + "<br />" + inn.stats[key];
+													cell.innerHTML = 'This Over:-'  + inn.stats[key];
 												}
 												else if(boc.status == 'LASTBOWLER'){
-													cell.innerHTML = 'This Over:-' +  boc.totalRunsThisOver + "<br />" + inn.stats[key];
+													cell.innerHTML = 'This Over:-' + inn.stats[key];
 												}
 											}
 										}
+										for(var key in inn.stats){
+										if(key == 'OVER'){
+											if(boc.status == 'CURRENTBOWLER'){
+												cell.innerHTML = cell.innerHTML + "<br />" + inn.stats[key] ;
+											}
+											else if(boc.status == 'LASTBOWLER'){
+												cell.innerHTML = cell.innerHTML + "<br />" + inn.stats[key] ;
+											}
+										}
+									}
 									});
 								}
 							});
@@ -225,7 +235,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 2:
-								cell.style = "background: silver";
+								cell.style= "background: linear-gradient(to top, lightgray 50%, yellow 50%);";
 								cell.style.fontWeight = "700";
 								dataToProcess.inning.forEach(function(inn,index,arr){
 									if(inn.isCurrentInning == 'YES'){
@@ -234,6 +244,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 												cell.innerHTML = 'Ball Since Last Boundary:-' + inn.stats[key];
 											}
 										}
+										cell.innerHTML = cell.innerHTML + "<br />" +'Last 30 Balls:-';
 									}
 								});
 								break;
@@ -292,10 +303,27 @@ function addItemsToList(whatToProcess, dataToProcess)
 								break;
 							case 2:
 								dataToProcess.inning.forEach(function(inn,index,arr){
-									cell.innerHTML = 'Last 30 Balls:-' ;
+									if(inn.isCurrentInning == 'YES'){
+										if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											cell.innerHTML = dataToProcess.homeTeam.shortname ;
+										}
+										else {
+											cell.innerHTML = dataToProcess.awayTeam.shortname ;
+										}
+										for(var key in inn.stats){
+											if(key == 'PPS'){
+												cell.innerHTML = 'PP1 Score of '+ cell.innerHTML +': ' + inn.stats[key];
+											}
+										}
+										for(var key in inn.stats){
+											if(key == 'DOTBALLS'){
+												cell.innerHTML = cell.innerHTML + "<br />" + 'DOT BALLS:-' + inn.stats[key];
+											}
+										}
+									}
 								});
 								break;
-							/*case 3:
+						/*	case 3:
 								cell.style.textAlign = "center";
 								cell.style.fontWeight = "900";
 								dataToProcess.inning.forEach(function(inn,index,arr){

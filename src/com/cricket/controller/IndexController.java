@@ -136,10 +136,14 @@ public class IndexController
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
 						this_stats.put("Req_RR", CricketFunctions.GenerateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
-						this_stats.put("PS", ProjectedScore(whatToProcess,inn));
+						this_stats.put("PS", ProjectedScore(inn));
+						this_stats.put("ThisOver", processThisOversRunsCount(session_event_file.getEvents()));
+						this_stats.put("PPS", getPowerPlayScore(inn,inn.getInningNumber(),session_event_file.getEvents()));
+						this_stats.put("DOTBALLS", countDotBalls(session_match, inn,inn.getInningNumber() , session_event_file.getEvents()));
 						
 					}
 					inn.setStats(this_stats);
+					//System.out.println(this_stats.get(CricketUtil.DOT));
 					//System.out.println("traget runs:" + (CricketFunctions.getTargetRuns(session_match) - inn.getTotalRuns()) +" "+ "traget balls:" + CricketFunctions.getRequiredBalls(session_match));
 				}
 			}
@@ -150,6 +154,102 @@ public class IndexController
 			return JSONObject.fromObject(null).toString();
 		}
 	}
+	
+	public static String countDotBalls(Match match,Inning inning,int inn_num,List<Event> events) {
+		int countBalls=0;
+		if((events != null) && (events.size() > 0)) {
+			for(Event evnt : events) {
+				if(evnt.getEventInningNumber() == inn_num) {
+					int Event_overs = ((evnt.getEventOverNo()*6)+evnt.getEventBallNo());
+					if(Event_overs <= (match.getMaxOvers()*6)) {
+						switch(evnt.getEventType()) {
+						case CricketUtil.DOT:
+							countBalls++;
+						}
+					}
+				}
+			}
+		}
+		return String.valueOf(countBalls);
+	}
+	
+	public static String getPowerPlayScore(Inning inning,int inn_num,List<Event> events) {
+		int total_run_PP=0, total_wickets_PP=0;
+		if((events != null) && (events.size() > 0)) {
+			for(Event evnt : events) {
+				if(evnt.getEventInningNumber() == inn_num) {
+					int Event_overs = ((evnt.getEventOverNo()*6)+evnt.getEventBallNo());
+					if((Event_overs) <= (inning.getFirstPowerplayEndOver()*6)) {
+						switch(evnt.getEventType()) {
+						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+						case CricketUtil.FOUR: case CricketUtil.SIX: 
+							total_run_PP += evnt.getEventRuns();
+							break;
+			          
+						case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+							total_run_PP += evnt.getEventRuns();
+							break;
+			        	
+						case CricketUtil.LOG_WICKET:
+							total_wickets_PP += 1;
+							break;
+			        
+						case CricketUtil.LOG_ANY_BALL:
+							total_run_PP += evnt.getEventRuns();
+							if (evnt.getEventExtra() != null) {
+								total_run_PP += evnt.getEventExtraRuns();
+							}
+							if (evnt.getEventSubExtra() != null) {
+								total_run_PP += evnt.getEventSubExtraRuns();
+							}
+							if (evnt.getEventHowOut() != null && !evnt.getEventHowOut().isEmpty()) {
+								total_wickets_PP += 1;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+		return String.valueOf(total_run_PP)+"-"+String.valueOf(total_wickets_PP);
+	}
+	
+	
+	public static String processThisOversRunsCount(List<Event> events) {
+		int total_runs=0;
+		if((events != null) && (events.size() > 0)) {
+			for(Event evnt : events) {
+				if ((evnt.getEventType().equalsIgnoreCase("CHANGE_BOWLER"))) {
+					break;
+				}
+				switch(evnt.getEventType()) {
+				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+		        case CricketUtil.FOUR: case CricketUtil.SIX: 
+		        	total_runs += evnt.getEventRuns();
+		          break;
+		          
+		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+		        	total_runs += evnt.getEventRuns();
+		        	break;
+		        
+		        case CricketUtil.LOG_ANY_BALL:
+		        	total_runs += evnt.getEventRuns();
+			          if (evnt.getEventExtra() != null) {
+			        	 total_runs += evnt.getEventExtraRuns();
+			          }
+			          if (evnt.getEventSubExtra() != null) {
+			        	 total_runs += evnt.getEventSubExtraRuns();
+			          }
+			          break;
+				}
+			}
+		}
+		
+		return String.valueOf(total_runs);
+	}
+	
+	
+	
 	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls)
 	  {
 	    int cuEcoent_over = total_overs;
@@ -177,7 +277,7 @@ public class IndexController
 	    return return_pp_txt;
 	  }
 	
-	public static String ProjectedScore(String whatToProcess,Inning inn) {
+	public static String ProjectedScore(Inning inn) {
 		
 		int PS_Curr=0;
 		String PS_1="", PS_2="", PS_3="";
