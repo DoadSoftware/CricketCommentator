@@ -26,7 +26,7 @@
 	<div class="row ; text-nowrap" style="height: 100% ; width: 101% ">
 	 <div class="col-xl">
        <span class="anchor"></span>
-          <div class="card-body" style="background-color: #808080">
+          <div class="card-body">
 			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2">
 			  </div>
 	       </div>
