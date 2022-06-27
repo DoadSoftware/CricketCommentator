@@ -71,7 +71,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_bat = document.createElement('table');
-			table_bat.style = 'width:30%; margin-left:1%;';
+			table_bat.style = 'width:25%; margin-left:1%;';
 			table_bat.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_bat.appendChild(tbody);
@@ -137,7 +137,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 													cell.innerHTML = bc.strikeRate;
 													break;
 												case 5:
-													cell.innerHTML = bc.seconds;
+													if(bc.seconds > '60'){
+														cell.innerHTML = Math.floor(bc.seconds / 60);
+													}else{
+														cell.innerHTML = bc.seconds;
+													}
 													break;
 												case 6:
 													if(inn.partnerships.length > 0) {
@@ -180,7 +184,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 													cell.innerHTML = bc.strikeRate;
 													break;
 												case 5:
-													cell.innerHTML = bc.seconds;
+													if(bc.seconds > '60'){
+														cell.innerHTML = Math.floor(bc.seconds / 60);
+													}else{
+														cell.innerHTML = bc.seconds;
+													}
 													break;
 												case 6:
 													if(inn.partnerships.length > 0) {
@@ -257,7 +265,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_score = document.createElement('table');
-			table_score.style = 'width:23%; margin-left:1%; margin-right:1%;';
+			table_score.style = 'width:20%; margin-left:1%; margin-right:1%;';
 			table_score.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_score.appendChild(tbody);
@@ -266,7 +274,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				row = tbody.insertRow(tbody.rows.length);
 				switch(i){
 					case 1:
-						row.style="background-color: #fff4cc ; font-size:45px; font-weight: bold;";
+						row.style="background-color: #fff4cc; font-size:40px; font-weight: bold;";
 						row.style.textAlign = "center";
 						dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
@@ -277,11 +285,27 @@ function addItemsToList(whatToProcess, dataToProcess)
 										row.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
 									}
 									
-									for(var key in inn.stats){
-										if(key == 'POWERPLAY'){
-											row.innerHTML = row.innerHTML + '(' + inn.stats[key] + ')';
-										}
-									}
+									switch(dataToProcess.matchType){
+										case 'DT20': case 'IT20':
+											for(var key in inn.stats){
+												if(key == 'POWERPLAY'){
+													if(inn.stats[key] == 'P1'){
+														row.innerHTML = row.innerHTML + '(P)';
+													}else{
+														row.innerHTML = row.innerHTML + '';
+													}
+												}
+											}
+											break;
+											
+										case 'ODI':
+											for(var key in inn.stats){
+												if(key == 'POWERPLAY'){
+													row.innerHTML = row.innerHTML + '(' + inn.stats[key] + ')';
+												}
+											}
+											break;
+									} 
 									
 									for(var key in inn.stats){
 										if(key == 'OVER' + inn.inningNumber){
@@ -292,21 +316,21 @@ function addItemsToList(whatToProcess, dataToProcess)
 							});
 						break;
 					case 2:
-						row.style="background-color: #fffc04; font-weight: 700;"
+						row.style="background-color: #fffc04; font-size:18px; font-weight: 700;"
 						dataToProcess.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
-								row.innerHTML = 'CRR-' + inn.runRate;
+								row.innerHTML = 'CURRENT RUN RATE :' + inn.runRate;
 							}
 							if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 								if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
 									for(var key in inn.stats){
 										if(key == 'Req_RR'){
-											row.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req.RR-' + inn.stats[key];
+											row.innerHTML = 'CURRENT RUN RATE :' + inn.runRate + "<br />" + 'REQUIRED RUN RATE : ' + inn.stats[key];
 										}
 									}
 								}
 								else{
-									row.innerHTML = 'CRR-' + inn.runRate + "<br />" + 'Req. RR- 0.00'
+									row.innerHTML = 'CURRENT RUN RATE :' + inn.runRate + "<br />" + 'REQUIRED RUN RATE : 0.00'
 								}
 							}
 						});
@@ -315,7 +339,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_detail = document.createElement('table');
-			table_detail.style = 'width:26%;';
+			table_detail.style = 'width:25%;';
 			table_detail.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_detail.appendChild(tbody);
@@ -420,10 +444,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 							}
 							break;
 						case 3:
-							cell.style = "background: #f8ccac ;";
+							cell.style = "background: #f8ccac; font-weight: 600;";
 							cell.style.textAlign = "center";
 							switch(j){
-								/*case 1:
+								case 1:
 									dataToProcess.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
 											for(var key in inn.stats){
@@ -433,19 +457,19 @@ function addItemsToList(whatToProcess, dataToProcess)
 											}
 										}
 									});
-									break;*/
+									break;
 								case 2:
 									cell.innerHTML = 'AT THIS STAGE';
 									cell.style = "background: #b0d48c; font-weight: 700;";
 									cell.style.textAlign = "center";		
 									break;
-								/*case 3:
+								case 3:
 									dataToProcess.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 											cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 										}
 									});
-									break;*/
+									break;
 							}
 							break;	
 						case 4:
@@ -589,7 +613,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				row = tbody.insertRow(tbody.rows.length);
 				switch(i){
 					case 1:
-						row.style="background-color: #f8b484 ; font-size:30px; font-weight: bold;";
+						row.style="background-color: #f8b484 ; font-size:25px; font-weight: bold;";
 						row.style.textAlign = "center";
 						dataToProcess.inning.forEach(function(inn,index,arr){
 							if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
@@ -609,7 +633,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 						});
 						break;
 					case 2:
-						row.style="background-color: #c8eccc; font-weight: 600; ";
+						row.style="background-color: #c8eccc; font-size:20px;  font-weight: 600; ";
 						dataToProcess.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								inn.bowlingCard.forEach(function(boc,index,arr2){
@@ -638,7 +662,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 						});					
 						break;
 					case 3:
-						row.style="background-color: #b0d48c; font-weight: 600; margin-left:1%;";
+						row.style="background-color: #b0d48c; font-size:20px; font-weight: 600; margin-left:1%;";
 						dataToProcess.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								for(var key in inn.stats){

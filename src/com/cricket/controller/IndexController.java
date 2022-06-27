@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cricket.containers.Configurations;
 import com.cricket.containers.Functions;
-import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
@@ -124,24 +122,25 @@ public class IndexController
 				session_event_file = (EventFile) JAXBContext.newInstance(EventFile.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + session_match.getMatchFileName()));
 				
-				Collections.reverse(session_event_file.getEvents());
 				
 				Map<String, String> this_stats = new HashMap<String,String>();
 				for(Inning inn : session_match.getInning()){
 					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
-					//this_stats.put(CricketUtil.COMPARE , Functions.compareInningData(CricketUtil.COMPARE, "-", session_match,1,session_event_file.getEvents()));
-					this_stats.put(CricketUtil.TOSS, CricketFunctions.TossResult(session_match, "", "", CricketUtil.SHORT));
+					this_stats.put(CricketUtil.COMPARE , CricketFunctions.compareInningData(session_match,"-",1,session_event_file.getEvents()));
+					this_stats.put(CricketUtil.TOSS, CricketFunctions.generateTossResult(session_match, "", "", CricketUtil.SHORT));
 					this_stats.put("DOTBALLS" + inn.getInningNumber(), Functions.countDotBalls(inn.getInningNumber(), session_event_file.getEvents()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
-						this_stats.put(CricketUtil.POWERPLAY, Functions.processPowerPlay(CricketUtil.SHORT, inn, inn.getTotalOvers(), inn.getTotalBalls()));
-						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
-						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, inn, session_event_file.getEvents()));
+						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI, inn, inn.getTotalOvers(), inn.getTotalBalls()));
 						this_stats.put(CricketUtil.INNING_STATUS, Functions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT));
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
-						this_stats.put("Req_RR", CricketFunctions.GenerateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
+						this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
 						this_stats.put("PS", Functions.ProjectedScore(session_match,inn));
-						this_stats.put("ThisOver",Functions.processThisOverRunsCount(session_event_file.getEvents()));
-						this_stats.put("PPS", Functions.getPowerPlayScore(inn,inn.getInningNumber(),session_event_file.getEvents()));
+						//this_stats.put("PPS", CricketFunctions.getPowerPlayScore(inn,inn.getInningNumber(),'-', session_event_file.getEvents()));
+						
+						Collections.reverse(session_event_file.getEvents());
+						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, session_event_file.getEvents()));
+						this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(session_event_file.getEvents()));
+						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 						
 					}
 					inn.setStats(this_stats);
@@ -153,51 +152,5 @@ public class IndexController
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
-	}
-	
-	public static String compareInningData(String whatToProcess, String separator, Inning inning, List<Event> events) {
-		int total_runs = 0,total_wickets=0,count_balls=0;
-		if(inning.getInningNumber() == 2) {
-			count_balls=((inning.getTotalOvers()*6)+inning.getTotalBalls());
-		}
-		if((events != null) && (events.size() > 0)) {
-			for (Event evnt : events) {
-				if(evnt.getEventInningNumber() == 1) {
-					switch (evnt.getEventType()) 
-					{
-					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-			        case CricketUtil.FOUR: case CricketUtil.SIX: 
-			        	total_runs += evnt.getEventRuns();
-			          break;
-			          
-			        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-			        	total_runs += evnt.getEventRuns();
-			        	break;
-			        	
-			        case CricketUtil.LOG_WICKET:
-			        	total_wickets += 1;
-			        	break;
-			        
-			        case CricketUtil.LOG_ANY_BALL:
-			        	total_runs += evnt.getEventRuns();
-				          if (evnt.getEventExtra() != null) {
-				        	 total_runs += evnt.getEventExtraRuns();
-				          }
-				          if (evnt.getEventSubExtra() != null) {
-				        	 total_runs += evnt.getEventSubExtraRuns();
-				          }
-				          if (evnt.getEventHowOut() != null && !evnt.getEventHowOut().isEmpty()) {
-				        	  total_wickets += 1;
-				          }
-				          break;
-					}
-					if(count_balls == ((evnt.getEventOverNo()*6)+evnt.getEventBallNo())) {
-						break;
-					}
-					//System.out.println();
-				}
-			}
-		}
-		return total_runs + "-" + total_wickets;
 	}
 }
