@@ -67,32 +67,32 @@ public class Functions
 		return String.valueOf(total_run_PP)+"-"+String.valueOf(total_wickets_PP);
 	}
 	
-	public static String ProjectedScore(Match match,Inning inn) {
+	public static String ProjectedScore(Match match) {
 		
-		int PS_Curr=0;
-		String PS_1="", PS_2="", PS_3="";
+		String PS_1="", PS_2="", PS_3="", PS_Curr="";
 		String RR1="",RR2="",RR3="",RR_Curr="";
-		int remaining_overs = ((match.getMaxOvers()*6) - ((inn.getTotalOvers()*6)+inn.getTotalBalls()));
+		int remaining_balls = ((match.getMaxOvers()*6) - ((match.getInning().get(0).getTotalOvers()*6)+match.getInning().get(0).getTotalBalls()));
 		
-		PS_Curr = (int) ((inn.getTotalRuns() + (remaining_overs * Double.valueOf(inn.getRunRate())))/6);
-		RR_Curr = inn.getRunRate();
+		PS_Curr = String.valueOf(Math.round(((match.getInning().get(0).getTotalRuns() + (remaining_balls * 
+				Double.valueOf(match.getInning().get(0).getRunRate())))/6)));
+		RR_Curr = match.getInning().get(0).getRunRate();
 		
-		String[] arr = inn.getRunRate().split("\\.");
-	    int[] intArr=new int[2];
+		String[] arr = match.getInning().get(0).getRunRate().split("\\.");
+		double[] intArr= new double[2];
 	    intArr[0]=Integer.parseInt(arr[0]);
 	    
 		for(int i=2;i<=6;i = i+2) {
 			if(i==2) {
-				PS_1 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0]+ i))/6);
-				RR1 = String.valueOf(intArr[0] + i);
+				PS_1 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0]+ i))/6));
+				RR1 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==4) {
-				PS_2 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0] + i))/6);
-				RR2 = String.valueOf(intArr[0] + i);
+				PS_2 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0] + i))/6));
+				RR2 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==6) {
-				PS_3 = String.valueOf((inn.getTotalRuns() + remaining_overs * (intArr[0] + i))/6);
-				RR3 = String.valueOf(intArr[0] + i);
+				PS_3 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0] + i))/6));
+				RR3 = String.valueOf((int)intArr[0] + i);
 			}
 		}
 		return String.valueOf(PS_Curr)+","+RR_Curr+","+PS_1+","+ RR1 +","+ PS_2 +","+ RR2 +","+ PS_3 +","+ RR3 ;
