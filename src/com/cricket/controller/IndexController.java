@@ -130,16 +130,17 @@ public class IndexController
 					this_stats.put(CricketUtil.TOSS, CricketFunctions.generateTossResult(session_match, "", "", CricketUtil.SHORT));
 					this_stats.put("DOTBALLS" + inn.getInningNumber(), Functions.countDotBalls(inn.getInningNumber(), session_event_file.getEvents()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
-						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI, inn, inn.getTotalOvers(), inn.getTotalBalls()));
+						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI, inn, inn.getTotalOvers(), inn.getTotalBalls(),session_match));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT).toUpperCase());
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
 						this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
 						this_stats.put("PS", Functions.ProjectedScore(session_match));
 						//this_stats.put("PPS", CricketFunctions.getPowerPlayScore(inn,inn.getInningNumber(),'-', session_event_file.getEvents()));
+						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents(),0));
+						//System.out.println("LAST 30 BALLS : " + CricketFunctions.getlastthirtyballsdata(session_match, "-", session_event_file.getEvents(), 30));
 						
 						Collections.reverse(session_event_file.getEvents());
 							this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(session_event_file.getEvents()));
-							this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER, ",", session_event_file.getEvents()));
 							this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, session_event_file.getEvents()));
 					}
 					inn.setStats(this_stats);

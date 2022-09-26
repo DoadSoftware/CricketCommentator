@@ -109,7 +109,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									dataToProcess.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											inn.partnerships.forEach(function(ps,index,arr4){
-												cell.innerHTML = 'PARTNERSHIP ' + ps.totalRuns + '(' + ps.totalBalls + ')';
+												cell.innerHTML = 'PARTNERSHIP ' + ps.totalRuns + ' (' + ps.totalBalls + ')';
 											});
 										}
 									});
@@ -124,17 +124,21 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
 											switch(j){
 												case 1:
-													cell.innerHTML = bc.player.surname + '*';
+													cell.innerHTML = bc.player.ticker_name + '*';
 													cell.style.fontWeight = "900";
 													break;
 												case 2:
-													cell.innerHTML = bc.runs +'('+bc.balls+')';
+													cell.innerHTML = bc.runs +' ('+bc.balls+')';
 													break;
 												case 3:
 													cell.innerHTML = bc.fours + '/' + bc.sixes;
 													break;
 												case 4:
-													cell.innerHTML = bc.strikeRate;
+													if(bc.strikeRate == 0){
+														cell.innerHTML = '-';
+													}else{
+														cell.innerHTML = bc.strikeRate;
+													}
 													break;
 												case 5:
 													if(bc.seconds > '60'){
@@ -146,10 +150,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 												case 6:
 													if(inn.partnerships.length > 0) {
 														if(bc.playerId == inn.partnerships[inn.partnerships.length-1].firstBatterNo){
-															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + '(' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
+															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
 														}
 														else{
-															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + '(' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
+															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
 														}
 														
 													} else {
@@ -171,17 +175,21 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
 											switch(j){
 												case 1:
-													cell.innerHTML = bc.player.surname;
+													cell.innerHTML = bc.player.ticker_name;
 													cell.style.fontWeight = "900";
 													break;
 												case 2:
-													cell.innerHTML = bc.runs +'('+bc.balls+')';
+													cell.innerHTML = bc.runs +' ('+bc.balls+')';
 													break;
 												case 3:
 													cell.innerHTML = bc.fours + '/' + bc.sixes;
 													break;
 												case 4:
-													cell.innerHTML = bc.strikeRate;
+													if(bc.strikeRate == 0){
+														cell.innerHTML = '-';
+													}else{
+														cell.innerHTML = bc.strikeRate;
+													}
 													break;
 												case 5:
 													if(bc.seconds > '60'){
@@ -193,10 +201,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 												case 6:
 													if(inn.partnerships.length > 0) {
 														if(bc.playerId == inn.partnerships[inn.partnerships.length-1].firstBatterNo){
-															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + '(' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
+															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
 														}
 														else{
-															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + '(' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
+															cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
 														}
 														
 													} else {
@@ -226,10 +234,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId) {
 														switch(j){
 															case 2:
-																cell.innerHTML = bc.player.surname ;
+																cell.innerHTML = bc.player.ticker_name ;
 																break;
 															case 3:
-																cell.innerHTML = bc.runs + '(' + bc.balls + ')';
+																cell.innerHTML = bc.runs + ' (' + bc.balls + ')';
 																break;
 															case 4:
 																cell.innerHTML = bc.howOutText;
@@ -325,7 +333,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
 									for(var key in inn.stats){
 										if(key == 'Req_RR'){
-											row.innerHTML = 'CURRENT RUN RATE :' + inn.runRate + "<br />" + 'REQUIRED RUN RATE : ' + inn.stats[key];
+											row.innerHTML = 'CURRENT RUN RATE : ' + inn.runRate + "<br />" + 'REQUIRED RUN RATE : ' + inn.stats[key];
 										}
 									}
 								}
@@ -366,10 +374,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 											for(var key in inn.stats){
 												if(key == 'OVER' + inn.inningNumber){
 													if(inn.battingTeamId == dataToProcess.homeTeamId){	
-														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + '(' + inn.stats[key] + ')';
+														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 													else if(inn.battingTeamId == dataToProcess.awayTeamId){
-														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + '(' + inn.stats[key] + ')';
+														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 												}
 											}
@@ -384,10 +392,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 											for(var key in inn.stats){
 												if(key == 'OVER'+ inn.inningNumber){
 													if(inn.battingTeamId == dataToProcess.homeTeamId){	
-														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + '(' + inn.stats[key] + ')';
+														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 													else if(inn.battingTeamId == dataToProcess.awayTeamId){
-														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + '(' + inn.stats[key] + ')';
+														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 												}
 											}
@@ -449,7 +457,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(j){
 								case 1:
 									dataToProcess.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1){
+										if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
 											for(var key in inn.stats){
 												if(key == 'COMPARE'){
 													cell.innerHTML = inn.stats[key] ;
@@ -479,19 +487,19 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 1:
 									dataToProcess.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
-											cell.innerHTML = inn.totalExtras + "<br />" + dataToProcess.reviewsPerTeam ;
+											cell.innerHTML = inn.totalExtras ;
 										}
 									});
 									break;
 								case 2:
-									cell.innerHTML = 'EXTRAS' + "<br />" + 'REVIEWS';
+									cell.innerHTML = 'EXTRAS';
 									cell.style = "background: #b0d48c; font-weight: 700;";
 									cell.style.textAlign = "center";
 									break;
 								case 3:
 									dataToProcess.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2){
-											cell.innerHTML = inn.totalExtras + "<br />" + dataToProcess.reviewsPerTeam;
+											cell.innerHTML = inn.totalExtras;
 										}
 									});
 									break;
@@ -546,7 +554,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(boc.status == 'CURRENTBOWLER' || boc.status == 'LASTBOWLER'){
 											switch(j){
 												case 1:
-													cell.innerHTML = boc.player.surname;
+													cell.innerHTML = boc.player.ticker_name;
 													break;
 												case 2:
 													cell.innerHTML = boc.wickets + '-' + boc.runs;
@@ -558,7 +566,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 													cell.innerHTML = boc.dots;
 													break;
 												case 5:
-													cell.innerHTML = boc.economyRate;
+													if(boc.economyRate == 0){
+														cell.innerHTML = '-';
+													}else{
+														cell.innerHTML = boc.economyRate;
+													}
 													break;
 											}
 										}
@@ -677,7 +689,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_PS = document.createElement('table');
-			table_PS.style = 'width:20%; margin-left:1%;';
+			table_PS.style = 'width:25%; margin-left:1%;';
 			table_PS.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_PS.appendChild(tbody);
@@ -761,7 +773,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				}
 			}
 			
-				table_fow = document.createElement('table');
+			table_fow = document.createElement('table');
 			table_fow.style = 'width:70%; margin-left:1%;';
 			table_fow.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
