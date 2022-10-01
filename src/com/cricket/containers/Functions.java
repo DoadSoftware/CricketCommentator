@@ -6,7 +6,7 @@ import com.cricket.model.Event;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.util.CricketUtil;
-import com.cricket.util.CricketFunctions;
+//import com.cricket.util.CricketFunctions;
 
 public class Functions 
 {
@@ -71,10 +71,18 @@ public class Functions
 		
 		String PS_1="", PS_2="", PS_3="", PS_Curr="";
 		String RR1="",RR2="",RR3="",RR_Curr="";
-		int remaining_balls = ((match.getMaxOvers()*6) - ((match.getInning().get(0).getTotalOvers()*6)+match.getInning().get(0).getTotalBalls()));
+		int Over_val = 0;
+		if(match.getTargetOvers() > 0) {
+			Over_val = match.getTargetOvers();
+		}else {
+			Over_val = match.getMaxOvers();
+		}
+		int remaining_balls = ((Over_val*6) - ((match.getInning().get(0).getTotalOvers()*6)+match.getInning().get(0).getTotalBalls()));
+		double value = (remaining_balls * Double.valueOf(match.getInning().get(0).getRunRate()));
+		value = value/6;
 		
-		PS_Curr = String.valueOf(Math.round(((match.getInning().get(0).getTotalRuns() + (remaining_balls * 
-				Double.valueOf(match.getInning().get(0).getRunRate())))/6)));
+		
+		PS_Curr = String.valueOf(Math.round(value + match.getInning().get(0).getTotalRuns()));
 		RR_Curr = match.getInning().get(0).getRunRate();
 		
 		String[] arr = match.getInning().get(0).getRunRate().split("\\.");
@@ -83,92 +91,24 @@ public class Functions
 	    
 		for(int i=2;i<=6;i = i+2) {
 			if(i==2) {
-				PS_1 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0]+ i))/6));
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_1 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
 				RR1 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==4) {
-				PS_2 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0] + i))/6));
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_2 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
 				RR2 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==6) {
-				PS_3 = String.valueOf(Math.round((match.getInning().get(0).getTotalRuns() + remaining_balls * (intArr[0] + i))/6));
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_3 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
 				RR3 = String.valueOf((int)intArr[0] + i);
 			}
 		}
 		return String.valueOf(PS_Curr)+","+RR_Curr+","+PS_1+","+ RR1 +","+ PS_2 +","+ RR2 +","+ PS_3 +","+ RR3 ;
-	}
-	
-	public static String generateMatchSummaryStatus(int whichInning, Match match, String teamNameType)
-	  {
-	    if (match.getMaxOvers() <= 0) {
-	    	System.out.println("EROR: generateMatchSummaryStatus NOT available for test matches");
-	    } else {
-	      switch (whichInning) {
-	      case 1: case 2: 
-	        break;
-	      default: 
-	        System.out.println("EROR: Selected inning is wrong [" + whichInning + "]");
-	        return null;
-	      }
-	    }
-	    String teamNameToUse = "", bottomLineText = "";
-	    if (CricketFunctions.getRequiredRuns(match) <= 0 || CricketFunctions.getRequiredRuns(match) > 0) {
-	    	switch (teamNameType) {
-		    case CricketUtil.SHORT: 
-		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
-		      break;
-		    default: 
-		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getFullname();
-		    	break;
-		    }
-	    }
-	    else {
-	    	switch (teamNameType) {
-		    case CricketUtil.SHORT: 
-		    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getShortname();
-		      break;
-		    default: 
-		    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
-		    	break;
-		    }
-	    }
-	    switch (whichInning) {
-	    case 1: 
-	    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
-	  		      ((match.getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
-	  		      ((match.getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
-	  		      return "CURRENT RUNRATE" + (match.getInning().get(0)).getRunRate();
-	  		    }
-	    	else {
-	    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
-	    	}
-	    case 2:
-		    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) && (CricketFunctions.getWicketsLeft(match) > 0))
-		    {
-		      switch (teamNameType)
-		      {
-		      case "SHORT": 
-		        bottomLineText = teamNameToUse + " NEED " + CricketFunctions.getRequiredRuns(match) + " MORE RUN" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " TO WIN FROM ";
-		        break;
-		      default: 
-		        bottomLineText = teamNameToUse + " NEED " + CricketFunctions.getRequiredRuns(match) + " MORE RUN" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " TO WIN FROM ";
-		      }
-		      if (CricketFunctions.getRequiredBalls(match) >= 150) {
-		        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " OVER";
-		      } else {
-		        bottomLineText = bottomLineText + CricketFunctions.getRequiredBalls(match) + " BALL" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
-		      }
-		    }
-		    else if (CricketFunctions.getRequiredRuns(match) <= 0)
-		    {
-		    	bottomLineText = teamNameToUse + " WIN BY " + CricketFunctions.getWicketsLeft(match) + " WICKET" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
-		    }
-		    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
-		    {
-		    	bottomLineText = teamNameToUse + " WIN BY " + (CricketFunctions.getRequiredRuns(match) - 1) + " RUN" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
-		    }
-	    }
-		return bottomLineText;
-		  
 	}
 }

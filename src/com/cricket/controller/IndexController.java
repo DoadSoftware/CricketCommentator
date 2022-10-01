@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cricket.containers.Configurations;
 import com.cricket.containers.Functions;
+import com.cricket.model.BattingCard;
 import com.cricket.model.EventFile;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
@@ -130,6 +131,17 @@ public class IndexController
 					this_stats.put(CricketUtil.TOSS, CricketFunctions.generateTossResult(session_match, "", "", CricketUtil.SHORT));
 					this_stats.put("DOTBALLS" + inn.getInningNumber(), Functions.countDotBalls(inn.getInningNumber(), session_event_file.getEvents()));
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+						for(BattingCard bc : inn.getBattingCard()) {
+							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT) && bc.getOnStrike().equalsIgnoreCase(CricketUtil.YES)) {
+								this_stats.put("BATSMAN1DOTS",  CricketFunctions.getScoreTypeData(CricketUtil.BATSMAN,session_match, inn.getInningNumber(), bc.getPlayerId(),",", 
+										session_event_file.getEvents()));
+							}
+							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT) && bc.getOnStrike().equalsIgnoreCase(CricketUtil.NO)) {
+								this_stats.put("BATSMAN2DOTS",  CricketFunctions.getScoreTypeData(CricketUtil.BATSMAN,session_match, inn.getInningNumber(), bc.getPlayerId(),",", 
+										session_event_file.getEvents()));
+							}
+						}
+						
 						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI, inn, inn.getTotalOvers(), inn.getTotalBalls(),session_match));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT).toUpperCase());
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));

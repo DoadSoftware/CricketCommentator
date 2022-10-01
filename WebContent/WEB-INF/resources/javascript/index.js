@@ -103,7 +103,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'S/R';
 									break;
 								case 5:
-									cell.innerHTML = 'MINS';
+									cell.innerHTML = 'DOTS';
 									break;
 								case 6:
 									dataToProcess.inning.forEach(function(inn,index,arr){
@@ -141,10 +141,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													break;
 												case 5:
-													if(bc.seconds > '60'){
-														cell.innerHTML = Math.floor(bc.seconds / 60);
-													}else{
-														cell.innerHTML = bc.seconds;
+													for(var key in inn.stats){
+														if(key == 'BATSMAN1DOTS'){
+															cell.innerHTML = inn.stats[key].split(',')[0];
+														}
 													}
 													break;
 												case 6:
@@ -192,10 +192,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													break;
 												case 5:
-													if(bc.seconds > '60'){
-														cell.innerHTML = Math.floor(bc.seconds / 60);
-													}else{
-														cell.innerHTML = bc.seconds;
+													for(var key in inn.stats){
+														if(key == 'BATSMAN2DOTS'){
+															cell.innerHTML = inn.stats[key].split(',')[0];
+														}
 													}
 													break;
 												case 6:
@@ -282,7 +282,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				row = tbody.insertRow(tbody.rows.length);
 				switch(i){
 					case 1:
-						row.style="background-color: #fff4cc; font-size:40px; font-weight: bold;";
+						row.style="background-color: #fff4cc; font-size:53px; font-weight: bold;";
 						row.style.textAlign = "center";
 						dataToProcess.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
@@ -291,6 +291,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 									}
 									else {
 										row.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+									}
+									
+									for(var key in inn.stats){
+										if(key == 'OVER' + inn.inningNumber){
+											row.innerHTML = row.innerHTML + ' ('+ inn.stats[key] + ')';
+										}
 									}
 									
 									switch(dataToProcess.matchType){
@@ -314,12 +320,6 @@ function addItemsToList(whatToProcess, dataToProcess)
 											}
 											break;
 									} 
-									
-									for(var key in inn.stats){
-										if(key == 'OVER' + inn.inningNumber){
-											row.innerHTML = row.innerHTML + "<br />" + inn.stats[key] + ' Overs';
-										}
-									}
 								}
 							});
 						break;
@@ -555,6 +555,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											switch(j){
 												case 1:
 													cell.innerHTML = boc.player.ticker_name;
+													cell.style.fontWeight = "900";
 													break;
 												case 2:
 													cell.innerHTML = boc.wickets + '-' + boc.runs;
@@ -652,20 +653,20 @@ function addItemsToList(whatToProcess, dataToProcess)
 									for(var key in inn.stats){
 										if(key == 'ThisOver'){
 											if(boc.status == 'CURRENTBOWLER'){
-												row.innerHTML = 'This Over:-'  + inn.stats[key];
+												row.innerHTML = 'This Over Runs:-'  + inn.stats[key];
 											}
 											else if(boc.status == 'LASTBOWLER'){
-												row.innerHTML = 'This Over:-' + inn.stats[key];
+												row.innerHTML = 'This Over Runs:-' + inn.stats[key];
 											}
 										}
 									}
 									for(var key in inn.stats){
 										if(key == 'OVER'){
 											if(boc.status == 'CURRENTBOWLER'){
-												row.innerHTML = row.innerHTML + "<br />" + inn.stats[key] ;
+												row.innerHTML = row.innerHTML + ' [' + inn.stats[key] + ']';
 											}
 											else if(boc.status == 'LASTBOWLER'){
-												row.innerHTML = row.innerHTML + "<br />" + inn.stats[key] ;
+												row.innerHTML = row.innerHTML + ' [' + inn.stats[key] + ']' ;
 											}
 										}
 									}
@@ -714,7 +715,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 2 : case 3: case 4: case 5:
 									cell.style.fontWeight = "600";
 									dataToProcess.inning.forEach(function(inn,index,arr){
-										if(inn.isCurrentInning == 'YES'){
+										//if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES')
+										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
 												if(key == 'PS'){
 													const myArray = inn.stats[key].split(",");
@@ -744,7 +746,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 2 : case 3: case 4: case 5:
 									cell.style.fontWeight = "600";
 									dataToProcess.inning.forEach(function(inn,index,arr){
-										if(inn.isCurrentInning == 'YES'){
+										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
 												if(key == 'PS'){
 													const myArray = inn.stats[key].split(",");
@@ -774,7 +776,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_fow = document.createElement('table');
-			table_fow.style = 'width:70%; margin-left:1%;';
+			table_fow.style = 'width:98%; margin-left:1%;';
 			table_fow.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_fow.appendChild(tbody);
@@ -868,16 +870,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 				
 				}
 			}
-			
-			
-			
+
 		}
 		$('#fruit_captions_div').append(table_head);
 		$('#fruit_captions_div').append(table_bat);
 		$('#fruit_captions_div').append(table_score);
 		$('#fruit_captions_div').append(table_detail);
 		$('#fruit_captions_div').append(table_Bowl);
-		$('#fruit_captions_div').append(table_Other);
+		//$('#fruit_captions_div').append(table_Other);
 		$('#fruit_captions_div').append(table_Other1);
 		$('#fruit_captions_div').append(table_PS);
 		$('#fruit_captions_div').append(table_fow);
