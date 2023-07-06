@@ -30,10 +30,14 @@ function processCricketProcedures(whatToProcess)
         success : function(data) {
         	switch(whatToProcess) {
 			case 'READ-MATCH-AND-POPULATE':
-				if($('#matchFileTimeStamp').val() != data.matchFileTimeStamp) {
+				if(data){
 					addItemsToList(whatToProcess,data);
-					document.getElementById('matchFileTimeStamp').value = data.matchFileTimeStamp;
+					document.getElementById('matchFileTimeStamp').value = data.setup.matchFileTimeStamp;
 				}
+				/*if($('#matchFileTimeStamp').val() != data.setup.matchFileTimeStamp) {
+					addItemsToList(whatToProcess,data);
+					document.getElementById('matchFileTimeStamp').value = data.setup.matchFileTimeStamp;
+				}*/
 				break;
         	}
 	    },    
@@ -65,7 +69,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 1:
 						row.style="background-color: #3074b4 ; color: #FFFFFF; font-size:25px; font-weight: bold;";
 						row.style.textAlign = "center";
-						row.innerHTML = dataToProcess.homeTeam.fullname + " v " + dataToProcess.awayTeam.fullname +' - '+ dataToProcess.tournament + ' ('+dataToProcess.matchIdent + ')';
+						row.innerHTML = dataToProcess.setup.homeTeam.teamName1 + " v " + dataToProcess.setup.awayTeam.teamName1 +' - '+ dataToProcess.setup.tournament +
+						 ' ('+dataToProcess.setup.matchIdent + ')';
 						break;
 				}
 			}
@@ -106,7 +111,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'DOTS';
 									break;
 								case 6:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											inn.partnerships.forEach(function(ps,index,arr4){
 												cell.innerHTML = 'PARTNERSHIP ' + ps.totalRuns + ' (' + ps.totalBalls + ')';
@@ -118,7 +123,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 2:
 							cell.style = 'text-align:center';
-							dataToProcess.inning.forEach(function(inn,index,arr){
+							dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.battingCard.forEach(function(bc,index,arr1){
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
@@ -169,7 +174,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 3:
 							cell.style = 'text-align:center';
-							dataToProcess.inning.forEach(function(inn,index,arr){
+							dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.battingCard.forEach(function(bc,index,arr1){
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
@@ -227,7 +232,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									break;
 								case 2: case 3: case 4:
 									cell.style = "background: white; color: Black;"
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											inn.battingCard.forEach(function(bc,index,arr1){
 												if(inn.fallsOfWickets.length > 0){
@@ -252,7 +257,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 5:
 									cell.style = "background: #08b4f4; color: Black;"
 									cell.style.fontWeight = "900";
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											cell.innerHTML = 'Extras: ' + inn.totalExtras ;
 										}
@@ -260,7 +265,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									break;
 								case 6:
 									cell.style = "background: #08b4f4; color: Black;"
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											cell.innerHTML ='(' + 'WD:' + inn.totalWides + ' NB:' + inn.totalNoBalls + ' B:' + inn.totalByes + ' LB:' + inn.totalLegByes  + ' Pen:' + inn.totalPenalties + ')';
 										}
@@ -284,13 +289,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 1:
 						row.style="background-color: #fff4cc; font-size:53px; font-weight: bold;";
 						row.style.textAlign = "center";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
-									if(inn.battingTeamId == dataToProcess.homeTeamId){	
-										row.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+									if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+										row.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
 									}
 									else {
-										row.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										row.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
 									}
 									
 									for(var key in inn.stats){
@@ -325,12 +330,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 						break;
 					case 2:
 						row.style="background-color: #fffc04; font-size:18px; font-weight: 700;"
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								row.innerHTML = 'CURRENT RUN RATE :' + inn.runRate;
 							}
 							if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
-								if(dataToProcess.inning[0].totalRuns > dataToProcess.inning[1].totalRuns){
+								if(dataToProcess.match.inning[0].totalRuns > dataToProcess.match.inning[1].totalRuns){
 									for(var key in inn.stats){
 										if(key == 'Req_RR'){
 											row.innerHTML = 'CURRENT RUN RATE : ' + inn.runRate + "<br />" + 'REQUIRED RUN RATE : ' + inn.stats[key];
@@ -369,15 +374,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 1:
 									cell.style = "font-weight: 700;";
 									cell.style.textAlign = "center";
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
 											for(var key in inn.stats){
 												if(key == 'OVER' + inn.inningNumber){
-													if(inn.battingTeamId == dataToProcess.homeTeamId){	
-														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+													if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+														cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
-													else if(inn.battingTeamId == dataToProcess.awayTeamId){
-														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+													else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+														cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 												}
 											}
@@ -387,15 +392,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 								case 3:
 									cell.style = "font-weight: 700;";
 									cell.style.textAlign = "center";
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2){
 											for(var key in inn.stats){
 												if(key == 'OVER'+ inn.inningNumber){
-													if(inn.battingTeamId == dataToProcess.homeTeamId){	
-														cell.innerHTML = dataToProcess.homeTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+													if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+														cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
-													else if(inn.battingTeamId == dataToProcess.awayTeamId){
-														cell.innerHTML = dataToProcess.awayTeam.shortname + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+													else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+														cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 													}
 												}
 											}
@@ -409,12 +414,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.textAlign = "center";
 							switch(j){
 								case 1:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
-											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
 												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
 											}
-											else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
 												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
 											}
 											
@@ -432,12 +437,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style.textAlign = "center";
 									break;
 								case 3:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2){
-											if(inn.battingTeamId == dataToProcess.homeTeamId){	
+											if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
 												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
 											}
-											else if(inn.battingTeamId == dataToProcess.awayTeamId){
+											else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
 												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
 											}
 											
@@ -456,7 +461,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.textAlign = "center";
 							switch(j){
 								case 1:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
 											for(var key in inn.stats){
 												if(key == 'COMPARE'){
@@ -472,7 +477,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style.textAlign = "center";		
 									break;
 								case 3:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 											cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
 										}
@@ -485,7 +490,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.textAlign = "center";
 							switch(j){
 								case 1:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
 											cell.innerHTML = inn.totalExtras ;
 										}
@@ -497,7 +502,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style.textAlign = "center";
 									break;
 								case 3:
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2){
 											cell.innerHTML = inn.totalExtras;
 										}
@@ -548,7 +553,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							break;
 						case 2:
 							cell.style = 'text-align:center';
-							dataToProcess.inning.forEach(function(inn,index,arr){
+							dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.bowlingCard.forEach(function(boc,index,arr2){
 										if(boc.status == 'CURRENTBOWLER' || boc.status == 'LASTBOWLER'){
@@ -595,21 +600,21 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 1:
 						row.style="background-color: Red; color: #FFFFFF;";
 						row.style.textAlign = "center";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								row.innerHTML = 'INFORMATIVE POP-UP';
 						});
 						break;
 					case 2:
 						row.style="background-color: white ;";
 						row.style.textAlign = "center";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								row.innerHTML = 'Speed';
 						});
 						break;
 					case 3:
 						row.style="background-color: white ;";
 						row.style.textAlign = "center";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								row.innerHTML = 'KPH';
 						});
 						break;
@@ -628,7 +633,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 1:
 						row.style="background-color: #f8b484 ; font-size:25px; font-weight: bold;";
 						row.style.textAlign = "center";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 							if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 								for(var key in inn.stats){
 									if(key == 'TOSS'){
@@ -647,7 +652,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 						break;
 					case 2:
 						row.style="background-color: #c8eccc; font-size:20px;  font-weight: 600; ";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								inn.bowlingCard.forEach(function(boc,index,arr2){
 									for(var key in inn.stats){
@@ -676,7 +681,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 						break;
 					case 3:
 						row.style="background-color: #b0d48c; font-size:20px; font-weight: 600; margin-left:1%;";
-						dataToProcess.inning.forEach(function(inn,index,arr){
+						dataToProcess.match.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								for(var key in inn.stats){
 									if(key == 'BOUNDARY'){
@@ -714,7 +719,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									break;
 								case 2 : case 3: case 4: case 5:
 									cell.style.fontWeight = "600";
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										//if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES')
 										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
@@ -745,7 +750,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(j){
 								case 2 : case 3: case 4: case 5:
 									cell.style.fontWeight = "600";
-									dataToProcess.inning.forEach(function(inn,index,arr){
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
 												if(key == 'PS'){
@@ -809,13 +814,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 2:
 							switch(j){
 							case 1:
-								dataToProcess.inning.forEach(function(inn,index,arr){
+								dataToProcess.match.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname;
+										if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+											cell.innerHTML = dataToProcess.setup.homeTeam.teamName4;
 										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											cell.innerHTML = dataToProcess.awayTeam.shortname;
+										else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+											cell.innerHTML = dataToProcess.setup.awayTeam.teamName4;
 										}
 									}
 									cell.style = "background: #08b454; color: #FFFFFF; width:130px;";
@@ -825,7 +830,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
 								cell.style = "background: #ffc404 ; width:130px;";
 								cell.style.fontWeight = "600";
-								dataToProcess.inning.forEach(function(inn,index,arr){
+								dataToProcess.match.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 1){
 										if(inn.fallsOfWickets.length >= j-1){
 											cell.innerHTML = inn.fallsOfWickets[j-2].fowRuns + '(' + inn.fallsOfWickets[j-2].fowOvers + '.' + inn.fallsOfWickets[j-2].fowBalls + ')' ;
@@ -838,13 +843,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 3:
 							switch(j){
 							case 1:
-								dataToProcess.inning.forEach(function(inn,index,arr){
+								dataToProcess.match.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2){
-										if(inn.battingTeamId == dataToProcess.homeTeamId){	
-											cell.innerHTML = dataToProcess.homeTeam.shortname;
+										if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+											cell.innerHTML = dataToProcess.setup.homeTeam.teamName4;
 										}
-										else if(inn.battingTeamId == dataToProcess.awayTeamId){
-											cell.innerHTML = dataToProcess.awayTeam.shortname;
+										else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+											cell.innerHTML = dataToProcess.setup.awayTeam.teamName4;
 										}
 									}
 									cell.style = "background: #08b454; color: #FFFFFF; width:130px;";
@@ -856,7 +861,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
 								cell.style = "background: #ffc404; width:130px;";
 								cell.style.fontWeight = "600";
-								dataToProcess.inning.forEach(function(inn,index,arr){
+								dataToProcess.match.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2){
 										if(inn.fallsOfWickets.length >= j-1){
 											cell.innerHTML = inn.fallsOfWickets[j-2].fowRuns + '(' + inn.fallsOfWickets[j-2].fowOvers + '.' + inn.fallsOfWickets[j-2].fowBalls + ')' ;

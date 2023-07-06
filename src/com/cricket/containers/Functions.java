@@ -5,6 +5,7 @@ import java.util.List;
 import com.cricket.model.Event;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
+import com.cricket.model.MatchAllData;
 import com.cricket.util.CricketUtil;
 //import com.cricket.util.CricketFunctions;
 
@@ -67,25 +68,30 @@ public class Functions
 		return String.valueOf(total_run_PP)+"-"+String.valueOf(total_wickets_PP);
 	}
 	
-	public static String ProjectedScore(Match match) {
+	public static String ProjectedScore(MatchAllData match) {
 		
 		String PS_1="", PS_2="", PS_3="", PS_Curr="";
 		String RR1="",RR2="",RR3="",RR_Curr="";
 		int Over_val = 0;
-		if(match.getTargetOvers() > 0) {
-			Over_val = match.getTargetOvers();
+		if(!match.getSetup().getTargetOvers().isEmpty() && Double.valueOf(match.getSetup().getTargetOvers()) > 0) {
+			if(match.getSetup().getTargetOvers().contains(".")) {
+				Over_val = (Integer.valueOf(match.getSetup().getTargetOvers().split("\\.")[0]) * 6) 
+					+ Integer.valueOf(match.getSetup().getTargetOvers().split("\\.")[1]);
+			}else {
+				Over_val = Integer.valueOf(match.getSetup().getTargetOvers()) * 6;
+			}
 		}else {
-			Over_val = match.getMaxOvers();
+			Over_val = match.getSetup().getMaxOvers()*6;
 		}
-		int remaining_balls = ((Over_val*6) - ((match.getInning().get(0).getTotalOvers()*6)+match.getInning().get(0).getTotalBalls()));
-		double value = (remaining_balls * Double.valueOf(match.getInning().get(0).getRunRate()));
+		int remaining_balls = ((Over_val) - ((match.getMatch().getInning().get(0).getTotalOvers()*6)+match.getMatch().getInning().get(0).getTotalBalls()));
+		double value = (remaining_balls * Double.valueOf(match.getMatch().getInning().get(0).getRunRate()));
 		value = value/6;
 		
 		
-		PS_Curr = String.valueOf(Math.round(value + match.getInning().get(0).getTotalRuns()));
-		RR_Curr = match.getInning().get(0).getRunRate();
+		PS_Curr = String.valueOf(Math.round(value + match.getMatch().getInning().get(0).getTotalRuns()));
+		RR_Curr = match.getMatch().getInning().get(0).getRunRate();
 		
-		String[] arr = match.getInning().get(0).getRunRate().split("\\.");
+		String[] arr = match.getMatch().getInning().get(0).getRunRate().split("\\.");
 		double[] intArr= new double[2];
 	    intArr[0]=Integer.parseInt(arr[0]);
 	    
@@ -93,19 +99,19 @@ public class Functions
 			if(i==2) {
 				value = (remaining_balls * (intArr[0] + i));
 				value = value / 6;
-				PS_1 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
+				PS_1 = String.valueOf(Math.round(match.getMatch().getInning().get(0).getTotalRuns() + value));
 				RR1 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==4) {
 				value = (remaining_balls * (intArr[0] + i));
 				value = value / 6;
-				PS_2 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
+				PS_2 = String.valueOf(Math.round(match.getMatch().getInning().get(0).getTotalRuns() + value));
 				RR2 = String.valueOf((int)intArr[0] + i);
 			}
 			else if(i==6) {
 				value = (remaining_balls * (intArr[0] + i));
 				value = value / 6;
-				PS_3 = String.valueOf(Math.round(match.getInning().get(0).getTotalRuns() + value));
+				PS_3 = String.valueOf(Math.round(match.getMatch().getInning().get(0).getTotalRuns() + value));
 				RR3 = String.valueOf((int)intArr[0] + i);
 			}
 		}
