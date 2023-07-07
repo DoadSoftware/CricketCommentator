@@ -22,8 +22,8 @@ import com.cricket.model.Player;
 public class DataSourceConfig {
 
  private static final String PROPERTY_NAME_DATABASE_DRIVER = "hibernate.connection.driver_class";
- //private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.url";
- private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.server.url";
+ private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.url";
+ //private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.server.url";
 
  @Resource
  private Environment env;

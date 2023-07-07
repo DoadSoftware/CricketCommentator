@@ -49,7 +49,8 @@ public class IndexController
 	public static Configurations session_Configurations;
 	public static MatchAllData session_match;
 	public static String session_selected_broadcaster;
-
+	boolean bowler_Found = false;
+	int bowler = 0;
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String initialisePage(ModelMap model) throws JAXBException  
 	{
@@ -135,6 +136,7 @@ public class IndexController
 					this_stats.put(CricketUtil.COMPARE , CricketFunctions.compareInningData(session_match,"-",1,session_match.getEventFile().getEvents()));
 					this_stats.put(CricketUtil.TOSS, CricketFunctions.generateTossResult(session_match,CricketUtil.SHORT, "", CricketUtil.SHORT, ""));
 					this_stats.put("DOTBALLS" + inn.getInningNumber(), Functions.countDotBalls(inn.getInningNumber(), session_match.getEventFile().getEvents()));
+					
 					if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 						for(BattingCard bc : inn.getBattingCard()) {
 							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT) && bc.getOnStrike().equalsIgnoreCase(CricketUtil.YES)) {
@@ -147,34 +149,32 @@ public class IndexController
 							}
 						}
 						
+						this_stats.put("PREVIOUS_BOWLER", CricketFunctions.previousBowler(session_match, session_match.getEventFile().getEvents()));
+						this_stats.put("OTHER_BOWLER", CricketFunctions.otherBowler(session_match, session_match.getEventFile().getEvents()));
 						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI,session_match));
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT).toUpperCase());
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
-						//Collections.reverse(session_match.getEventFile().getEvents());
-						for(BowlingCard boc : inn.getBowlingCard()) {
-							if(boc.getStatus().contains(CricketUtil.CURRENT)) {
-								this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), boc.getPlayerId(), CricketFunctions.getRequiredBalls(session_match), 2));
-								this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER,boc.getPlayerId(), ",", session_match.getEventFile().getEvents(),0));
-								//this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(boc.getPlayerId(),session_match.getEventFile().getEvents()));
+						this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
+						this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER,0, ",", session_match.getEventFile().getEvents(),0));
+						
+						if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+							if(inn.getRunRate()!= null) {
+								this_stats.put("PS", Functions.ProjectedScore(session_match));
 							}
 						}
-						
-						this_stats.put("PS", Functions.ProjectedScore(session_match));
 						//this_stats.put("PPS", CricketFunctions.getPowerPlayScore(inn,inn.getInningNumber(),'-', session_event_file.getEvents()));
 						
 						//System.out.println("LAST 30 BALLS : " + CricketFunctions.getlastthirtyballsdata(session_match, "-", session_event_file.getEvents(), 30));
-						
-						Collections.reverse(session_match.getEventFile().getEvents());
+						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, session_match.getEventFile().getEvents(),inn.getInningNumber()));
+						//Collections.reverse(session_match.getEventFile().getEvents());
 						for(BowlingCard boc : inn.getBowlingCard()) {
-							if(boc.getStatus().contains(CricketUtil.CURRENT)) {
-								//this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), boc.getPlayerId(), CricketFunctions.getRequiredBalls(session_match), 2));
-								//this_stats.put(CricketUtil.OVER, CricketFunctions.getEventsText(CricketUtil.OVER,boc.getPlayerId(), ",", session_match.getEventFile().getEvents(),0));
+							if(boc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER)) {
 								this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(boc.getPlayerId(),session_match.getEventFile().getEvents()));
 							}
 						}
-						//this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(0,session_match.getEventFile().getEvents()));
 
-						this_stats.put(CricketUtil.BOUNDARY, CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, session_match.getEventFile().getEvents(),inn.getInningNumber()));
+						//this_stats.put("ThisOver",CricketFunctions.processThisOverRunsCount(0,session_match.getEventFile().getEvents()));
+						
 					}
 					inn.setStats(this_stats);
 				}
