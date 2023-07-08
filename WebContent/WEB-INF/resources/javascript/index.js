@@ -395,20 +395,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
-										row.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										row.innerHTML = dataToProcess.setup.homeTeam.teamName4 ;
 									}
 									else {
-										row.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										row.innerHTML = dataToProcess.setup.awayTeam.teamName4 ;
 									}
 									
-									for(var key in inn.stats){
-										if(key == 'OVER' + inn.inningNumber){
-											row.innerHTML = row.innerHTML + ' ('+ inn.stats[key] + ')';
-										}
-									}
-									
-									switch(dataToProcess.matchType){
+									switch(dataToProcess.setup.matchType){
 										case 'DT20': case 'IT20':
+										//alert(row.innerHTML)
 											for(var key in inn.stats){
 												if(key == 'POWERPLAY'){
 													if(inn.stats[key] == 'P1'){
@@ -427,7 +422,20 @@ function addItemsToList(whatToProcess, dataToProcess)
 												}
 											}
 											break;
-									} 
+									}
+									
+									if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+										row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+									}
+									else {
+										row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+									}
+									
+									for(var key in inn.stats){
+										if(key == 'OVER' + inn.inningNumber){
+											row.innerHTML = row.innerHTML + ' ('+ inn.stats[key] + ')';
+										}
+									}
 								}
 							});
 						break;
@@ -666,8 +674,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(boc.status == 'CURRENTBOWLER'){
 											switch(j){
 												case 1:
+													cell.style="font-size:15px; font-weight: bold;";
 													cell.innerHTML = boc.player.ticker_name.slice(0,10) + '*';
-													cell.style.fontWeight = "900";
+													//cell.style.fontWeight = "900";
 													break;
 												case 2:
 													cell.innerHTML = boc.wickets + '-' + boc.runs;
@@ -700,24 +709,48 @@ function addItemsToList(whatToProcess, dataToProcess)
 											if(key == 'OTHER_BOWLER'){
 												switch(j){
 													case 1:
-														cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
-														cell.style.fontWeight = "900";
-														break;
-													case 2:
-														cell.innerHTML = inn.stats[key].split(',')[1];
-														break;
-													case 3:
-														cell.innerHTML = inn.stats[key].split(',')[4];
-														break;
-													case 4:
-														cell.innerHTML = inn.stats[key].split(',')[2];
-														break;
-													case 5:
-														if(inn.stats[key].split(',')[3] == 0){
+														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
-															cell.innerHTML = inn.stats[key].split(',')[3];
+															cell.style="font-size:15px; font-weight: bold;";
+															cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
+															//cell.style.fontWeight = "900";
 														}
+														break;
+													case 2:
+														if(inn.stats[key].split(',')[0] == ''){
+															cell.innerHTML = '-';
+														}else{
+															cell.innerHTML = inn.stats[key].split(',')[1];
+														}
+														break;
+													case 3:
+														if(inn.stats[key].split(',')[0] == ''){
+															cell.innerHTML = '-';
+														}else{
+															cell.innerHTML = inn.stats[key].split(',')[4];
+														}
+														
+														break;
+													case 4:
+														if(inn.stats[key].split(',')[0] == ''){
+															cell.innerHTML = '-';
+														}else{
+															cell.innerHTML = inn.stats[key].split(',')[2];
+														}
+														
+														break;
+													case 5:
+														if(inn.stats[key].split(',')[0] == ''){
+															cell.innerHTML = '-';
+														}else{
+															if(inn.stats[key].split(',')[3] == 0){
+																cell.innerHTML = '-';
+															}else{
+																cell.innerHTML = inn.stats[key].split(',')[3];
+															}
+														}
+														
 														break;
 												}
 											}
@@ -735,8 +768,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(key == 'PREVIOUS_BOWLER'){
 											switch(j){
 												case 1:
+													cell.style="font-size:15px; font-weight: bold;";
 													cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
-													cell.style.fontWeight = "900";
+													//cell.style.fontWeight = "900";
 													break;
 												case 2:
 													cell.innerHTML = inn.stats[key].split(',')[1];
@@ -1009,13 +1043,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 										break;
 										case 2:
-										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+										cell.style="background-color: #ffe49c ; font-size:12px; font-weight: bold;";
 										
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
 													if(inn.fallsOfWickets[i-2].fowPlayerID == bc.playerId){
 														cell.innerHTML = bc.howOutText;
+														//cell.style.maxWidth = "9px;";
+														//cell.innerHTML = 'st KRANTHI KUMAR b CHANDRA KOUSHIK';
 													}
 												});
 											}else{
@@ -1024,9 +1060,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 										break;
 										case 3:
-										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
 										//cell.style.width = "100px;";
-										
+										//cell.style = "text-align:center;";
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
@@ -1112,7 +1148,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											});
 											break;
 										case 2:
-											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
 											
 											if(inn.bowlingCard[i-2] != null){
 												cell.innerHTML = inn.bowlingCard[i-2].wickets + '-' + inn.bowlingCard[i-2].runs;
@@ -1123,7 +1159,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											
 											break;
 										case 3:
-											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
 											
 											if(inn.bowlingCard[i-2] != null){
 												cell.innerHTML = inn.bowlingCard[i-2].overs + '.' + inn.bowlingCard[i-2].balls;

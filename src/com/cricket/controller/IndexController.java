@@ -147,10 +147,12 @@ public class IndexController
 								this_stats.put("BATSMAN2DOTS",  CricketFunctions.getScoreTypeData(CricketUtil.BATSMAN,session_match, inn.getInningNumber(), bc.getPlayerId(),",", 
 										session_match.getEventFile().getEvents()));
 							}
-							if(inn.getFallsOfWickets().size() >=0) {
-								if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() -1).getFowPlayerID() == bc.getPlayerId()) {
-									this_stats.put("BATSMAN_OUT",  CricketFunctions.getScoreTypeData(CricketUtil.BATSMAN,session_match, inn.getInningNumber(), bc.getPlayerId(),",", 
-											session_match.getEventFile().getEvents()));
+							if(inn.getFallsOfWickets() != null) {
+								if(inn.getFallsOfWickets().size() >=0) {
+									if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() -1).getFowPlayerID() == bc.getPlayerId()) {
+										this_stats.put("BATSMAN_OUT",  CricketFunctions.getScoreTypeData(CricketUtil.BATSMAN,session_match, inn.getInningNumber(), bc.getPlayerId(),",", 
+												session_match.getEventFile().getEvents()));
+									}
 								}
 							}
 						}
