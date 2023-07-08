@@ -27,7 +27,7 @@
 	 <div class="col-xl">
        <span class="anchor"></span>
           <div class="card-body">
-			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2">
+			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2 " style="height:50% width: 50%;">
 			  </div>
 	       </div>
        </div>

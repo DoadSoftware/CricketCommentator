@@ -58,7 +58,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 		if(dataToProcess) {
 			
 			table_head = document.createElement('table');
-			table_head.style = 'width:98%; margin-left:1%;';
+			table_head.style = 'table-layout:fixed;width:98%; margin-left:1%;';
 			table_head.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_head.appendChild(tbody);
@@ -76,7 +76,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_bat = document.createElement('table');
-			table_bat.style = 'table-layout:fixed; width:755px; margin-left:1%;';
+			table_bat.style = 'table-layout:fixed;height:100px;width:780px; margin-left:1%;';
 			//table_bat.style = 'width:25%; margin-left:1%;';
 			table_bat.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
@@ -85,6 +85,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			for (var i = 1; i <= 4; i++){
 				row = tbody.insertRow(tbody.rows.length);
 				row.style = "background: #3074b4; color: #FFFFFF; "
+				var player1_found = false;
 				switch(i){
 					case 1: case 2: case 3: case 4:
 						count = 6;
@@ -130,10 +131,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
 											switch(j){
 												case 1:
+													cell.style="font-size:15px; font-weight: bold;";
 													cell.innerHTML = bc.player.ticker_name.slice(0,10) + '*';
-													cell.style.fontWeight = "900";
+													//cell.style.fontWeight = "600";
 													break;
 												case 2:
+													
 													cell.innerHTML = bc.runs +' ('+bc.balls+')';
 													break;
 												case 3:
@@ -168,8 +171,96 @@ function addItemsToList(whatToProcess, dataToProcess)
 													break;
 												
 											}
+											player1_found = true;
 										}
 									});
+									
+									if(player1_found == false){
+										//alert(player1_found)
+										switch(j){
+											case 1:
+												var size = inn.fallsOfWickets.length;
+												
+												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length >= 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
+															cell.style="font-size:15px; font-weight: bold;";
+															cell.innerHTML = hs.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awaySquad.forEach(function(as,index,arr){
+													if(inn.fallsOfWickets.length >= 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
+															cell.style="font-size:15px; font-weight: bold;";
+															cell.innerHTML = as.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												break;
+											case 2:
+												if(inn.fallsOfWickets.length >= 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															//alert(bc.runs +' ('+bc.balls+')')
+															cell.innerHTML = bc.runs +' ('+bc.balls+')';
+														}
+													});
+												}
+												break;
+											case 3:
+												if(inn.fallsOfWickets.length >= 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															cell.innerHTML = bc.fours + '/' + bc.sixes;
+														}
+													});
+												}
+												break;
+											case 4:
+												if(inn.fallsOfWickets.length >= 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															if(bc.strikeRate == 0){
+																cell.innerHTML = '-';
+															}else{
+																cell.innerHTML = bc.strikeRate;
+															}
+														}
+													});
+												}
+												break;
+											case 5:
+												for(var key in inn.stats){
+													if(key == 'BATSMAN_OUT'){
+														cell.innerHTML = inn.stats[key].split(',')[0];
+													}
+												}
+												break;
+											case 6:
+												if(inn.partnerships.length > 0) {
+													if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == inn.partnerships[inn.partnerships.length-1].firstBatterNo){
+														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
+													}
+													else{
+														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
+													}
+													
+												} else {
+													cell.innerHTML = '';
+												}
+												break;
+										}
+									}
 								}				
 							});		
 							break;
@@ -181,8 +272,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
 											switch(j){
 												case 1:
+													cell.style="font-size:15px; font-weight: bold;";
 													cell.innerHTML = bc.player.ticker_name.slice(0,10);
-													cell.style.fontWeight = "900";
+													//cell.style.fontWeight = "900";
 													break;
 												case 2:
 													cell.innerHTML = bc.runs +' ('+bc.balls+')';
@@ -248,7 +340,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 																break;
 															case 4:
 																//cell.innerHTML = bc.howOutText;
-																cell.innerHTML = bc.howOutPartOne.slice(0,10) + '<br>' + bc.howOutPartTwo.slice(0,10);
+																//alert(bc.howOutText)
+																if(bc.howOut == 'obstructing_fielder' || bc.howOut == 'handled_the_ball'){
+																	cell.innerHTML = bc.howOutText.split(' ')[0] + '<br>' + bc.howOutText.split(' ')[1] + ' ' + bc.howOutText.split(' ')[2];
+																}else if(bc.howOut == 'hit_ball_twice'){
+																	cell.innerHTML = 'hit ball <br> twice';
+																}else{
+																	cell.innerHTML = bc.howOutPartOne.slice(0,11) + '<br>' + bc.howOutPartTwo.slice(0,11);
+																}
 																break;
 														}
 													}
@@ -282,7 +381,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_score = document.createElement('table');
 			//table_score.style.maxWidth = '50px';
-			table_score.style = 'table-layout:fixed; width:20%; margin-left:1%; margin-right:1%;';
+			table_score.style = 'table-layout:fixed;width:20%; margin-left:1%; margin-right:1%;';
 			table_score.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_score.appendChild(tbody);
@@ -666,7 +765,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_Other = document.createElement('table');
-			table_Other.style = 'table_Other-layout: fixed;width:400px; margin-left:1%; margin-right:1%;';
+			table_Other.style = 'table_Other-layout: fixed; width:400px; margin-left:1%; margin-right:1%;';
 			table_Other.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_Other.appendChild(tbody);
@@ -733,14 +832,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 						dataToProcess.match.inning.forEach(function(inn,index,arr){
 							if(inn.isCurrentInning == 'YES'){
 								inn.bowlingCard.forEach(function(boc,index,arr2){
-									row.innerHTML = 'This Over Runs:-';
+									//row.innerHTML = 'This Over Runs:-';
 									for(var key in inn.stats){
 										if(key == 'ThisOver'){
 											if(boc.status == 'CURRENTBOWLER'){
-												row.innerHTML = row.innerHTML  + inn.stats[key];
+												row.innerHTML = 'This Over Runs:-'  + inn.stats[key];
 											}
 											else if(boc.status == 'LASTBOWLER'){
-												row.innerHTML = row.innerHTML + inn.stats[key];
+												row.innerHTML = 'This Over Runs:-' + inn.stats[key];
 											}
 										}
 									}
@@ -860,7 +959,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_BC = document.createElement('table');
-			table_BC.style = 'table-layout:fixed; width:50%; margin-left:1%;';
+			table_BC.style = 'table-layout:fixed; height:20%; width:50%; margin-left:1%;';
 			table_BC.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_BC.appendChild(tbody);
@@ -926,6 +1025,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										break;
 										case 3:
 										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+										//cell.style.width = "100px;";
 										
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
@@ -949,7 +1049,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			});
 			
 			table_BOC = document.createElement('table');
-			table_BOC.style = 'table-layout:fixed; width:46%; margin-left:1%;';
+			table_BOC.style = 'table-layout:fixed; height:25%; width:46%; margin-left:1%;';
 			table_BOC.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_BOC.appendChild(tbody);
@@ -968,7 +1068,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(i){
 							case i:
 								//alert(boc.playerId)
-								count = 2;
+								count = 3;
 								break;
 							}
 							for (var j=1;j<=count;j++){
@@ -1022,6 +1122,17 @@ function addItemsToList(whatToProcess, dataToProcess)
 												
 											
 											break;
+										case 3:
+											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
+											
+											if(inn.bowlingCard[i-2] != null){
+												cell.innerHTML = inn.bowlingCard[i-2].overs + '.' + inn.bowlingCard[i-2].balls;
+											}else{
+												cell.innerHTML = '';
+											}
+												
+											
+											break;	
 									}
 									break;	
 							}
@@ -1031,7 +1142,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				}
 			});
 			table_fow = document.createElement('table');
-			table_fow.style = 'table-layout:fixed; width:98%; margin-left:1%;';
+			table_fow.style = 'table-layout:fixed; height:20%;width:98%; margin-left:1%;';
 			table_fow.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_fow.appendChild(tbody);
@@ -1051,7 +1162,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(j){
 							case 1:
 								cell.innerHTML = 'Falls Of Wickets:';
-								cell.style = "background: #08b454; color: #FFFFFF; width:130px;";
+								cell.style = "background: #08b454; color: #FFFFFF; height:20%;width:130px;";
 								cell.style.fontWeight = "700";
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
@@ -1078,7 +1189,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								});
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
-								cell.style = "background: #ffc404 ; width:130px;";
+								cell.style = "background: #ffc404 ;height:10%; width:10%;";
 								cell.style.fontWeight = "600";
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
@@ -1109,7 +1220,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								
 								break;
 							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
-								cell.style = "background: #ffc404; width:130px;";
+								cell.style = "background: #ffc404; width:50px;";
 								cell.style.fontWeight = "600";
 								dataToProcess.match.inning.forEach(function(inn,index,arr){
 									if(inn.inningNumber == 2){
@@ -1139,6 +1250,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 		$('#fruit_captions_div').append(table_BOC);
 		$('#fruit_captions_div').append(table_fow);
 		document.getElementById('fruit_captions_div').style.display = '';
+		//$("body").css("overflow", "hidden");
 		break;
 	}
 }
