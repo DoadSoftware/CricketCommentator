@@ -59,6 +59,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_head = document.createElement('table');
 			table_head.style = 'table-layout:fixed;width:98%; margin-left:1%;';
+			table_head.style.marginTop = "-16px";
 			table_head.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_head.appendChild(tbody);
@@ -76,8 +77,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_bat = document.createElement('table');
-			table_bat.style = 'table-layout:fixed;height:100px;width:780px; margin-left:1%;';
+			table_bat.style = 'table-layout:fixed;height:100px;width:820px; margin-left:1%;';
 			//table_bat.style = 'width:25%; margin-left:1%;';
+			table_bat.style.marginTop = "-13px";
+			table_bat.style.marginRight = "-12px";
 			table_bat.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_bat.appendChild(tbody);
@@ -86,6 +89,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				row = tbody.insertRow(tbody.rows.length);
 				row.style = "background: #3074b4; color: #FFFFFF; "
 				var player1_found = false;
+				var player2_found = false;
 				switch(i){
 					case 1: case 2: case 3: case 4:
 						count = 6;
@@ -180,13 +184,20 @@ function addItemsToList(whatToProcess, dataToProcess)
 										switch(j){
 											case 1:
 												var size = inn.fallsOfWickets.length;
-												
+												/*dataToProcess.eventFile.events.forEach(function(evnt,index,arr){
+													if(evnt[evnt.length-1].eventType == 'LOG_WICKET'){
+														if(evnt[evnt.length-1].eventHowOut == 'RETIRED_HURT'){
+															cell.innerHTML = '-';
+														}
+													}
+												});*/
+													
 												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
 												//alert(hs.playerId)
-													if(inn.fallsOfWickets.length >= 0){
+													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
-															cell.style="font-size:15px; font-weight: bold;";
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
 															cell.innerHTML = hs.ticker_name.slice(0,10);
 														}
 													}else{
@@ -194,12 +205,62 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													
 												});
+												dataToProcess.setup.homeOtherSquad.forEach(function(hos,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = hos.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.homeSubstitutes.forEach(function(hsub,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = hsub.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
 												dataToProcess.setup.awaySquad.forEach(function(as,index,arr){
-													if(inn.fallsOfWickets.length >= 0){
+													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
-															cell.style="font-size:15px; font-weight: bold;";
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
 															cell.innerHTML = as.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awayOtherSquad.forEach(function(aos,index,arr){
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = aos.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awaySubstitutes.forEach(function(asub,index,arr){
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = asub.ticker_name.slice(0,10);
 														}
 													}else{
 														cell.innerHTML = '';
@@ -208,31 +269,35 @@ function addItemsToList(whatToProcess, dataToProcess)
 												});
 												break;
 											case 2:
-												if(inn.fallsOfWickets.length >= 0){
+												if(inn.fallsOfWickets.length > 0){
 													inn.battingCard.forEach(function(bc,index,arr){
 														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
 															//alert(bc.runs +' ('+bc.balls+')')
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 															cell.innerHTML = bc.runs +' ('+bc.balls+')';
 														}
 													});
 												}
 												break;
 											case 3:
-												if(inn.fallsOfWickets.length >= 0){
+												if(inn.fallsOfWickets.length > 0){
 													inn.battingCard.forEach(function(bc,index,arr){
 														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 															cell.innerHTML = bc.fours + '/' + bc.sixes;
 														}
 													});
 												}
 												break;
 											case 4:
-												if(inn.fallsOfWickets.length >= 0){
+												if(inn.fallsOfWickets.length > 0){
 													inn.battingCard.forEach(function(bc,index,arr){
 														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
 															if(bc.strikeRate == 0){
+																cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 																cell.innerHTML = '-';
 															}else{
+																cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 																cell.innerHTML = bc.strikeRate;
 															}
 														}
@@ -242,20 +307,24 @@ function addItemsToList(whatToProcess, dataToProcess)
 											case 5:
 												for(var key in inn.stats){
 													if(key == 'BATSMAN_OUT'){
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 														cell.innerHTML = inn.stats[key].split(',')[0];
 													}
 												}
 												break;
 											case 6:
-												if(inn.partnerships.length > 0) {
+												if(inn.partnerships.length > 0 && inn.fallsOfWickets.length > 0) {
 													if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == inn.partnerships[inn.partnerships.length-1].firstBatterNo){
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
 													}
 													else{
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
 														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
 													}
 													
 												} else {
+													cell.style="font-size:15px; font-weight: bold;text-align:center;";
 													cell.innerHTML = '';
 												}
 												break;
@@ -311,10 +380,155 @@ function addItemsToList(whatToProcess, dataToProcess)
 													break;
 												
 											}
+											player2_found = true;
 										}
 									});
+									if(player2_found == false){
+										//alert(player1_found)
+										switch(j){
+											case 1:
+												var size = inn.fallsOfWickets.length;
+												
+												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = hs.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.homeOtherSquad.forEach(function(hos,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = hos.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.homeSubstitutes.forEach(function(hsub,index,arr){
+												//alert(hs.playerId)
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[size - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = hsub.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awaySquad.forEach(function(as,index,arr){
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = as.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awayOtherSquad.forEach(function(aos,index,arr){
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = aos.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												dataToProcess.setup.awaySubstitutes.forEach(function(asub,index,arr){
+													if(inn.fallsOfWickets.length > 0){
+														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
+														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;";
+															cell.innerHTML = asub.ticker_name.slice(0,10);
+														}
+													}else{
+														cell.innerHTML = '';
+													}
+													
+												});
+												break;
+											case 2:
+												if(inn.fallsOfWickets.length > 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															//alert(bc.runs +' ('+bc.balls+')')
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+															cell.innerHTML = bc.runs +' ('+bc.balls+')';
+														}
+													});
+												}
+												break;
+											case 3:
+												if(inn.fallsOfWickets.length > 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+															cell.innerHTML = bc.fours + '/' + bc.sixes;
+														}
+													});
+												}
+												break;
+											case 4:
+												if(inn.fallsOfWickets.length > 0){
+													inn.battingCard.forEach(function(bc,index,arr){
+														if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId){
+															if(bc.strikeRate == 0){
+																cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+																cell.innerHTML = '-';
+															}else{
+																cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+																cell.innerHTML = bc.strikeRate;
+															}
+														}
+													});
+												}
+												break;
+											case 5:
+												for(var key in inn.stats){
+													if(key == 'BATSMAN_OUT'){
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+														cell.innerHTML = inn.stats[key].split(',')[0];
+													}
+												}
+												break;
+											case 6:
+												if(inn.partnerships.length > 0) {
+													if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == inn.partnerships[inn.partnerships.length-1].firstBatterNo){
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].firstBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].firstBatterBalls + ')';
+													}
+													else{
+														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+														cell.innerHTML = inn.partnerships[inn.partnerships.length-1].secondBatterRuns + ' (' + inn.partnerships[inn.partnerships.length-1].secondBatterBalls + ')';
+													}
+													
+												} else {
+													cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;";
+													cell.innerHTML = '';
+												}
+												break;
+										}
+									}
 								}				
-							});		
+							});	
 							break;
 						case 4:
 							switch(j){
@@ -382,6 +596,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			table_score = document.createElement('table');
 			//table_score.style.maxWidth = '50px';
 			table_score.style = 'table-layout:fixed;width:20%; margin-left:1%; margin-right:1%;';
+			table_score.style.marginTop = "-13px";
+			table_score.style.marginRight = "-12px";
 			table_score.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_score.appendChild(tbody);
@@ -390,7 +606,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 				row = tbody.insertRow(tbody.rows.length);
 				switch(i){
 					case 1:
-						row.style="background-color: #fff4cc; font-size:53px; font-weight: bold;";
+						row.style="background-color: #fff4cc; font-size:40px; font-weight: bold;";
 						row.style.textAlign = "center";
 						dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
@@ -407,7 +623,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											for(var key in inn.stats){
 												if(key == 'POWERPLAY'){
 													if(inn.stats[key] == 'P1'){
-														row.innerHTML = row.innerHTML + '(P)';
+														row.innerHTML = row.innerHTML + ' (P)';
 													}else{
 														row.innerHTML = row.innerHTML + '';
 													}
@@ -415,10 +631,18 @@ function addItemsToList(whatToProcess, dataToProcess)
 											}
 											break;
 											
-										case 'ODI':
+										case 'ODI': case 'OD':
 											for(var key in inn.stats){
 												if(key == 'POWERPLAY'){
-													row.innerHTML = row.innerHTML + '(' + inn.stats[key] + ')';
+													if(inn.stats[key] == 'P1'){
+														row.innerHTML = row.innerHTML + ' (' + inn.stats[key] + ')';
+													}else if(inn.stats[key] == 'P2'){
+														row.innerHTML = row.innerHTML + ' (' + inn.stats[key] + ')';
+													}else if(inn.stats[key] == 'P3'){
+														row.innerHTML = row.innerHTML + ' (' + inn.stats[key] + ')';
+													}else{
+														row.innerHTML = row.innerHTML + '';
+													}
 												}
 											}
 											break;
@@ -464,6 +688,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_detail = document.createElement('table');
 			table_detail.style = 'table-layout:fixed; width:25%;';
+			table_detail.style.marginTop = "-13px";
+			table_detail.style.marginRight = "-12px";
 			table_detail.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_detail.appendChild(tbody);
@@ -627,6 +853,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_Bowl = document.createElement('table');
 			table_Bowl.style = 'table-layout:fixed; width:40%; margin-left:1%;';
+			table_Bowl.style.marginTop = "-13px";
+			table_Bowl.style.marginRight = "-12px";
 			table_Bowl.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_Bowl.appendChild(tbody);
@@ -768,24 +996,45 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(key == 'PREVIOUS_BOWLER'){
 											switch(j){
 												case 1:
-													cell.style="font-size:15px; font-weight: bold;";
-													cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
+													if(inn.stats[key].split(',')[0] == ''){
+														cell.style="font-size:15px; font-weight: bold;";
+														cell.innerHTML = '-';
+													}else{
+														cell.style="font-size:15px; font-weight: bold;";
+														cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
+													}
 													//cell.style.fontWeight = "900";
 													break;
 												case 2:
-													cell.innerHTML = inn.stats[key].split(',')[1];
-													break;
-												case 3:
-													cell.innerHTML = inn.stats[key].split(',')[4];
-													break;
-												case 4:
-													cell.innerHTML = inn.stats[key].split(',')[2];
-													break;
-												case 5:
-													if(inn.stats[key].split(',')[3] == 0){
+													if(inn.stats[key].split(',')[0] == ''){
 														cell.innerHTML = '-';
 													}else{
-														cell.innerHTML = inn.stats[key].split(',')[3];
+														cell.innerHTML = inn.stats[key].split(',')[1];
+													}
+													break;
+												case 3:
+													if(inn.stats[key].split(',')[0] == ''){
+														cell.innerHTML = '-';
+													}else{
+														cell.innerHTML = inn.stats[key].split(',')[4];
+													}
+													break;
+												case 4:
+													if(inn.stats[key].split(',')[0] == ''){
+														cell.innerHTML = '-';
+													}else{
+														cell.innerHTML = inn.stats[key].split(',')[2];
+													}
+													break;
+												case 5:
+													if(inn.stats[key].split(',')[0] == ''){
+														cell.innerHTML = '-';
+													}else{
+														if(inn.stats[key].split(',')[3] == 0){
+															cell.innerHTML = '-';
+														}else{
+															cell.innerHTML = inn.stats[key].split(',')[3];
+														}
 													}
 													break;
 											}
@@ -800,6 +1049,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_Other = document.createElement('table');
 			table_Other.style = 'table_Other-layout: fixed; width:400px; margin-left:1%; margin-right:1%;';
+			table_Other.style.marginTop = "-13px";
+			table_Other.style.marginRight = "-12px";
 			table_Other.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_Other.appendChild(tbody);
@@ -833,6 +1084,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_Other1 = document.createElement('table');
 			table_Other1.style = 'table-layout:fixed; width:30%; margin-left:1%;';
+			table_Other1.style.marginTop = "-13px";
+			table_Other1.style.marginRight = "-12px";
 			table_Other1.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_Other1.appendChild(tbody);
@@ -907,7 +1160,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_PS = document.createElement('table');
-			table_PS.style = 'table-layout:fixed; width:27%; margin-left:1%;';
+			table_PS.style = 'table-layout:fixed; width:430px; margin-left:1%;';
+			table_PS.style.marginTop = "-13px";
+			table_PS.style.marginRight = "-12px";
 			table_PS.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_PS.appendChild(tbody);
@@ -926,8 +1181,16 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 1:
 							switch(j){
 								case 1:
-									cell.innerHTML = 'Projected <br> Score';
-									cell.style.fontWeight = "700";
+									dataToProcess.match.inning.forEach(function(inn,index,arr){
+										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
+											cell.innerHTML = 'Projected <br> Score';
+											cell.style.fontWeight = "700";
+										}else{
+											cell.innerHTML = '';
+											cell.style.fontWeight = "700";
+										}
+									});
+									
 									break;
 								case 2 : case 3: case 4: case 5:
 									cell.style.fontWeight = "600";
@@ -993,19 +1256,21 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_BC = document.createElement('table');
-			table_BC.style = 'table-layout:fixed; height:20%; width:50%; margin-left:1%;';
+			table_BC.style = 'height:20%;width:98%; margin-left:1%;';
+			table_BC.style.marginTop = "-13px";
+			table_BC.style.marginRight = "-12px";
 			table_BC.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_BC.appendChild(tbody);
 			
 			dataToProcess.match.inning.forEach(function(inn,index,arr){
 				if(inn.isCurrentInning == 'YES'){
-					for (var i = 1; i <= 13; i++){
+					for (var i = 1; i <= 4; i++){
 						row = tbody.insertRow(tbody.rows.length);
 						row.style="background-color: #ffe49c ;";
 						switch(i){
 							case i:
-								count = 3;
+								count = 13;
 								break;
 						}
 						for (var j=1;j<=count;j++){
@@ -1013,28 +1278,46 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(i){
 								case 1:
 									switch(j){
-										case 1:
-										//cell.style = "text-align:center;";
-										cell.style.fontWeight = "900";
+									case 1:
 										cell.innerHTML = 'BATTING CARD';
+										cell.style = "background: #08b454; color: #FFFFFF; height:20%;width:130px;";
+										cell.style.fontWeight = "700";
 										break;
-									}	
+									}
 									break;
-								default:
+								case 2:
 									switch(j){
-										case 1:
-										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
-										
-										if(inn.fallsOfWickets.length >= 0){
-											if(inn.fallsOfWickets[i-2] != null){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13:
+										if(inn.fallsOfWickets.length > 0){
+											if(inn.fallsOfWickets[j -1] != null){
 												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
-													if(inn.fallsOfWickets[i-2].fowPlayerID == hs.playerId){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == hs.playerId){
 														cell.innerHTML = hs.ticker_name;
 													}
 												});
+												dataToProcess.setup.homeOtherSquad.forEach(function(hos,index,arr){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == hos.playerId){
+														cell.innerHTML = hos.ticker_name;
+													}
+												});
+												dataToProcess.setup.homeSubstitutes.forEach(function(hsub,index,arr){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == hsub.playerId){
+														cell.innerHTML = hsub.ticker_name;
+													}
+												});
 												dataToProcess.setup.awaySquad.forEach(function(as,index,arr){
-													if(inn.fallsOfWickets[i-2].fowPlayerID == as.playerId){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == as.playerId){
 														cell.innerHTML = as.ticker_name;
+													}
+												});
+												dataToProcess.setup.awayOtherSquad.forEach(function(aos,index,arr){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == aos.playerId){
+														cell.innerHTML = aos.ticker_name;
+													}
+												});
+												dataToProcess.setup.awaySubstitutes.forEach(function(asub,index,arr){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == asub.playerId){
+														cell.innerHTML = asub.ticker_name;
 													}
 												});
 											}else{
@@ -1042,13 +1325,16 @@ function addItemsToList(whatToProcess, dataToProcess)
 											}
 										}
 										break;
-										case 2:
+									}
+									break;
+								case 3:
+									switch(j){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13:
 										cell.style="background-color: #ffe49c ; font-size:12px; font-weight: bold;";
-										
-										if(inn.fallsOfWickets.length >= 0){
-											if(inn.fallsOfWickets[i-2] != null){
+										if(inn.fallsOfWickets.length > 0){
+											if(inn.fallsOfWickets[j -1] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
-													if(inn.fallsOfWickets[i-2].fowPlayerID == bc.playerId){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == bc.playerId){
 														cell.innerHTML = bc.howOutText;
 														//cell.style.maxWidth = "9px;";
 														//cell.innerHTML = 'st KRANTHI KUMAR b CHANDRA KOUSHIK';
@@ -1059,14 +1345,15 @@ function addItemsToList(whatToProcess, dataToProcess)
 											}
 										}
 										break;
-										case 3:
-										cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
-										//cell.style.width = "100px;";
-										//cell.style = "text-align:center;";
-										if(inn.fallsOfWickets.length >= 0){
-											if(inn.fallsOfWickets[i-2] != null){
+									}
+									break;
+								case 4:
+									switch(j){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13:
+										if(inn.fallsOfWickets.length > 0){
+											if(inn.fallsOfWickets[j -1] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
-													if(inn.fallsOfWickets[i-2].fowPlayerID == bc.playerId){
+													if(inn.fallsOfWickets[j -1].fowPlayerID == bc.playerId){
 														cell.innerHTML = bc.runs + '(' + bc.balls + ')';
 													}
 												});
@@ -1085,48 +1372,42 @@ function addItemsToList(whatToProcess, dataToProcess)
 			});
 			
 			table_BOC = document.createElement('table');
-			table_BOC.style = 'table-layout:fixed; height:25%; width:46%; margin-left:1%;';
+			table_BOC.style = 'height:20%;width:98%; margin-left:1%;';
+			table_BOC.style.marginTop = "-13px";
+			table_BOC.style.marginRight = "-12px";
 			table_BOC.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_BOC.appendChild(tbody);
 			
 			dataToProcess.match.inning.forEach(function(inn,index,arr){
 				if(inn.isCurrentInning == 'YES'){
-					//alert(inn.bowlingCard.length)
-					/*inn.bowlingCard.forEach(function(boc,index,arr){
-						alert(inn.bowlingCard.length)
-					});*/
-					//inn.bowlingCard.forEach(function(boc,index,arr){
-						//alert(boc.length)
-						for (var i = 1; i <= 9; i++){
-							row = tbody.insertRow(tbody.rows.length);
-							row.style="background-color: #ffe49c ;";
-							switch(i){
+					for (var i = 1; i <= 4; i++){
+						row = tbody.insertRow(tbody.rows.length);
+						row.style="background-color: #ffe49c ;";
+						switch(i){
 							case i:
-								//alert(boc.playerId)
-								count = 3;
+								count = 10;
 								break;
-							}
-							for (var j=1;j<=count;j++){
-								cell = row.insertCell(j-1);
-								switch(i){
+						}
+						for (var j=1;j<=count;j++){
+							cell = row.insertCell(j-1);
+							switch(i){
 								case 1:
 									switch(j){
-										case 1:
-										cell.style.fontWeight = "1000";
+									case 1:
 										cell.innerHTML = 'BOWLING CARD';
+										cell.style = "background: #08b454; color: #FFFFFF; height:20%;width:130px;";
+										cell.style.fontWeight = "700";
 										break;
-									}	
+									}
 									break;
-								default:
+								case 2:
 									switch(j){
-										case 1:
-											//alert(boc.playerId)
-											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
-											dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+										dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
 												//alert(hs.playerId)
-												if(inn.bowlingCard[i-2] != null){
-													if(inn.bowlingCard[i-2].playerId == hs.playerId){
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == hs.playerId){
 														//alert(hs.ticker_name)
 														cell.innerHTML = hs.ticker_name;
 													}
@@ -1135,9 +1416,33 @@ function addItemsToList(whatToProcess, dataToProcess)
 												}
 												
 											});
+											dataToProcess.setup.homeOtherSquad.forEach(function(hos,index,arr){
+												//alert(hs.playerId)
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == hos.playerId){
+														//alert(hs.ticker_name)
+														cell.innerHTML = hos.ticker_name;
+													}
+												}else{
+													cell.innerHTML = '';
+												}
+												
+											});
+											dataToProcess.setup.homeSubstitutes.forEach(function(hsub,index,arr){
+												//alert(hs.playerId)
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == hsub.playerId){
+														//alert(hs.ticker_name)
+														cell.innerHTML = hsub.ticker_name;
+													}
+												}else{
+													cell.innerHTML = '';
+												}
+												
+											});
 											dataToProcess.setup.awaySquad.forEach(function(as,index,arr){
-												if(inn.bowlingCard[i-2] != null){
-													if(inn.bowlingCard[i-2].playerId == as.playerId){
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == as.playerId){
 														//alert(hs.ticker_name)
 														cell.innerHTML = as.ticker_name;
 													}
@@ -1146,39 +1451,64 @@ function addItemsToList(whatToProcess, dataToProcess)
 												}
 												
 											});
-											break;
-										case 2:
-											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
-											
-											if(inn.bowlingCard[i-2] != null){
-												cell.innerHTML = inn.bowlingCard[i-2].wickets + '-' + inn.bowlingCard[i-2].runs;
+											dataToProcess.setup.awayOtherSquad.forEach(function(aos,index,arr){
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == aos.playerId){
+														//alert(hs.ticker_name)
+														cell.innerHTML = aos.ticker_name;
+													}
+												}else{
+													cell.innerHTML = '';
+												}
+												
+											});
+											dataToProcess.setup.awaySubstitutes.forEach(function(asub,index,arr){
+												if(inn.bowlingCard[j-1] != null){
+													if(inn.bowlingCard[j-1].playerId == asub.playerId){
+														//alert(hs.ticker_name)
+														cell.innerHTML = asub.ticker_name;
+													}
+												}else{
+													cell.innerHTML = '';
+												}
+												
+											});
+										break;
+									}
+									break;
+								case 3:
+									switch(j){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+										cell.style="background-color: #ffe49c ; font-size:12px; font-weight: bold;";
+										if(inn.bowlingCard[j-1] != null){
+												cell.innerHTML = inn.bowlingCard[j-1].wickets + '-' + inn.bowlingCard[j-1].runs;
 											}else{
 												cell.innerHTML = '';
 											}
-												
-											
-											break;
-										case 3:
-											cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
-											
-											if(inn.bowlingCard[i-2] != null){
-												cell.innerHTML = inn.bowlingCard[i-2].overs + '.' + inn.bowlingCard[i-2].balls;
-											}else{
-												cell.innerHTML = '';
-											}
-												
-											
-											break;	
+										break;
+									}
+									break;
+								case 4:
+									switch(j){
+									case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+										if(inn.bowlingCard[j-1] != null){
+											cell.innerHTML = inn.bowlingCard[j-1].overs + '.' + inn.bowlingCard[j-1].balls;
+										}else{
+											cell.innerHTML = '';
+										}
+										break;
 									}
 									break;	
 							}
-							}
 						}
-					//});	
+					}
 				}
 			});
+			
 			table_fow = document.createElement('table');
 			table_fow.style = 'table-layout:fixed; height:20%;width:98%; margin-left:1%;';
+			table_fow.style.marginTop = "-13px";
+			table_fow.style.marginRight = "-12px";
 			table_fow.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_fow.appendChild(tbody);
@@ -1269,10 +1599,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 							}
 							break;
 					}
-				
 				}
 			}
-
 		}
 		$('#fruit_captions_div').append(table_head);
 		$('#fruit_captions_div').append(table_bat);
@@ -1286,7 +1614,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 		$('#fruit_captions_div').append(table_BOC);
 		$('#fruit_captions_div').append(table_fow);
 		document.getElementById('fruit_captions_div').style.display = '';
-		//$("body").css("overflow", "hidden");
+		$("body").css("overflow", "hidden");
 		break;
 	}
 }

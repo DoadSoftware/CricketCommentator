@@ -30,7 +30,7 @@
     
     
     
-    <wb-module deploy-name="CricketCommentator-1.0.b18">
+    <wb-module deploy-name="CricketCommentator-1.0.b21">
                                                                                                                                                                                                                                                                 
         
         
@@ -127,7 +127,7 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="CricketLibrary-1.197.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/CricketLibrary/CricketLibrary">
+        <dependent-module archiveName="CricketLibrary-1.199.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/CricketLibrary/CricketLibrary">
             <dependency-type>uses</dependency-type>
         </dependent-module>
                                                                                                                                                                                                                                                                 
