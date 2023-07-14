@@ -1364,7 +1364,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 			}
 			
 			table_BC = document.createElement('table');
-			table_BC.style = 'table-layout:fixed; height:20%; width:42%;';
+			//table_BC.style = 'table-layout:fixed;';
+			table_BC.style.height = "15px";
+			table_BC.style.width = "635px";
 			table_BC.style.marginTop = "-13px";
 			table_BC.style.marginRight = "-12px";
 			table_BC.setAttribute('class', 'table table-bordered');
@@ -1373,7 +1375,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			dataToProcess.match.inning.forEach(function(inn,index,arr){
 				if(inn.isCurrentInning == 'YES'){
-					for (var i = 1; i <= 13; i++){
+					for (var i = 1; i <= 11; i++){
 						row = tbody.insertRow(tbody.rows.length);
 						row.style="background-color: #E6B8B8 ;";
 						row.style.fontFamily = 'Rockwell';
@@ -1381,7 +1383,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							case 1:
 								count = 1;
 								break;
-							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13:
+							case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
 								count = 3;	
 								break;
 						}
@@ -1400,13 +1402,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 									}	
 									break;
 								default:
-									cell.style="background-color: #E6B8B8 ; font-size:15px; font-weight: bold;text-align:center;";
-									cell.style.height = "36px"
-									cell.style.width = "50px"
+									cell.style="background-color: #E6B8B8 ; font-weight: bold;text-align:center;";
+									cell.style.height = "30px"
+									
 									switch(j){
 										case 1:
-										//cell.style="font-size:15px; font-weight: bold;";
-										
+										cell.style.width = "10%"
 										if(inn.fallsOfWickets.length > 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
@@ -1445,7 +1446,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 										break;
 										case 2:
-										cell.style="background-color: #E6B8B8 ; font-size:13px; font-weight: bold;";
+										cell.style="background-color: #E6B8B8 ; font-size:12px; font-weight: bold;text-align:center;";
+										cell.style.width = "100px"
 										
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
@@ -1463,8 +1465,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										break;
 										case 3:
 										cell.style="font-size:16px; font-weight: bold;text-align:center;";
-										//cell.style.width = "100px;";
-										//cell.style = "text-align:center;";
+										cell.style.width = "80px"
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
@@ -1488,7 +1489,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_BOC = document.createElement('table');
 			table_BOC.style = 'table-layout:fixed; width:40%;';
+			table_BOC.style.height = "15px";
 			table_BOC.style.marginTop = "-13px";
+			table_BOC.style.marginLeft = "12px";
 			table_BOC.style.marginRight = "-12px";
 			table_BOC.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
@@ -1532,7 +1535,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									break;
 								default:
 									cell.style="color: #000000; font-size:15px; font-weight: bold;text-align:center;";
-									cell.style.height = "43px"
+									cell.style.height = "40px"
 									cell.style.width = "45px"
 									switch(j){
 										case 1:
@@ -1638,16 +1641,18 @@ function addItemsToList(whatToProcess, dataToProcess)
 				}
 			});
 			table_fow = document.createElement('table');
-			table_fow.style = 'table-layout:fixed;';
-			table_fow.style.height = "70px"
-			table_fow.style.width = "295px"
+			//table_fow.style = 'table-layout:fixed;';
+			table_fow.style.height = "15px";
+			table_fow.style.width = "280px";
 			table_fow.style.marginTop = "-13px";
+			table_fow.style.marginLeft = "12px";
 			table_fow.style.marginRight = "-12px";
 			table_fow.setAttribute('class', 'table table-bordered');
 			tbody = document.createElement('tbody');
 			table_fow.appendChild(tbody);
 			for (var i = 1; i <= 12; i++){
 				row = tbody.insertRow(tbody.rows.length);
+				row.style.height = "10px"
 				row.style = "background: #0C0C0C ; color: #D7DCA2";
 				row.style.fontFamily = 'Rockwell';
 				switch(i){
@@ -1676,8 +1681,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 										cell.style = "background: #0C0C0C; color: #D7DCA2;font-size:'19px';";
 										cell.style.textAlign = "center";
+										cell.style.height = "15px"
 										cell.style.width = "20px"
-										cell.style.height = "20px"
 										cell.style.fontWeight = "650";
 									});
 									break;
@@ -1685,8 +1690,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.innerHTML = 'FOW';
 									cell.style = "background: #0C0C0C; color: #D7DCA2";
 									cell.style.textAlign = "center";
+									cell.style.height = "15px"
 									cell.style.width = "20px"
-									cell.style.height = "20px"
 									cell.style.fontWeight = "700";
 									break;
 								case 3:
@@ -1701,8 +1706,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 									}
 										cell.style = "background: #0C0C0C; color: #D7DCA2";
 										cell.style.textAlign = "center";
+										cell.style.height = "15px"
 										cell.style.width = "20px"
-										cell.style.height = "20px"
 										cell.style.fontWeight = "700";
 									});
 									break;
@@ -1711,7 +1716,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
 						switch(j){
 							case 1:
-								cell.style = "background: #0C0C0C ;font-size:14px;font-weight: bold;";
+								cell.style = "background: #0C0C0C ;font-size:13px;font-weight: bold;";
 								cell.style.textAlign = "center";
 								cell.style.width = "20px"
 								cell.style.height = "20px"
@@ -1726,7 +1731,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									});
 								break;
 							case 2:
-								cell.style = "background: #0C0C0C;font-size:14px;font-weight: bold;";
+								cell.style = "background: #0C0C0C;font-size:13px;font-weight: bold;";
 								cell.style.width = "20px"
 								cell.style.height = "20px"
 								cell.style.textAlign = "center";
@@ -1734,7 +1739,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								cell.innerHTML = i - 1;
 								break;
 							case 3:
-								cell.style = "background: #0C0C0C;font-size:14px;font-weight: bold;";
+								cell.style = "background: #0C0C0C;font-size:13px;font-weight: bold;";
 								cell.style.textAlign = "center";
 								cell.style.width = "20px"
 								cell.style.height = "20px"
@@ -1754,10 +1759,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 						switch(j){
 						case 1:
 							cell.colSpan = 3;
-							cell.style = "background: #000000; color: #0000FF;font-size: '15px'; font-weight: bold;";
+							cell.style = "background: #000000; color: #0000FF;font-size: '13px'; font-weight: bold;";
 							cell.style.textAlign = "center";
+							cell.style.height = "15px"
 							cell.style.width = "20px"
-							cell.style.height = "20px"
 							cell.innerHTML = "DESIGN ON A DIME";	
 							break;
 						}
