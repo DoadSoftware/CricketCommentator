@@ -26,6 +26,7 @@ import com.cricket.containers.Configurations;
 import com.cricket.containers.Functions;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
+import com.cricket.model.Configuration;
 import com.cricket.model.EventFile;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
@@ -115,7 +116,7 @@ public class IndexController
 	public @ResponseBody String processCricketProcedures(
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
 			@RequestParam(value = "valueToProcess", required = false, defaultValue = "") String valueToProcess) 
-					throws IOException, IllegalAccessException, InvocationTargetException, JAXBException, URISyntaxException
+					throws IOException, IllegalAccessException, InvocationTargetException, JAXBException, URISyntaxException, InterruptedException
 	{	
 		switch (whatToProcess.toUpperCase()) {
 		case "CHECK-NUMBER-INNINGS":
@@ -157,6 +158,8 @@ public class IndexController
 							}
 						}
 						
+						this_stats.put("DLS", Functions.dls(session_match));
+						this_stats.put("DLS_EQUATION", Functions.populateDls(session_match));
 						this_stats.put("PREVIOUS_BOWLER", CricketFunctions.previousBowler(session_match, session_match.getEventFile().getEvents()));
 						this_stats.put("OTHER_BOWLER", CricketFunctions.otherBowler(session_match, session_match.getEventFile().getEvents()));
 						this_stats.put(CricketUtil.POWERPLAY, CricketFunctions.processPowerPlay(CricketUtil.MINI,session_match));

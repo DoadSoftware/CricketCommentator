@@ -1,11 +1,19 @@
 package com.cricket.containers;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import com.cricket.model.DuckWorthLewis;
 import com.cricket.model.Event;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
+import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 //import com.cricket.util.CricketFunctions;
 
@@ -116,5 +124,132 @@ public class Functions
 			}
 		}
 		return String.valueOf(PS_Curr)+","+RR_Curr+","+PS_1+","+ RR1 +","+ PS_2 +","+ RR2 +","+ PS_3 +","+ RR3 ;
+	}
+	public static String dls(MatchAllData match) {
+		String balls="",data = ""; 
+		Document htmlFile = null;
+		if(new File("C:\\Sports\\ParScores BB.html").exists()) {
+			try { 
+				for(Inning inn : match.getMatch().getInning()) {
+					if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores BB.html"), "ISO-8859-1");
+						balls = CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls());
+						
+					}
+				}
+			} catch (IOException e) {  
+				e.printStackTrace(); 
+			} 
+			
+			List<DuckWorthLewis> this_dls = new ArrayList<DuckWorthLewis>();
+			for(int i=14; i<htmlFile.body().getElementsByTag("font").size() - 1;i++) {
+				if(htmlFile.body().getElementsByTag("font").get(i).text().contains("TableID")) {
+					i = i + 15;
+					if(i > htmlFile.body().getElementsByTag("font").size()) {
+						break;
+					}
+				}
+				
+				for(Inning inn : match.getMatch().getInning()) {
+					if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+						//System.out.println(" i = " + (i+(1+(inn.getTotalWickets()))));
+						this_dls.add(new DuckWorthLewis(htmlFile.body().getElementsByTag("font").get(i).text(),
+								htmlFile.body().getElementsByTag("font").get(i+(2+(inn.getTotalWickets()))).text()));
+					}
+				}
+				i = i +11;
+				
+			}
+			for(int i = 0; i<= this_dls.size() -1;i++) {
+				if(this_dls.get(i).getOver_left().equalsIgnoreCase(balls)) {
+					data = this_dls.get(i).getWkts_down();
+				}
+			}
+		}else {
+			data = "";
+		}
+		
+		return data;
+	}
+	public static String populateDls(MatchAllData match) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		
+		String balls="",data = ""; 
+		Document htmlFile = null; 
+		if(new File("C:\\Sports\\ParScores BB.html").exists()) {
+			try { 
+				for(Inning inn : match.getMatch().getInning()) {
+					if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores BB.html"), "ISO-8859-1");
+						balls = CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls());
+						
+					}
+				}
+			} catch (IOException e) {  
+				e.printStackTrace(); 
+			} 
+			
+			List<DuckWorthLewis> this_dls = new ArrayList<DuckWorthLewis>();
+			for(int i=14; i<htmlFile.body().getElementsByTag("font").size() - 1;i++) {
+				if(htmlFile.body().getElementsByTag("font").get(i).text().contains("TableID")) {
+					i = i + 15;
+					if(i > htmlFile.body().getElementsByTag("font").size()) {
+						break;
+					}
+				}
+				
+				for(Inning inn : match.getMatch().getInning()) {
+					if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+						//System.out.println(" i = " + (i+(1+(inn.getTotalWickets()))));
+						this_dls.add(new DuckWorthLewis(htmlFile.body().getElementsByTag("font").get(i).text(),
+								htmlFile.body().getElementsByTag("font").get(i+(2+(inn.getTotalWickets()))).text()));
+					}
+				}
+				i = i +11;
+				
+			}
+			for(int i = 0; i<= this_dls.size() -1;i++) {
+				if(this_dls.get(i).getOver_left().equalsIgnoreCase(balls)) {
+					data = this_dls.get(i).getWkts_down();
+				}
+			}
+			
+			for(Inning inn : match.getMatch().getInning()) {
+				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+					if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+						team = match.getSetup().getHomeTeam().getTeamName4();
+					}
+					if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+						team = match.getSetup().getAwayTeam().getTeamName4();
+					}
+					
+					for(int i = 0; i<= this_dls.size() -1;i++) {
+						if(this_dls.get(i).getOver_left().equalsIgnoreCase(balls)) {
+							runs = (inn.getTotalRuns() - Integer.valueOf(this_dls.get(i).getWkts_down()));
+						}
+					}
+					if(runs < 0)
+	                {
+	                    ahead_behind = team + " ARE " + (Math.abs(runs)) + " RUNS BEHIND";
+	                }
+
+	                if (runs > 0)
+	                {
+	                    ahead_behind = team + " ARE " + runs + " RUNS AHEAD";
+	                }
+	                
+	                if (runs == 0)
+	                {
+	                	ahead_behind = "DLS SCORE ARE LEVEL";
+	                }
+				}
+			}
+		}else {
+			ahead_behind = "";
+		}
+		
+		return ahead_behind;
 	}
 }
