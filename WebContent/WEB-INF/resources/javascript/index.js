@@ -106,28 +106,31 @@ function addItemsToList(whatToProcess, dataToProcess)
 							cell.style.fontWeight = "900";
 							switch(j){
 								case 1:
-									cell.innerHTML = 'BATTER';
+									cell.style.width = '30%';
+									cell.innerHTML = 'BAT';
 									break;
 								case 2:
+									cell.style.width = '15%';
 									cell.innerHTML = 'RUNS';
 									break;
 								case 3:
+									cell.style.width = '10%';
 									cell.innerHTML = '4s/6s';
 									break;
 								case 4:
+									cell.style.width = '16%';
 									cell.innerHTML = 'S/R';
 									break;
 								case 5:
+									cell.style.width = '15%';
 									cell.innerHTML = 'DOTS';
 									break;
 								case 6:
-									cell.style = "text-align:center;border-color: Black;border-width: 3px;font-size: 15px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.fontWeight = "750";
+									cell.style.width = '19%';
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											inn.partnerships.forEach(function(ps,index,arr4){
-												cell.innerHTML = 'PARTNERSHIP <br>' + ps.totalRuns + ' (' + ps.totalBalls + ')';
+												cell.innerHTML = "P'ship" + '<br>' + ps.totalRuns + ' (' + ps.totalBalls + ')';
 											});
 										}
 									});
@@ -143,7 +146,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
 											switch(j){
 												case 1:
-													cell.style="font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+													cell.style="font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 													cell.innerHTML = bc.player.ticker_name.slice(0,10) + '*';
 													//cell.style.fontWeight = "600";
 													break;
@@ -209,7 +212,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = hs.ticker_name.slice(0,10);
 														}
 													}else{
@@ -222,7 +225,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = hos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -235,7 +238,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = hsub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -247,7 +250,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = as.ticker_name.slice(0,10);
 														}
 													}else{
@@ -259,7 +262,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = aos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -271,7 +274,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;border-width: 3px;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;border-width: 3px;";
 															cell.innerHTML = asub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -319,7 +322,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											case 5:
 												for(var key in inn.stats){
 													if(key == 'BATSMAN_OUT'){
-														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;border-color: Black;border-width: 3px;";
+														cell.style="background: #FF0000;font-size:18px; font-weight: bold;text-align:center;border-color: Black;border-width: 3px;";
 														cell.innerHTML = inn.stats[key].split(',')[0];
 													}
 												}
@@ -354,7 +357,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
 											switch(j){
 												case 1:
-													cell.style="font-size:15px; font-weight: bold;border-color: Black;";
+													cell.style="font-size:18px; font-weight: bold;border-color: Black;";
 													cell.innerHTML = bc.player.ticker_name.slice(0,10);
 													//cell.style.fontWeight = "900";
 													break;
@@ -412,7 +415,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = hs.ticker_name.slice(0,10);
 														}
 													}else{
@@ -425,7 +428,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = hos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -438,7 +441,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = hsub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -450,7 +453,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = as.ticker_name.slice(0,10);
 														}
 													}else{
@@ -462,7 +465,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = aos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -474,7 +477,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
-															cell.style="background: #FF0000;font-size:15px; font-weight: bold;border-color: Black;";
+															cell.style="background: #FF0000;font-size:18px; font-weight: bold;border-color: Black;";
 															cell.innerHTML = asub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -522,7 +525,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											case 5:
 												for(var key in inn.stats){
 													if(key == 'BATSMAN_OUT'){
-														cell.style="background: #FF0000;font-size:15px; font-weight: bold;text-align:center;border-color: Black;";
+														cell.style="background: #FF0000;font-size:18px; font-weight: bold;text-align:center;border-color: Black;";
 														cell.innerHTML = inn.stats[key].split(',')[0];
 													}
 												}
@@ -555,7 +558,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.fontWeight = "800";
 									cell.style.maxWidth = '180px'
-									cell.innerHTML = 'LAST WICKET';
+									cell.innerHTML = 'LAST WKT';
 									break;
 								case 2: case 3: case 4:
 									
@@ -727,7 +730,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_detail = document.createElement('table');
 			table_detail.style = 'table-layout:fixed;';
-			table_detail.style.height = "233px";
+			//table_detail.style.height = "230px";
 			table_detail.style.width = "375px";
 			table_detail.style.marginTop = "-16px";
 			table_detail.style.marginLeft = "11px";
@@ -755,6 +758,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:16px;";
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.textAlign = "center";
+									cell.style.width = '30%';
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1){
 											for(var key in inn.stats){
@@ -770,10 +774,14 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 									});
 									break;
+								case 2:
+									cell.style.width = '40%';
+									break;	
 								case 3:
 									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:16px;";
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.textAlign = "center";
+									cell.style.width = '30%';
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 2){
 											for(var key in inn.stats){
@@ -881,7 +889,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									break;
 								case 2:
 									cell.innerHTML = 'AT THIS STAGE';
-									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:14px;font-weight: bold;border-color: Black;border-width: 2px;";
+									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:15px;font-weight: bold;border-color: Black;border-width: 2px;";
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.textAlign = "center";		
 									break;
@@ -950,22 +958,27 @@ function addItemsToList(whatToProcess, dataToProcess)
 					//cell.setAttribute("id","bowlerId");
 					switch (i){
 						case 1:
-							cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;';
+							cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
 							cell.style.fontFamily = 'Rockwell';
-							cell.style.fontWeight = "900";
+							//cell.style.fontWeight = "900";
 							switch(j){
 								case 1:
+									cell.style.width = '40%';
 									break;
 								case 2:
-									cell.innerHTML = 'FIGURES';
+									cell.style.width = '15%';
+									cell.innerHTML = 'FIG';
 									break;
 								case 3:
-									cell.innerHTML = 'OVERS';
+									cell.style.width = '15%';
+									cell.innerHTML = 'OVRS';
 									break;
 								case 4:
+									cell.style.width = '15%';
 									cell.innerHTML = 'DOTS';
 									break;
 								case 5:
+									cell.style.width = '15%';
 									cell.innerHTML = 'ECON';
 									break;
 							}
@@ -979,24 +992,24 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(boc.status == 'CURRENTBOWLER'){
 											switch(j){
 												case 1:
-													cell.style="font-size:15px; font-weight: bold;border-color: Black;border-width: 2px;";
+													cell.style="font-size:18px; font-weight: bold;border-color: Black;border-width: 2px;";
 													cell.innerHTML = boc.player.ticker_name.slice(0,10) + '*';
 													//cell.style.fontWeight = "900";
 													break;
 												case 2:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													cell.innerHTML = boc.wickets + '-' + boc.runs;
 													break;
 												case 3:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													cell.innerHTML = boc.overs + '.' + boc.balls;
 													break;
 												case 4:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													cell.innerHTML = boc.dots;
 													break;
 												case 5:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													if(boc.economyRate == 0){
 														cell.innerHTML = '-';
 													}else{
@@ -1022,13 +1035,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
-															cell.style="font-size:15px; font-weight: bold;border-color: Black;border-width: 2px;";
+															cell.style="font-size:18px; font-weight: bold;border-color: Black;border-width: 2px;";
 															cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
 															//cell.style.fontWeight = "900";
 														}
 														break;
 													case 2:
-														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
@@ -1036,7 +1049,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														}
 														break;
 													case 3:
-														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
@@ -1045,7 +1058,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														
 														break;
 													case 4:
-														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
@@ -1054,7 +1067,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														
 														break;
 													case 5:
-														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+														cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
@@ -1087,13 +1100,13 @@ function addItemsToList(whatToProcess, dataToProcess)
 														cell.style="font-size:15px; font-weight: bold;border-color: Black;border-width: 2px;";
 														cell.innerHTML = '-';
 													}else{
-														cell.style="font-size:15px; font-weight: bold;border-color: Black;border-width: 2px;";
+														cell.style="font-size:18px; font-weight: bold;border-color: Black;border-width: 2px;";
 														cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
 													}
 													//cell.style.fontWeight = "900";
 													break;
 												case 2:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													if(inn.stats[key].split(',')[0] == ''){
 														cell.innerHTML = '-';
 													}else{
@@ -1101,7 +1114,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													break;
 												case 3:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													if(inn.stats[key].split(',')[0] == ''){
 														cell.innerHTML = '-';
 													}else{
@@ -1109,7 +1122,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													break;
 												case 4:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													if(inn.stats[key].split(',')[0] == ''){
 														cell.innerHTML = '-';
 													}else{
@@ -1117,7 +1130,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 													break;
 												case 5:
-													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;';
+													cell.style = 'text-align:center;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;';
 													if(inn.stats[key].split(',')[0] == ''){
 														cell.innerHTML = '-';
 													}else{
@@ -1208,7 +1221,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 							switch(j){
 								case 1:
 									cell.colSpan = 2;
+									cell.style="font-size:18px; font-weight: bold; font-weight: bold;border-width: 2px;";
+									cell.style.textAlign = 'center';
 									cell.style.fontWeight = "700";
+									cell.style.width = '100%';
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.inningNumber == 1 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
@@ -1220,7 +1236,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
 												if(key == 'INNING_STATUS'){
-													//cell.innerHTML = 'OMN A NEED 999 RUNS TO WIN FROM 20.0 OVERS (DLS) adsdsadsdsdASas cXzxZ';
+													//cell.innerHTML = 'JKSS NEED 999 RUNS TO WIN FROM 20.0 OVERS (DLS)';
 													cell.innerHTML = inn.stats[key].toUpperCase();
 												}
 											}
@@ -1232,7 +1248,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 2:
 							switch(j){
 								case 1:
-									cell.style.width = "30px"
+									cell.style.width = '20%';
 									cell.style.fontWeight = "500";
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
@@ -1245,17 +1261,18 @@ function addItemsToList(whatToProcess, dataToProcess)
 													}
 												}
 											}
+											//cell.innerHTML = 'DLS PAR SCORE: 88';
 										}
 									});	
 									break;
 								case 2 :
-									//cell.style.width = "70px"
-									cell.style="font-size:14px; font-weight: bold; font-weight: bold;border-width: 2px;";
+									cell.style.width = '80%';
+									cell.style="font-size:15px; font-weight: bold; font-weight: bold;border-width: 2px;";
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											for(var key in inn.stats){
 												if(key == 'DLS_EQUATION'){
-													//cell.innerHTML = "IND A ARE 99 RUNS BEHIND PAR SCORE";
+													//cell.innerHTML = "STRIKERS ARE 99 RUNS BEHIND PAR SCORE";
 													cell.innerHTML = inn.stats[key];
 												}
 											}
@@ -1267,10 +1284,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 						case 3:
 							switch(j){
 								case 1:
-									cell.style="font-size:17px; font-weight: bold; font-weight: bold;border-width: 2px;";
+									cell.style="font-size:19px; font-weight: bold; font-weight: bold;border-width: 2px;";
 									cell.style.textAlign = 'center';
 									cell.colSpan = 2;
 									cell.style.fontWeight = "700";
+									cell.style.width = '100%';
 									dataToProcess.match.inning.forEach(function(inn,index,arr){
 										if(inn.isCurrentInning == 'YES'){
 											inn.bowlingCard.forEach(function(boc,index,arr2){
@@ -1506,7 +1524,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									
 									switch(j){
 										case 1:
-										cell.style.width = "10%"
+										cell.style.width = "25%"
 										if(inn.fallsOfWickets.length > 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
@@ -1545,8 +1563,8 @@ function addItemsToList(whatToProcess, dataToProcess)
 										}
 										break;
 										case 2:
-										cell.style="background-color: #D8E4BC ; font-size:15px; font-weight: bold;text-align:center;border-color: Black;border-width: 2px;";
-										cell.style.width = "100px"
+										cell.style="background-color: #D8E4BC ; font-size:16px; font-weight: bold;text-align:center;border-color: Black;border-width: 2px;";
+										cell.style.width = '60%';
 										
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
@@ -1564,7 +1582,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										break;
 										case 3:
 										cell.style="font-size:16px; font-weight: bold;text-align:center;border-color: Black;border-width: 2px;";
-										cell.style.width = "80px"
+										cell.style.width = '15%';
 										if(inn.fallsOfWickets.length >= 0){
 											if(inn.fallsOfWickets[i-2] != null){
 												inn.battingCard.forEach(function(bc,index,arr){
@@ -1634,11 +1652,11 @@ function addItemsToList(whatToProcess, dataToProcess)
 									}	
 									break;
 								default:
-									cell.style="color: #000000;font-weight: bold;text-align:center;border-color: Black;border-width: 2px;";
+									cell.style="color: #000000;font-weight: bold;text-align:center;border-color: Black;border-width: 2px;font-size:18px;";
 									cell.style.height = "38px"
 									switch(j){
 										case 1:
-											cell.style.width = "100px"
+											cell.style.width = '60%';
 											//cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;";
 											dataToProcess.setup.homeSquad.forEach(function(hs,index,arr){
 												//alert(hs.playerId)
@@ -1711,7 +1729,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											});
 											break;
 										case 2:
-											cell.style.width = "20px"
+											cell.style.width = '20%';
 											if(inn.bowlingCard[i-2] != null){
 												cell.innerHTML = inn.bowlingCard[i-2].wickets + '-' + inn.bowlingCard[i-2].runs;
 											}else{
@@ -1721,7 +1739,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											
 											break;
 										case 3:
-											cell.style.width = "20px"
+											cell.style.width = '20%';
 											//cell.style="background-color: #ffe49c ; font-size:14px; font-weight: bold;text-align:center;";
 											//cell.style.height = "43px"
 											//	cell.style.width = "50px"
@@ -1783,7 +1801,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										cell.style = "background: #0C0C0C; color: #D7DCA2;font-size:'19px';";
 										cell.style.textAlign = "center";
 										cell.style.height = "15px"
-										cell.style.width = "20px"
+										cell.style.width = '35%';
 										cell.style.fontWeight = "650";
 									});
 									break;
@@ -1792,7 +1810,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style = "background: #0C0C0C; color: #D7DCA2";
 									cell.style.textAlign = "center";
 									cell.style.height = "15px"
-									cell.style.width = "20px"
+									cell.style.width = '30%';
 									cell.style.fontWeight = "700";
 									break;
 								case 3:
@@ -1808,7 +1826,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										cell.style = "background: #0C0C0C; color: #D7DCA2";
 										cell.style.textAlign = "center";
 										cell.style.height = "15px"
-										cell.style.width = "20px"
+										cell.style.width = '35%';
 										cell.style.fontWeight = "700";
 									});
 									break;
@@ -1817,7 +1835,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11:
 						switch(j){
 							case 1:
-								cell.style = "background: #0C0C0C ;font-size:13px;font-weight: bold;";
+								cell.style = "background: #0C0C0C ;font-size:14px;font-weight: bold;";
 								cell.style.textAlign = "center";
 								cell.style.width = "20px"
 								cell.style.height = "20px"
@@ -1840,7 +1858,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 								cell.innerHTML = i - 1;
 								break;
 							case 3:
-								cell.style = "background: #0C0C0C;font-size:13px;font-weight: bold;";
+								cell.style = "background: #0C0C0C;font-size:14px;font-weight: bold;";
 								cell.style.textAlign = "center";
 								cell.style.width = "20px"
 								cell.style.height = "20px"
