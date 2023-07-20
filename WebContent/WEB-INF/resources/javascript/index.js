@@ -79,7 +79,6 @@ function addItemsToList(whatToProcess, dataToProcess)
 			
 			table_bat = document.createElement('table');
 			table_bat.style = 'table-layout:fixed;width:850px;';
-			table_bat.style.height = '234px';
 			table_bat.style.marginTop = "-16px";
 			table_bat.style.marginRight = "-12px";
 			table_bat.setAttribute('class', 'table table-bordered');
@@ -102,6 +101,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 					switch (i){
 						case 1:
 							cell.style = "text-align:center;border-color: Black;border-width: 3px;font-weight: bold;";
+							cell.style.height = '20px';
 							cell.style.fontFamily = 'Rockwell';
 							cell.style.fontWeight = "900";
 							switch(j){
@@ -138,8 +138,9 @@ function addItemsToList(whatToProcess, dataToProcess)
 							}
 							break;
 						case 2:
-							
+							cell.style.height = '20px';
 							cell.style.fontFamily = 'Rockwell';
+							
 							dataToProcess.match.inning.forEach(function(inn,index,arr){
 								if(inn.isCurrentInning == 'YES'){
 									inn.battingCard.forEach(function(bc,index,arr1){
@@ -682,11 +683,19 @@ function addItemsToList(whatToProcess, dataToProcess)
 											break;
 									}
 									
-									if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
-										row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+									if(inn.battingTeamId == dataToProcess.setup.homeTeamId){
+										if(inn.totalWickets >= 10){
+											row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns;
+										}else{
+											row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										}	
 									}
 									else {
-										row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										if(inn.totalWickets >= 10){
+											row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns;
+										}else{
+											row.innerHTML = row.innerHTML + "<br />" + inn.totalRuns + '-' + inn.totalWickets ;
+										}	
 									}
 									
 									for(var key in inn.stats){
@@ -1299,7 +1308,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 															cell.innerHTML = 'THIS OVER RUNS :- '  + inn.stats[key];
 														}
 														else if(boc.status == 'LASTBOWLER'){
-															cell.innerHTML = 'THIS OVER RUNS :- ' + inn.stats[key];
+															cell.innerHTML = 'LAST OVER RUNS :- ' + inn.stats[key];
 														}
 													}
 												}
