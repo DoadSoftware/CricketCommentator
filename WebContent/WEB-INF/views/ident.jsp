@@ -22,12 +22,14 @@
 	
 </head>
 <body>
-<div class="content py-8" style="background-color: #EAE8FF; color: #2E008B">
-	<div class="row ; text-nowrap" style="height:100% width: 100% ;">
+<div class="content py-8" style="background-color: #000000; color: #2E008B">
+	<div class="row ; text-nowrap">
 	 <div class="col-xl">
        <span class="anchor"></span>
           <div class="card-body">
-			  <div id="fruit_captions_div" class="form-group row row-bottom-margin ml-2 " style="height:50% width: 50%;">
+			  <div id="fruit_ident_div" class="form-group row mr-0" >
+			  <img src="https://drive.google.com/uc?export=view&id=1yHkVc8OQqsbey5tsdNrlWkPHPd4t1pGJ">
+			  <!--<img src="FileServet?path=c:\\DOAD_Fruit\Ident.png">  -->
 			  </div>
 	       </div>
        </div>

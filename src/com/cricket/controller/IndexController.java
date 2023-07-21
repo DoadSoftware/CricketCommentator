@@ -48,6 +48,7 @@ public class IndexController
 	public static Configurations session_Configurations;
 	public static MatchAllData session_match;
 	public static String session_selected_broadcaster;
+	String session_selected_page;
 	boolean bowler_Found = false;
 	int bowler = 0;
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
@@ -74,11 +75,13 @@ public class IndexController
 
 	@RequestMapping(value = {"/commentator"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String commentatorPage(ModelMap model,
+			@RequestParam(value = "select_page", required = false, defaultValue = "") String select_page,
 			@RequestParam(value = "select_inning", required = false, defaultValue = "") String select_inning,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch) 
 					throws IllegalAccessException, InvocationTargetException, JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
 	{
+		session_selected_page = select_page;
 		session_selected_broadcaster = select_broadcaster;
 		
 		session_Configurations = new Configurations(selectedMatch, select_broadcaster);
@@ -104,12 +107,19 @@ public class IndexController
 				CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 		session_match.getSetup().setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 		
+		model.addAttribute("session_selected_page", session_selected_page);
 		model.addAttribute("session_match", session_match);
 		model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
-		
-		return "fruit";
+		switch(session_selected_page) {
+		case "fruit":
+			return "fruit";
+		case "teams":
+			return "teams";
+		case "ident":
+			return "ident";	
+		}
+		return null;
 	}
-	
 	@RequestMapping(value = {"/processCricketProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processCricketProcedures(
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
@@ -130,7 +140,7 @@ public class IndexController
 				
 				
 				Map<String, String> this_stats = new HashMap<String,String>();
-				int Player_id=0;
+				int Player_id = 0;
 				for(Inning inn : session_match.getMatch().getInning()){
 					this_stats.put(CricketUtil.OVER + inn.getInningNumber(), CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()));
 					this_stats.put(CricketUtil.COMPARE , CricketFunctions.compareInningData(session_match,"-",1,session_match.getEventFile().getEvents()));
@@ -165,7 +175,6 @@ public class IndexController
 						this_stats.put(CricketUtil.INNING_STATUS, CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), session_match, CricketUtil.SHORT).toUpperCase());
 						this_stats.put(CricketUtil.PLURAL,CricketFunctions.Plural(inn.getTotalOvers()));
 						this_stats.put("Req_RR", CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(session_match), 0, CricketFunctions.getRequiredBalls(session_match), 2));
-						
 						if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 							if(inn.getRunRate()!= null) {
 								this_stats.put("PS", Functions.ProjectedScore(session_match));
@@ -177,7 +186,6 @@ public class IndexController
 						//Collections.reverse(session_match.getEventFile().getEvents());
 						if(inn.getBowlingCard()!= null) {
 							for(BowlingCard boc : inn.getBowlingCard()) {
-								
 								if(boc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER) || boc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)) {
 									Player_id = boc.getPlayerId();
 								}

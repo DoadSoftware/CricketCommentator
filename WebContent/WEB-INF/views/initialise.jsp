@@ -47,8 +47,18 @@
 			      </select>
 			    </div>
 			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="select_page" class="col-sm-4 col-form-label text-left">Select Page </label>
+			    <div class="col-sm-6 col-md-6">
+			      <select id="select_page" name="select_page" class="browser-default custom-select custom-select-sm">
+			          <option value="ident">Ident</option>
+			          <option value="teams">Double Teams</option>
+			          <option value="fruit">Fruit</option>
+			      </select>
+			    </div>
+			  </div>
 		    <button style="background-color:#2E008B;color:#FEFEFE;" class="btn btn-sm" type="submit"
-		  		name="load_fruit_btn" id="load_fruit_btn">
+		  		name="load_fruit_btn" id="load_fruit_btn" action ="commentator" method="POST">
 		  		<i class="fa-solid fa-microphone"></i> Load Commentator</button>
 	       </div>
 	    </div>
@@ -57,5 +67,6 @@
   </div>
 </div>
 </form:form>
+<input type="hidden" id="select_page" name="select_page" value="${session_selected_page}"></input>
 </body>
 </html>
