@@ -896,7 +896,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							row.style.fontFamily = 'Rockwell';
 							switch(j){
 								case 1:
-									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.textAlign = "center";
 									cell.style.width = '30%';
@@ -915,6 +915,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														if(inn.totalWickets >= 10){
 															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
 														}else{
+															//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.5' + ')';
 															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 														}
 													}
@@ -927,7 +928,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 									cell.style.width = '40%';
 									break;	
 								case 3:
-									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.textAlign = "center";
 									cell.style.width = '30%';
@@ -939,6 +940,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														if(inn.totalWickets >= 10){
 															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
 														}else{
+															//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.6' + ')';
 															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
 														}
 													}
