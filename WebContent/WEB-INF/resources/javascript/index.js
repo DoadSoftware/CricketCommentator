@@ -12,6 +12,59 @@ function processWaitingButtonSpinner(whatToProcess)
 	}
 	
 }
+function processUserSelectionData(whatToProcess,dataToProcess){
+	switch (whatToProcess) {
+	case 'LOGGER_FORM_KEYPRESS':
+		switch (dataToProcess) {
+			case 84: // Teams
+				if($('#select_page').val() == 'teams'){
+					document.teams_form.method = 'post';
+					document.teams_form.action = 'change_to_teams';
+		   			document.teams_form.submit();
+				}else if($('#select_page').val() == 'ident'){
+					document.ident_form.method = 'post';
+					document.ident_form.action = 'change_to_teams';
+		   			document.ident_form.submit();
+				}else if($('#select_page').val() == 'fruit'){
+					document.fruit_form.method = 'post';
+					document.fruit_form.action = 'change_to_teams';
+		   			document.fruit_form.submit();
+				}
+				break;
+			case 73: // Ident
+				if($('#select_page').val() == 'teams'){
+					document.teams_form.method = 'post';
+					document.teams_form.action = 'change_to_ident';
+		   			document.teams_form.submit();
+				}else if($('#select_page').val() == 'ident'){
+					document.ident_form.method = 'post';
+					document.ident_form.action = 'change_to_ident';
+		   			document.ident_form.submit();
+				}else if($('#select_page').val() == 'fruit'){
+					document.fruit_form.method = 'post';
+					document.fruit_form.action = 'change_to_ident';
+		   			document.fruit_form.submit();
+				}
+				break;
+			case 70: // Fruit
+				if($('#select_page').val() == 'teams'){
+					document.teams_form.method = 'post';
+					document.teams_form.action = 'change_to_fruit';
+		   			document.teams_form.submit();
+				}else if($('#select_page').val() == 'ident'){
+					document.ident_form.method = 'post';
+					document.ident_form.action = 'change_to_fruit';
+		   			document.ident_form.submit();
+				}else if($('#select_page').val() == 'fruit'){
+					document.fruit_form.method = 'post';
+					document.fruit_form.action = 'change_to_fruit';
+		   			document.fruit_form.submit();
+				}
+				break;		
+		}
+		break;
+	}
+}
 function processCricketProcedures(whatToProcess)
 {
 	var valueToProcess;
@@ -236,7 +289,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							}
 							break;
 						case 2:
-							cell.style = 'border-color: Black;border-width: 3px;font-weight: bold;font-size:21px;line-height: 13px;';
+							cell.style = 'border-color: Black;border-width: 3px;font-weight: bold;font-size:21px;line-height: 13px;text-align:center;';
 							cell.style.height = '15px';
 							cell.style.fontFamily = 'Rockwell';
 							
@@ -246,6 +299,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'YES'){
 											switch(j){
 												case 1:
+													//cell.innerHTML = 'ZZZZZZZZZZBBB' + '*';
 													cell.innerHTML = bc.player.ticker_name.slice(0,10) + '*';
 													//cell.style.fontWeight = "600";
 													break;
@@ -312,7 +366,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hs.ticker_name.slice(0,10);
 														}
 													}else{
@@ -325,7 +379,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -338,7 +392,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hsub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -350,7 +404,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = as.ticker_name.slice(0,10);
 														}
 													}else{
@@ -362,7 +416,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = aos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -374,7 +428,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = asub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -457,7 +511,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(bc.status == 'NOT OUT' && bc.onStrike == 'NO'){
 											switch(j){
 												case 1:
-													cell.style="font-size:21px; font-weight: bold;border-color: Black;line-height: 13px;";
+													cell.style="font-size:21px; font-weight: bold;border-color: Black;line-height: 13px;text-align:center;";
 													cell.innerHTML = bc.player.ticker_name.slice(0,10);
 													//cell.style.fontWeight = "900";
 													break;
@@ -515,7 +569,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hs.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hs.ticker_name.slice(0,10);
 														}
 													}else{
@@ -528,7 +582,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hos.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -541,7 +595,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[size - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == hsub.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = hsub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -553,7 +607,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == as.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = as.ticker_name.slice(0,10);
 														}
 													}else{
@@ -565,7 +619,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == aos.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = aos.ticker_name.slice(0,10);
 														}
 													}else{
@@ -577,7 +631,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 													if(inn.fallsOfWickets.length > 0){
 														//alert(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].playerId)
 														if(inn.fallsOfWickets[size - 1].fowPlayerID == asub.playerId){
-															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;";
+															cell.style="background: #FF0000;color: #ffffff;font-size:21px; font-weight: bold;border-color: Black;border-width: 3px;line-height: 13px;text-align:center;";
 															cell.innerHTML = asub.ticker_name.slice(0,10);
 														}
 													}else{
@@ -655,7 +709,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 							//cell.style = "background: #ff5050; color: Black; border-color: Black;border-width: 3px;font-weight: bold;line-height: 13px;"
 							switch(j){
 								case 1:
-									cell.style = "background: #ff5050;color: #ffffff;border-color: Black;border-width: 3px;font-weight: bold;"
+									cell.style = "background: #ff5050;color: #ffffff;border-color: Black;border-width: 3px;font-weight: bold;text-align:center;"
 									cell.style.fontFamily = 'Rockwell';
 									cell.style.fontWeight = "800";
 									cell.style.maxWidth = '180px'
@@ -665,7 +719,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 											inn.battingCard.forEach(function(bc,index,arr1){
 												if(inn.fallsOfWickets.length > 0){
 													if(inn.fallsOfWickets[inn.fallsOfWickets.length - 1].fowPlayerID == bc.playerId) {
-														cell.innerHTML = cell.innerHTML + '<br>' + bc.player.ticker_name.slice(0,10) + ' ' + bc.runs + ' (' + bc.balls + ')' ;
+														cell.innerHTML = cell.innerHTML + '<br><br>' + bc.player.ticker_name.slice(0,10) + ' ' + bc.runs + ' (' + bc.balls + ')' ;
 													}
 												}
 											});
@@ -848,12 +902,12 @@ function addItemsToList(whatToProcess, dataToProcess)
 								if(dataToProcess.match.inning[0].totalRuns > dataToProcess.match.inning[1].totalRuns){
 									for(var key in inn.stats){
 										if(key == 'Req_RR'){
-											row.innerHTML = 'CRR : ' + inn.runRate + " " + ' RRR : ' + inn.stats[key];
+											row.innerHTML = 'CRR : ' + inn.runRate + '&nbsp &nbsp RRR : ' + inn.stats[key];
 										}
 									}
 								}
 								else{
-									row.innerHTML = 'CRR :' + inn.runRate + " " + ' RRR : 0.00'
+									row.innerHTML = 'CRR :' + inn.runRate + '&nbsp &nbsp RRR : 0.00'
 								}
 							}
 						});
@@ -1151,7 +1205,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 										if(boc.status == 'CURRENTBOWLER'){
 											switch(j){
 												case 1:
-													cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;";
+													cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;text-align:center;";
 													cell.innerHTML = boc.player.ticker_name.slice(0,10) + '*';
 													//cell.style.fontWeight = "900";
 													break;
@@ -1194,7 +1248,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														if(inn.stats[key].split(',')[0] == ''){
 															cell.innerHTML = '-';
 														}else{
-															cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;";
+															cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;text-align:center;";
 															cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
 															//cell.style.fontWeight = "900";
 														}
@@ -1259,7 +1313,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 														cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;";
 														cell.innerHTML = '-';
 													}else{
-														cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;";
+														cell.style="font-size:20px; font-weight: bold;border-color: Black;border-width: 2px;line-height: 13px;text-align:center;";
 														cell.innerHTML = inn.stats[key].split(',')[0].slice(0,10);
 													}
 													//cell.style.fontWeight = "900";
@@ -1456,10 +1510,10 @@ function addItemsToList(whatToProcess, dataToProcess)
 												for(var key in inn.stats){
 													if(key == 'ThisOver'){
 														if(boc.status == 'CURRENTBOWLER'){
-															cell.innerHTML = 'THIS OVER RUNS :- '  + inn.stats[key];
+															cell.innerHTML = 'THIS OVER :- '  + inn.stats[key];
 														}
 														else if(boc.status == 'LASTBOWLER'){
-															cell.innerHTML = 'LAST OVER RUNS :- ' + inn.stats[key];
+															cell.innerHTML = 'LAST OVER :- ' + inn.stats[key];
 														}
 													}
 												}
@@ -1469,6 +1523,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 															if(inn.stats[key] == ''){
 																cell.innerHTML = cell.innerHTML;
 															}else{
+																//cell.innerHTML = cell.innerHTML + ' (' + '8nb,8nb,8nb,8nb,8nb,8nb,8nb,8nb,8nb,8nb' + ')';
 																cell.innerHTML = cell.innerHTML + ' (' + inn.stats[key] + ')';
 															}
 														}

@@ -17,7 +17,7 @@
 		
 </head>
 <body>
-<form:form name="initialise_form" autocomplete="off" action="commentator" method="POST">
+<form:form name="initialise_form" autocomplete="off" action="commentator" method="POST" enctype="multipart/form-data">
 <div class="content py-5" style="background-color: #EAE8FF; color: #2E008B">
   <div class="container">
 	<div class="row">

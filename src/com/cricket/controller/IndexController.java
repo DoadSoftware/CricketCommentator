@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.cricket.containers.Configurations;
 import com.cricket.containers.Functions;
@@ -72,7 +73,29 @@ public class IndexController
         }
 		return "initialise";
 	}
-
+	
+	@RequestMapping(value = {"/change_to_teams","/change_to_ident","/change_to_fruit"}, method={RequestMethod.GET,RequestMethod.POST}) 
+	public String processUserSelectionData(ModelMap model,MultipartHttpServletRequest request) 
+					throws IllegalAccessException, InvocationTargetException, JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
+	{
+		if(request.getRequestURI().contains("change_to_teams")) {
+			session_selected_page = "teams";
+			model.addAttribute("session_selected_page", session_selected_page);
+			model.addAttribute("session_match", session_match);
+			return "teams";
+		}else if(request.getRequestURI().contains("change_to_ident")) {
+			session_selected_page = "ident";
+			model.addAttribute("session_selected_page", session_selected_page);
+			model.addAttribute("session_match", session_match);
+			return "ident";
+		}else {
+			session_selected_page = "fruit";
+			model.addAttribute("session_selected_page", session_selected_page);
+			model.addAttribute("session_match", session_match);
+			return "fruit";
+		}
+	}
+	
 	@RequestMapping(value = {"/commentator"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String commentatorPage(ModelMap model,
 			@RequestParam(value = "select_page", required = false, defaultValue = "") String select_page,
@@ -120,6 +143,7 @@ public class IndexController
 		}
 		return null;
 	}
+	
 	@RequestMapping(value = {"/processCricketProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processCricketProcedures(
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
