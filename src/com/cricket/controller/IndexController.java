@@ -51,6 +51,11 @@ public class IndexController
 	public static String session_selected_broadcaster;
 	String session_selected_page;
 	boolean bowler_Found = false;
+	public boolean match_file_change = false;
+	public static long time_elapsed = 0;
+	public static long last_setup_time_stamp = 0;
+	public static long last_match_time_stamp = 0;
+	
 	int bowler = 0;
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String initialisePage(ModelMap model) throws JAXBException  
@@ -107,6 +112,9 @@ public class IndexController
 		session_selected_page = select_page;
 		session_selected_broadcaster = select_broadcaster;
 		
+		last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).lastModified();
+		last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).lastModified();
+		
 		session_Configurations = new Configurations(selectedMatch, select_broadcaster);
 		
 		JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations,
@@ -159,10 +167,18 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 
 		case "READ-MATCH-AND-POPULATE":
-				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,CricketUtil.SETUP + "," + 
-						CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-				
-				
+			
+			match_file_change = false;
+			if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+					+ session_match.getMatch().getMatchFileName()).lastModified()) {
+				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+				match_file_change = true;
+			}
+			
+//				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,CricketUtil.SETUP + "," + 
+//						CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+			if(match_file_change == true) {
 				Map<String, String> this_stats = new HashMap<String,String>();
 				int Player_id = 0;
 				for(Inning inn : session_match.getMatch().getInning()){
@@ -222,9 +238,17 @@ public class IndexController
 					}
 					inn.setStats(this_stats);
 				}
-
-			return JSONObject.fromObject(session_match).toString();
-
+				last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ session_match.getMatch().getMatchFileName()).lastModified();
+				last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY 
+						+ session_match.getMatch().getMatchFileName()).lastModified();
+				
+				return JSONObject.fromObject(session_match).toString();
+				
+			}else {
+				return JSONObject.fromObject(session_match).toString();
+			}
+			
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
