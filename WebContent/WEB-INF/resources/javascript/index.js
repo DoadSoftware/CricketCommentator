@@ -922,226 +922,485 @@ function addItemsToList(whatToProcess, dataToProcess)
 				}
 			}
 			
-			table_detail = document.createElement('table');
-			table_detail.style = 'table-layout:fixed;';
-			table_detail.style.height = "230px";
-			table_detail.style.width = "375px";
-			table_detail.style.marginTop = "-16px";
-			//table_detail.style.marginBottom = "-2px";
-			table_detail.style.marginLeft = "11px";
-			table_detail.style.marginRight = "-12px";
-			table_detail.setAttribute('class', 'table table-bordered');
-			tbody = document.createElement('tbody');
-			table_detail.appendChild(tbody);
-			
-			for (var i = 1; i <= 5; i++){
-				row = tbody.insertRow(tbody.rows.length);
-				row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
-				switch(i){
-					case 1: case 2:  case 3:  case 4: case 5:
-						count = 3;
-						break;
-				}
-				for (var j = 1; j <= count; j++){
-					cell = row.insertCell(j-1);
+			if(dataToProcess.setup.matchType == 'TEST'){
+				table_detail = document.createElement('table');
+				table_detail.style = 'table-layout:fixed;';
+				table_detail.style.height = "265px";
+				table_detail.style.width = "375px";
+				table_detail.style.marginTop = "-16px";
+				//table_detail.style.marginBottom = "-2px";
+				table_detail.style.marginLeft = "11px";
+				table_detail.style.marginRight = "-12px";
+				table_detail.setAttribute('class', 'table table-bordered');
+				tbody = document.createElement('tbody');
+				table_detail.appendChild(tbody);	
+				
+				for (var i = 1; i <= 5; i++){
+					row = tbody.insertRow(tbody.rows.length);
+					row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
 					switch(i){
-						case 1:
-							row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
-							row.style.fontFamily = 'Rockwell';
-							switch(j){
-								case 1:
-									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";
-									cell.style.width = '30%';
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1){
-											for(var key in inn.stats){
-												if(key == 'OVER' + inn.inningNumber){
-													if(inn.battingTeamId == dataToProcess.setup.homeTeamId){
-														if(inn.totalWickets >= 10){
-															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
-														}else{
-															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
-														}
-													}
-													else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
-														if(inn.totalWickets >= 10){
-															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
-														}else{
-															//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.5' + ')';
-															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
-														}
-													}
-												}
-											}
-										}
-									});
-									break;
-								case 2:
-									cell.style.width = '40%';
-									break;	
-								case 3:
-									cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";
-									cell.style.width = '30%';
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 2){
-											for(var key in inn.stats){
-												if(key == 'OVER'+ inn.inningNumber){
-													if(inn.battingTeamId == dataToProcess.setup.homeTeamId){
-														if(inn.totalWickets >= 10){
-															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
-														}else{
-															//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.6' + ')';
-															cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
-														}
-													}
-													else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
-														if(inn.totalWickets >= 10){
-															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
-														}else{
-															cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
-														}
-													}
-												}
-											}
-										}
-									});
-									break;
-							}
+						case 1: case 2:  case 3:  case 4: case 5:
+							count = 4;
 							break;
-						case 2:
-							cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-							cell.style.fontFamily = 'Rockwell';
-							cell.style.textAlign = "center";
-							switch(j){
-								case 1:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1){
-											if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
-												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+					}
+					for (var j = 1; j <= count; j++){
+						cell = row.insertCell(j-1);
+						switch(i){
+							case 1:
+								row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
+								row.style.fontFamily = 'Rockwell';
+								switch(j){
+									case 1:
+										cell.innerHTML = '';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										cell.style.width = '38%';
+										break;
+									case 2:
+										cell.innerHTML = 'SCORE';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										cell.style.width = '20%';
+										break;	
+									case 3:
+										cell.innerHTML = 'OVR';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.width = '15%';
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 4:
+										cell.innerHTML = 'OVR RATE';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:17px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.width = '27%';
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;	
+								}
+								break;
+							case 2:
+								cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + " 1st INN";
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + " 1st INN";
+												}
 											}
-											else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
-												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+										});
+										break
+									case 2:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												if (inn.totalBalls > 0 || inn.totalOvers > 0)
+			                                    {
+													cell.innerHTML = '888' + "-" + '88'
+													//cell.innerHTML = inn.totalRuns + "-" + inn.totalWickets;
+			                                    }
 											}
-										}
-									});
-									break
-								case 2:
-									cell.innerHTML = '4s/6s';
-									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";
-									break;
-								case 3:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 2){
-											if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
-												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+										});
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										
+	                                      //  lbls.Text = Convert.ToString(match.match.innings[0].totalRuns) + "-" + Convert.ToString(match.match.innings[0].totalWickets) +
+	                                           // "           " + Functions.OverBalls(match.match.innings[0].totalOvers, match.match.innings[0].totalBalls) + "          " +
+	                                         //   match.match.innings[0].runRate;
+	                                        //lbls.Text = "888-8       888       8.88     ";
+	                                        
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+												}
 											}
-											else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
-												cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+										});
+										break;
+									case 4:
+										cell.innerHTML = '4s/6s';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;	
+								}
+								break;
+							case 3:
+								cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + " 1st INN";
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + " 1st INN";
+												}
 											}
-										}
-									});
-									break;
-							}
+										});
+										break
+									case 2:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												if (inn.totalBalls > 0 || inn.totalOvers > 0)
+			                                    {
+													cell.innerHTML = inn.totalRuns + "-" + inn.totalWickets;
+			                                    }
+											}
+										});
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												for(var key in inn.stats){
+													if(key == 'DOTBALLS'  + inn.inningNumber){
+														cell.innerHTML = inn.stats[key];
+													}
+												}
+											}
+										});
+										break;
+									case 4:
+										cell.innerHTML = '4s/6s';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;	
+								}
+								break;	
+							case 4:
+								cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 3){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + " 2nd INN";
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + " 2nd INN";
+												}
+											}
+										});
+										break;
+									case 2:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 3){
+												if (inn.totalBalls > 0 || inn.totalOvers > 0)
+			                                    {
+													cell.innerHTML = inn.totalRuns + "-" + inn.totalWickets;
+			                                    }
+											}
+										});
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";		
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+												cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
+											}
+										});
+										break;
+									case 4:
+										cell.innerHTML = '4s/6s';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;	
+								}
+								break;	
+							case 5:
+								cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:17px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 4){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + " 2nd INN";
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + " 2nd INN";
+												}
+											}
+										});
+										break;
+									case 2:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 4){
+												if (inn.totalBalls > 0 || inn.totalOvers > 0)
+			                                    {
+													cell.innerHTML = inn.totalRuns + "-" + inn.totalWickets;
+			                                    }
+											}
+										});
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												cell.innerHTML = inn.totalExtras;
+											}
+										});
+										break;
+									case 4:
+										cell.innerHTML = '4s/6s';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;	
+								}
+								break;			
+						}
+					}
+				}
+			}else{
+				table_detail = document.createElement('table');
+				table_detail.style = 'table-layout:fixed;';
+				table_detail.style.height = "230px";
+				table_detail.style.width = "375px";
+				table_detail.style.marginTop = "-16px";
+				//table_detail.style.marginBottom = "-2px";
+				table_detail.style.marginLeft = "11px";
+				table_detail.style.marginRight = "-12px";
+				table_detail.setAttribute('class', 'table table-bordered');
+				tbody = document.createElement('tbody');
+				table_detail.appendChild(tbody);
+				
+				for (var i = 1; i <= 5; i++){
+					row = tbody.insertRow(tbody.rows.length);
+					row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
+					switch(i){
+						case 1: case 2:  case 3:  case 4: case 5:
+							count = 3;
 							break;
-						case 3:
-							cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-							cell.style.fontFamily = 'Rockwell';
-							cell.style.textAlign = "center";
-							switch(j){
-								case 1:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1){
-											for(var key in inn.stats){
-												if(key == 'DOTBALLS' + inn.inningNumber){
-													cell.innerHTML = inn.stats[key];
+					}
+					for (var j = 1; j <= count; j++){
+						cell = row.insertCell(j-1);
+						switch(i){
+							case 1:
+								row.style = "background: #92CDDB ; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
+								row.style.fontFamily = 'Rockwell';
+								switch(j){
+									case 1:
+										cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										cell.style.width = '30%';
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												for(var key in inn.stats){
+													if(key == 'OVER' + inn.inningNumber){
+														if(inn.battingTeamId == dataToProcess.setup.homeTeamId){
+															if(inn.totalWickets >= 10){
+																cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
+															}else{
+																cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+															}
+														}
+														else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+															if(inn.totalWickets >= 10){
+																cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
+															}else{
+																//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.5' + ')';
+																cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+															}
+														}
+													}
 												}
 											}
-										}
-									});
-									break
-								case 2:
-									cell.innerHTML = 'DOTS';
-									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";
-									break;
-								case 3:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 2){
-											for(var key in inn.stats){
-												if(key == 'DOTBALLS'  + inn.inningNumber){
-													cell.innerHTML = inn.stats[key];
+										});
+										break;
+									case 2:
+										cell.style.width = '40%';
+										break;	
+									case 3:
+										cell.style = "font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:18px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										cell.style.width = '30%';
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												for(var key in inn.stats){
+													if(key == 'OVER'+ inn.inningNumber){
+														if(inn.battingTeamId == dataToProcess.setup.homeTeamId){
+															if(inn.totalWickets >= 10){
+																cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
+															}else{
+																//cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + '188' + '-' + '8' + ' (' + '18.6' + ')';
+																cell.innerHTML = dataToProcess.setup.homeTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+															}
+														}
+														else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+															if(inn.totalWickets >= 10){
+																cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + ' (' + inn.stats[key] + ')';
+															}else{
+																cell.innerHTML = dataToProcess.setup.awayTeam.teamName4 + "<br />" + inn.totalRuns + '-' + inn.totalWickets + ' (' + inn.stats[key] + ')';
+															}
+														}
+													}
 												}
 											}
-										}
-									});
-									break;
-							}
-							break;	
-						case 4:
-							cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-							cell.style.fontFamily = 'Rockwell';
-							cell.style.textAlign = "center";
-							switch(j){
-								case 1:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
-											for(var key in inn.stats){
-												if(key == 'COMPARE'){
-													cell.innerHTML = inn.stats[key] ;
+										});
+										break;
+								}
+								break;
+							case 2:
+								cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
 												}
 											}
-										}
-									});
-									break;
-								case 2:
-									cell.innerHTML = 'AT THIS STAGE';
-									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";		
-									break;
-								case 3:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
-											cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
-										}
-									});
-									break;
-							}
-							break;	
-						case 5:
-							cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
-							cell.style.fontFamily = 'Rockwell';
-							cell.style.textAlign = "center";
-							switch(j){
-								case 1:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 1){
-											cell.innerHTML = inn.totalExtras ;
-										}
-									});
-									break;
-								case 2:
-									cell.innerHTML = 'EXTRAS';
-									cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
-									cell.style.fontFamily = 'Rockwell';
-									cell.style.textAlign = "center";
-									break;
-								case 3:
-									dataToProcess.match.inning.forEach(function(inn,index,arr){
-										if(inn.inningNumber == 2){
-											cell.innerHTML = inn.totalExtras;
-										}
-									});
-									break;
-							}
-							break;			
+										});
+										break
+									case 2:
+										cell.innerHTML = '4s/6s';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												if(inn.battingTeamId == dataToProcess.setup.homeTeamId){	
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+												}
+												else if(inn.battingTeamId == dataToProcess.setup.awayTeamId){
+													cell.innerHTML = inn.totalFours + '/' + inn.totalSixes;
+												}
+											}
+										});
+										break;
+								}
+								break;
+							case 3:
+								cell.style = "background: #92CDDB ;font-weight: 600; color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												for(var key in inn.stats){
+													if(key == 'DOTBALLS' + inn.inningNumber){
+														cell.innerHTML = inn.stats[key];
+													}
+												}
+											}
+										});
+										break
+									case 2:
+										cell.innerHTML = 'DOTS';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												for(var key in inn.stats){
+													if(key == 'DOTBALLS'  + inn.inningNumber){
+														cell.innerHTML = inn.stats[key];
+													}
+												}
+											}
+										});
+										break;
+								}
+								break;	
+							case 4:
+								cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1 && inn.isCurrentInning == 'NO'){
+												for(var key in inn.stats){
+													if(key == 'COMPARE'){
+														cell.innerHTML = inn.stats[key] ;
+													}
+												}
+											}
+										});
+										break;
+									case 2:
+										cell.innerHTML = 'AT THIS STAGE';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-size:18px;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";		
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2 && inn.isCurrentInning == 'YES'){
+												cell.innerHTML = inn.totalRuns + '-' + inn.totalWickets ;
+											}
+										});
+										break;
+								}
+								break;	
+							case 5:
+								cell.style = "background: #92CDDB; font-weight: 600;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;font-size:20px;";
+								cell.style.fontFamily = 'Rockwell';
+								cell.style.textAlign = "center";
+								switch(j){
+									case 1:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 1){
+												cell.innerHTML = inn.totalExtras ;
+											}
+										});
+										break;
+									case 2:
+										cell.innerHTML = 'EXTRAS';
+										cell.style = "background: #92CDDB; font-weight: 700;color: #05285D;font-weight: bold;border-color: Black;border-width: 2px;";
+										cell.style.fontFamily = 'Rockwell';
+										cell.style.textAlign = "center";
+										break;
+									case 3:
+										dataToProcess.match.inning.forEach(function(inn,index,arr){
+											if(inn.inningNumber == 2){
+												cell.innerHTML = inn.totalExtras;
+											}
+										});
+										break;
+								}
+								break;			
+						}
 					}
 				}
 			}

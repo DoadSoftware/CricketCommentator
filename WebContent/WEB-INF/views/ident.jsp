@@ -33,7 +33,8 @@
        <span class="anchor"></span>
           <div class="card-body">
 			  <div id="fruit_ident_div" class="form-group row mr-0" >
-			  <img src="https://drive.google.com/uc?export=view&id=1yHkVc8OQqsbey5tsdNrlWkPHPd4t1pGJ">
+			  <img class="pull-right img-responsive" src="<c:url value="/resources/Images/Ident.png"/>" alt="DOAD Logo" width="150" height="50">
+			  <!-- <img src="https://drive.google.com/uc?export=view&id=1yHkVc8OQqsbey5tsdNrlWkPHPd4t1pGJ"> -->
 			  <!--<img src="FileServet?path=c:\\DOAD_Fruit\Ident.png">  -->
 			  </div>
 	       </div>
